@@ -2,6 +2,7 @@ export interface Standing {
   teamId: string;
   teamName: string;
   teamLogo?: string;
+  tournamentId?: string;
   played: number;
   won: number;
   drawn: number;

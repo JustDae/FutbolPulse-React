@@ -6,5 +6,6 @@ export interface PlayerStats {
   yellowCards: number;
   redCards: number;
   minutesPlayed: number;
-  rating: number; 
+  rating: number;
+  position?: string;
 }
