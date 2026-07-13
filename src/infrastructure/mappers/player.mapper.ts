@@ -1,5 +1,6 @@
 import type { Player } from '../../domain/entities/player.entity';
 
+
 export class PlayerMapper {
   static fromJsonToDomain(raw: any): Player {
     return {
