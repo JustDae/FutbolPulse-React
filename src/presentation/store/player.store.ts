@@ -1,8 +1,10 @@
 import { create } from 'zustand';
+
 import type { Player } from '../../domain/entities/player.entity';
 import type { CreatePlayerDto } from '../../application/dtos/create-player.dto';
 import type { UpdatePlayerDto } from '../../application/dtos/update-player.dto';
 import { AxiosPlayerRepository } from '../../infrastructure/adapters/axios-player.repository';
+
 
 interface PlayerState {
   players: Player[];
