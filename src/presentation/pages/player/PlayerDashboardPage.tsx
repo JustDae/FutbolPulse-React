@@ -1,4 +1,5 @@
 import { CalendarDays, Trophy, Activity, Target } from 'lucide-react';
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/presentation/components/ui/card';
 
 export function PlayerDashboardPage() {

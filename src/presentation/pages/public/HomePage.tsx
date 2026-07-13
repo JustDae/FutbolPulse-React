@@ -1,7 +1,9 @@
 import { Trophy, Shield, CalendarDays, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
 import { Button } from '@/presentation/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/presentation/components/ui/card';
-import { Link } from 'react-router-dom';
+
 
 export function HomePage() {
   return (
