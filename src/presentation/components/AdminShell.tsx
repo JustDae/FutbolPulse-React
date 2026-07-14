@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
+import { useAuthStore } from '@/presentation/store/auth.store';
 import { 
   LayoutDashboard, 
   Shield, 
