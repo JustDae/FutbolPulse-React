@@ -34,7 +34,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_KEY }}
-          source: "dist/*"
+          source: "dist"
           target: "/tmp/react_build"
 
       - name: Activate build on VPS
@@ -46,11 +46,11 @@ jobs:
           script: |
             set -e
 
-            mkdir -p /var/www/futbol-pulse
-            rm -rf /var/www/futbol-pulse/*
-            cp -r /tmp/react_build/dist/* /var/www/futbol-pulse/
+            sudo mkdir -p /var/www/futbol-pulse
+            sudo rm -rf /var/www/futbol-pulse/*
+            sudo cp -r /tmp/react_build/dist/* /var/www/futbol-pulse/
 
-            chown -R www-data:www-data /var/www/futbol-pulse
+            sudo chown -R www-data:www-data /var/www/futbol-pulse
 
-            nginx -t
-            systemctl reload nginx
+            sudo nginx -t
+            sudo systemctl reload nginx
