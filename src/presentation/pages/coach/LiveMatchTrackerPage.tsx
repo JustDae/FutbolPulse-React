@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Play, Square, Activity, AlertCircle, LayoutGrid, Clock, Pause, PlusCircle } from 'lucide-react';
+import { Play, Square, AlertCircle, LayoutGrid, Clock, PlusCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/presentation/components/ui/card';
 import { Button } from '@/presentation/components/ui/button';
 import { AxiosPlayerRepository } from '@/infrastructure/adapters/axios-player.repository';
@@ -46,7 +46,7 @@ export function LiveMatchTrackerPage() {
   const [events, setEvents] = useState<MatchEvent[]>([]);
   const [selectedPlayerForEvent, setSelectedPlayerForEvent] = useState<Player | null>(null);
 
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
