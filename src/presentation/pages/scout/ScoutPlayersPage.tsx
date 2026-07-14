@@ -19,7 +19,7 @@ export function ScoutPlayersPage() {
       <p className="text-muted-foreground">Explora nuestra base de datos de jugadores disponibles para scouting.</p>
 
       <div className="max-w-md">
-        <SearchBar placeholder="Buscar jugador..." onSearch={(q) => console.log(q)} />
+        <SearchBar placeholder="Buscar jugador..." onChange={(q: string) => console.log(q)} />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

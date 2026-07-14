@@ -11,6 +11,7 @@ import {
   UserRound,
   CircleDot,
 } from 'lucide-react';
+import { useAuthStore } from '@/presentation/store/auth.store';
 
 import { Button } from '@/presentation/components/ui/button';
 import { Separator } from '@/presentation/components/ui/separator';

@@ -17,7 +17,7 @@ export function ScoutProspectsPage() {
       <p className="text-muted-foreground">Monitorea a los jugadores jóvenes con mayor proyección.</p>
 
       <div className="max-w-md">
-        <SearchBar placeholder="Buscar prospecto..." onSearch={(q) => console.log(q)} />
+        <SearchBar placeholder="Buscar prospecto..." onChange={(q: string) => console.log(q)} />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
