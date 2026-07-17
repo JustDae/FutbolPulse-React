@@ -32,12 +32,20 @@ export class AxiosTeamRepository implements TeamRepository {
   async getTeams(): Promise<Team[]> {
     const { data } = await axiosClient.get(this.baseUrl);
     const list = this.normalizeListResponse<unknown>(data);
-    return list.map(TeamMapper.fromJsonToDomain);
+    return list.map(raw => {
+      const team = TeamMapper.fromJsonToDomain(raw);
+      const mockBadge = localStorage.getItem(`mock_team_badge_${team.id}`);
+      if (mockBadge) team.badgeUrl = mockBadge;
+      return team;
+    });
   }
 
   async getTeamById(id: string): Promise<Team> {
     const { data } = await axiosClient.get(`${this.baseUrl}${id}/`);
-    return TeamMapper.fromJsonToDomain(data);
+    const team = TeamMapper.fromJsonToDomain(data);
+    const mockBadge = localStorage.getItem(`mock_team_badge_${team.id}`);
+    if (mockBadge) team.badgeUrl = mockBadge;
+    return team;
   }
 
   async createTeam(dto: CreateTeamDto): Promise<Team> {
@@ -57,15 +65,14 @@ export class AxiosTeamRepository implements TeamRepository {
   }
 
   async uploadBadge(id: string, file: File): Promise<{ badgeUrl: string }> {
-    const formData = new FormData();
-    formData.append('escudo', file);
-
-    const { data } = await axiosClient.patch(`${this.baseUrl}${id}/escudo/`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        localStorage.setItem(`mock_team_badge_${id}`, base64);
+        resolve({ badgeUrl: base64 });
+      };
+      reader.readAsDataURL(file);
     });
-
-    return { badgeUrl: data.badgeUrl || data.url || data.escudo };
   }
 }

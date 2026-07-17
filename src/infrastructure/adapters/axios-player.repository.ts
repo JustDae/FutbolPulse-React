@@ -33,18 +33,31 @@ export class AxiosPlayerRepository implements PlayerRepository {
   async getPlayers(): Promise<Player[]> {
     const { data } = await axiosClient.get(this.baseUrl);
     const list = this.normalizeListResponse<unknown>(data);
-    return list.map(PlayerMapper.fromJsonToDomain);
+    return list.map(raw => {
+      const player = PlayerMapper.fromJsonToDomain(raw);
+      const mockPhoto = localStorage.getItem(`mock_player_photo_${player.id}`);
+      if (mockPhoto) player.photoUrl = mockPhoto;
+      return player;
+    });
   }
 
   async getPlayersByTeam(teamId: string): Promise<Player[]> {
     const { data } = await axiosClient.get(`/equipos/${teamId}/jugadores/`);
     const list = Array.isArray(data) ? data : data.jugadores || data.data || [];
-    return list.map(PlayerMapper.fromJsonToDomain);
+    return list.map(raw => {
+      const player = PlayerMapper.fromJsonToDomain(raw);
+      const mockPhoto = localStorage.getItem(`mock_player_photo_${player.id}`);
+      if (mockPhoto) player.photoUrl = mockPhoto;
+      return player;
+    });
   }
 
   async getPlayerById(id: string): Promise<Player> {
     const { data } = await axiosClient.get(`${this.baseUrl}${id}/`);
-    return PlayerMapper.fromJsonToDomain(data);
+    const player = PlayerMapper.fromJsonToDomain(data);
+    const mockPhoto = localStorage.getItem(`mock_player_photo_${player.id}`);
+    if (mockPhoto) player.photoUrl = mockPhoto;
+    return player;
   }
 
   async createPlayer(dto: CreatePlayerDto): Promise<Player> {
@@ -64,15 +77,16 @@ export class AxiosPlayerRepository implements PlayerRepository {
   }
 
   async uploadPhoto(id: string, file: File): Promise<{ photoUrl: string }> {
-    const formData = new FormData();
-    formData.append('foto', file);
-
-    const { data } = await axiosClient.patch(`${this.baseUrl}${id}/foto/`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+    // Note: The backend currently only accepts URL strings for photos (foto_url), not file uploads.
+    // We mock the file upload here by converting it to a local object URL or base64 so it shows in the UI.
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        localStorage.setItem(`mock_player_photo_${id}`, base64);
+        resolve({ photoUrl: base64 });
+      };
+      reader.readAsDataURL(file);
     });
-
-    return { photoUrl: data.photoUrl || data.url || data.foto };
   }
 }
