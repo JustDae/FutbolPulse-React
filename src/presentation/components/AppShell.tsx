@@ -1,5 +1,5 @@
 import { Outlet, Link, useNavigate, NavLink } from 'react-router-dom'
-import { Trophy, LogOut, LayoutDashboard } from 'lucide-react'
+
 import { useAuthStore } from '@/presentation/store/auth.store'
 import { Button } from '@/presentation/components/ui/button'
 import {
@@ -10,17 +10,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/presentation/components/ui/dropdown-menu'
-import { Separator } from '@/presentation/components/ui/separator'
 import { UserAvatar } from './UserAvatar'
 
 
 function navLinkClass({ isActive }: { isActive: boolean }) {
   return [
-    'text-sm font-medium transition-colors hover:text-primary',
-    isActive ? 'text-primary' : 'text-muted-foreground',
+    'flex items-center h-full px-4 text-[11px] font-bold uppercase tracking-widest transition-colors hover:text-[#e63946]',
+    isActive ? 'text-[#e63946] border-b-2 border-[#e63946]' : 'text-slate-500 border-b-2 border-transparent',
   ].join(' ')
 }
-
 
 export function AppShell() {
   const navigate = useNavigate()
@@ -32,32 +30,34 @@ export function AppShell() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4">
+    <div className="flex min-h-screen flex-col bg-slate-50">
+      <header className="sticky top-0 z-50 w-full h-16 bg-white border-b border-slate-200 flex items-center shadow-sm">
+        
+        {/* Logo Section (Dark Block) */}
+        <div className="h-full flex items-center bg-black skew-x-[-15deg] -ml-4 pl-4 overflow-hidden border-r-4 border-[#e63946]">
           <Link
             to="/"
-            className="flex items-center gap-2 font-bold text-primary"
+            className="flex items-center justify-center h-full px-8 skew-x-[15deg] font-black text-xl italic tracking-tighter hover:scale-105 transition-transform"
           >
-            <Trophy className="h-5 w-5" />
-            <span>Fútbol Pulse</span>
+            <span className="text-[#e63946] mr-1">FÚTBOL</span> 
+            <span className="text-white">PULSE</span>
           </Link>
+        </div>
 
-          <Separator orientation="vertical" className="h-6 hidden md:block" />
+        {/* Navigation Links */}
+        <nav className="hidden md:flex items-center h-full ml-4">
+          <NavLink to="/torneos" className={navLinkClass}>
+            Torneos
+          </NavLink>
+          <NavLink to="/equipos" className={navLinkClass}>
+            Equipos
+          </NavLink>
+          <NavLink to="/partidos" className={navLinkClass}>
+            Partidos
+          </NavLink>
+        </nav>
 
-          <nav className="hidden md:flex items-center gap-4">
-            <NavLink to="/torneos" className={navLinkClass}>
-              Torneos
-            </NavLink>
-            <NavLink to="/equipos" className={navLinkClass}>
-              Equipos
-            </NavLink>
-            <NavLink to="/partidos" className={navLinkClass}>
-              Partidos
-            </NavLink>
-          </nav>
-
-          <div className="flex-1" />
+        <div className="flex-1" />
 
           <div className="flex items-center gap-2">
             {user ? (
@@ -84,7 +84,6 @@ export function AppShell() {
                     <>
                       <DropdownMenuItem asChild>
                         <Link to="/admin" className="flex items-center gap-2 cursor-pointer">
-                          <LayoutDashboard className="h-4 w-4" />
                           Panel Deportivo
                         </Link>
                       </DropdownMenuItem>
@@ -96,18 +95,16 @@ export function AppShell() {
                     onClick={handleLogout}
                     className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
                   >
-                    <LogOut className="h-4 w-4" />
                     Cerrar sesión
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button asChild size="sm">
+              <Button asChild size="sm" className="bg-black hover:bg-slate-800 text-white rounded-none tracking-widest text-[10px] uppercase font-bold px-6">
                 <Link to="/login">Iniciar sesión</Link>
               </Button>
             )}
           </div>
-        </div>
       </header>
 
       <main className="flex-1">
