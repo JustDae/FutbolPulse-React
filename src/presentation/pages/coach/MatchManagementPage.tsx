@@ -80,14 +80,18 @@ export function MatchManagementPage() {
   };
 
   return (
-    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Gestión de Partidos</h2>
+    <div className="flex-1 space-y-6 p-6 md:p-8">
+      {/* Clean SaaS Header */}
+      <div className="mb-8 pl-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Gestión de Partidos</h1>
+          <p className="text-gray-500 dark:text-[#888888] font-normal text-sm">Planifica y administra los próximos encuentros del equipo.</p>
+        </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" /> Nuevo Partido
-            </Button>
+            <button className="flex items-center gap-2 rounded-xl bg-[#f94116] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#e03a13] shadow-md">
+              <Plus className="h-4 w-4" /> Nuevo Partido
+            </button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -185,44 +189,46 @@ export function MatchManagementPage() {
         </Dialog>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Próximos Encuentros</CardTitle>
-          <CardDescription>Planifica y gestiona los partidos de tu equipo.</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <div className="bg-white dark:bg-[#101010] border border-gray-200 dark:border-[#1a1a1c] rounded-2xl shadow-sm overflow-hidden">
+        <div className="px-6 py-5 border-b border-gray-200 dark:border-[#1a1a1c] flex items-center justify-between bg-gray-50/50 dark:bg-[#151515]">
+          <div>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Próximos Encuentros</h3>
+            <p className="text-sm text-gray-500 dark:text-[#888888] mt-1">Planifica y gestiona los partidos de tu equipo.</p>
+          </div>
+        </div>
+        <div className="p-6">
           {isLoading ? (
-            <div className="flex justify-center items-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            <div className="flex justify-center items-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-gray-400 dark:text-[#888888]" />
             </div>
           ) : matches.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground border-2 border-dashed rounded-lg">
-              <Calendar className="mx-auto h-12 w-12 mb-4 text-muted-foreground/50" />
-              <p>No hay partidos programados.</p>
-              <p className="text-sm">Utiliza el botón "Nuevo Partido" para programar uno.</p>
+            <div className="text-center py-12 text-gray-500 dark:text-[#888888] border-2 border-dashed border-gray-200 dark:border-white/5 rounded-2xl bg-gray-50 dark:bg-transparent">
+              <Calendar className="mx-auto h-12 w-12 mb-4 text-gray-300 dark:text-zinc-600" />
+              <p className="font-medium text-gray-600 dark:text-zinc-400">No hay partidos programados.</p>
+              <p className="text-sm mt-1">Utiliza el botón "Nuevo Partido" para programar uno.</p>
             </div>
           ) : (
             <div className="space-y-4">
               {matches.map(match => (
-                <div key={match.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
-                  <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-primary font-bold text-lg">VS</span>
+                <div key={match.id} className="flex flex-col md:flex-row md:items-center justify-between p-5 border border-gray-200 dark:border-white/5 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all group">
+                  <div className="flex items-center gap-5">
+                    <div className="h-12 w-12 shrink-0 rounded-full bg-gray-100 dark:bg-[#1a1a1c] border border-gray-200 dark:border-white/5 flex items-center justify-center">
+                      <span className="text-gray-500 dark:text-zinc-500 font-bold text-sm tracking-widest">VS</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-lg">{match.equipoLocal} vs {match.equipoVisitante}</h4>
-                      <div className="flex items-center text-sm text-muted-foreground gap-4 mt-1">
-                        <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {new Date(match.matchDate).toLocaleDateString()}</span>
-                        <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {new Date(match.matchDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                        {match.stadium && <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {match.stadium}</span>}
+                      <h4 className="font-semibold text-lg text-gray-900 dark:text-white">{match.equipoLocal} vs {match.equipoVisitante}</h4>
+                      <div className="flex items-center flex-wrap text-sm text-gray-500 dark:text-[#888888] gap-4 mt-2">
+                        <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" /> {new Date(match.matchDate).toLocaleDateString()}</span>
+                        <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> {new Date(match.matchDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                        {match.stadium && <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> {match.stadium}</span>}
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 flex-col md:flex-row">
-                    <span className="px-3 py-1 bg-secondary text-secondary-foreground text-xs rounded-full font-medium">
+                  <div className="flex items-center gap-3 mt-4 md:mt-0">
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-[#1a1a1c] border border-gray-200 dark:border-white/5 text-gray-600 dark:text-[#888888] text-xs rounded-full font-medium shadow-sm">
                       {match.matchType}
                     </span>
-                    <span className={`px-3 py-1 text-xs rounded-full font-medium ${match.status === 'Programado' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}>
+                    <span className={`px-3 py-1 text-xs rounded-full font-medium shadow-sm border ${match.status === 'Programado' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/20' : 'bg-gray-100 dark:bg-[#1a1a1c] text-gray-600 dark:text-[#888888] border-gray-200 dark:border-white/5'}`}>
                       {match.status}
                     </span>
                   </div>
@@ -230,8 +236,8 @@ export function MatchManagementPage() {
               ))}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

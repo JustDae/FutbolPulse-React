@@ -236,23 +236,24 @@ export function LiveMatchTrackerPage() {
   };
 
   return (
-    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-2 gap-4">
+    <div className="flex-1 space-y-6 p-6 md:p-8">
+      {/* Clean SaaS Header */}
+      <div className="mb-8 pl-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Tracker en Vivo</h2>
-          <p className="text-sm text-muted-foreground">Monitorea el desarrollo del encuentro en tiempo real.</p>
+          <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Tracker en Vivo</h1>
+          <p className="text-gray-500 dark:text-[#888888] font-normal text-sm">Monitorea el desarrollo del encuentro en tiempo real.</p>
         </div>
         
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           <select 
-            className="px-3 py-2 bg-background border rounded-md text-sm outline-none focus:ring-2 focus:ring-ring"
+            className="px-4 py-2 bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none text-gray-700 dark:text-white shadow-sm focus:ring-2 focus:ring-[#f94116]/50"
             value={selectedMatchId}
             onChange={handleMatchChange}
             disabled={isLoading || period !== 'Previo'}
           >
             {matches.length === 0 ? <option value="">Sin partidos programados...</option> : null}
             {matches.map(m => (
-              <option key={m.id} value={m.id}>{m.equipoLocal} vs {m.equipoVisitante}</option>
+              <option key={m.id} value={m.id} className="bg-white dark:bg-[#101010] text-gray-900 dark:text-white">{m.equipoLocal} vs {m.equipoVisitante}</option>
             ))}
           </select>
         </div>

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Activity, Stethoscope, Dumbbell, Apple, Loader2, AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/presentation/components/ui/card';
 import { Button } from '@/presentation/components/ui/button';
+import { Plus } from 'lucide-react';
+import { HealthRecordModal } from '@/presentation/components/common/HealthRecordModal';
 import { AxiosPlayerRepository } from '@/infrastructure/adapters/axios-player.repository';
 import { healthRepository } from '@/infrastructure/factories/dashboard.factory';
 import type { Player } from '@/domain/entities/player.entity';
@@ -11,14 +13,20 @@ import type {
 } from '@/domain/entities/health.entity';
 
 const playerRepo = new AxiosPlayerRepository();
+import { AxiosTeamRepository } from '@/infrastructure/adapters/axios-team.repository';
+import { useAuthStore } from '@/presentation/store/auth.store';
+
+const teamRepo = new AxiosTeamRepository();
 
 type Tab = 'medical' | 'injuries' | 'performance' | 'diet';
 
 export function HealthManagementPage() {
+  const { user } = useAuthStore();
   const [players, setPlayers] = useState<Player[]>([]);
   const [selectedPlayerId, setSelectedPlayerId] = useState<string>('');
   const [activeTab, setActiveTab] = useState<Tab>('medical');
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [medical, setMedical] = useState<HealthBackground[]>([]);
   const [anthropometric, setAnthropometric] = useState<Anthropometric[]>([]);
@@ -27,102 +35,122 @@ export function HealthManagementPage() {
   const [diets, setDiets] = useState<DietPlan[]>([]);
 
   useEffect(() => {
-    const fetchPlayers = async () => {
+    const fetchPlayersAndFilter = async () => {
       try {
-        const fetchedPlayers = await playerRepo.getPlayers();
-        setPlayers(fetchedPlayers);
-        if (fetchedPlayers.length > 0) {
-          setSelectedPlayerId(fetchedPlayers[0].id);
+        const [fetchedPlayers, fetchedTeams] = await Promise.all([
+          playerRepo.getPlayers(),
+          teamRepo.getTeams()
+        ]);
+        
+        const isAdmin = user?.tipo_usuario?.toLowerCase() === 'admin' || user?.is_staff;
+
+        if (isAdmin) {
+           setPlayers(fetchedPlayers);
+           if (fetchedPlayers.length > 0) setSelectedPlayerId(fetchedPlayers[0].id);
+        } else if (user?.nombre_completo) {
+           const myTeams = fetchedTeams.filter(t => 
+             t.coach && t.coach.toLowerCase().includes(user.nombre_completo.toLowerCase())
+           );
+           const myTeamIds = new Set(myTeams.map(t => t.id));
+           const filteredPlayers = fetchedPlayers.filter(p => myTeamIds.has(p.teamId));
+           setPlayers(filteredPlayers);
+           if (filteredPlayers.length > 0) setSelectedPlayerId(filteredPlayers[0].id);
+        } else {
+           setPlayers([]);
         }
       } catch (error) {
-        console.error('Error fetching players', error);
+        console.error('Error fetching data', error);
       }
     };
-    fetchPlayers();
-  }, []);
+    fetchPlayersAndFilter();
+  }, [user]);
+
+  const fetchTabContent = async () => {
+    if (!selectedPlayerId) return;
+    setIsLoading(true);
+    try {
+      if (activeTab === 'medical') {
+        const [m, a] = await Promise.all([
+          healthRepository.getHealthBackground(selectedPlayerId),
+          healthRepository.getAnthropometrics(selectedPlayerId)
+        ]);
+        setMedical(m);
+        setAnthropometric(a);
+      } else if (activeTab === 'injuries') {
+        const i = await healthRepository.getInjuries(selectedPlayerId);
+        setInjuries(i);
+      } else if (activeTab === 'performance') {
+        const t = await healthRepository.getPerformanceTests(selectedPlayerId);
+        setTests(t);
+      } else if (activeTab === 'diet') {
+        const d = await healthRepository.getDietPlans(selectedPlayerId);
+        setDiets(d);
+      }
+    } catch (error) {
+      console.error('Error fetching tab data', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (!selectedPlayerId) return;
-
-    const fetchTabContent = async () => {
-      setIsLoading(true);
-      try {
-        if (activeTab === 'medical') {
-          const [m, a] = await Promise.all([
-            healthRepository.getHealthBackground(selectedPlayerId),
-            healthRepository.getAnthropometrics(selectedPlayerId)
-          ]);
-          setMedical(m);
-          setAnthropometric(a);
-        } else if (activeTab === 'injuries') {
-          const i = await healthRepository.getInjuries(selectedPlayerId);
-          setInjuries(i);
-        } else if (activeTab === 'performance') {
-          const t = await healthRepository.getPerformanceTests(selectedPlayerId);
-          setTests(t);
-        } else if (activeTab === 'diet') {
-          const d = await healthRepository.getDietPlans(selectedPlayerId);
-          setDiets(d);
-        }
-      } catch (error) {
-        console.error('Error fetching tab data', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchTabContent();
   }, [selectedPlayerId, activeTab]);
 
   return (
-    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0">
-        <h2 className="text-3xl font-bold tracking-tight">Salud y Rendimiento</h2>
+    <div className="flex-1 space-y-6 p-6 md:p-8">
+      {/* Clean SaaS Header */}
+      <div className="mb-8 pl-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Salud y Rendimiento</h1>
+          <p className="text-gray-500 dark:text-[#888888] font-normal text-sm">Gestiona el perfil médico y rendimiento de los jugadores.</p>
+        </div>
         
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-muted-foreground">Jugador:</span>
+        <div className="flex flex-wrap items-center gap-3">
           <select 
-            className="flex h-10 w-[250px] rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="px-4 py-2 bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none text-gray-700 dark:text-white shadow-sm focus:ring-2 focus:ring-[#f94116]/50"
             value={selectedPlayerId}
             onChange={(e) => setSelectedPlayerId(e.target.value)}
           >
             <option value="" disabled>Selecciona un jugador...</option>
             {players.map(p => (
-              <option key={p.id} value={p.id}>{p.firstNames} {p.lastNames}</option>
+              <option key={p.id} value={p.id} className="bg-white dark:bg-[#101010] text-gray-900 dark:text-white">{p.firstNames} {p.lastNames}</option>
             ))}
           </select>
+          <Button 
+            onClick={() => setIsModalOpen(true)} 
+            className="bg-[#f94116] hover:bg-[#d83610] text-white shadow-sm rounded-xl px-4 flex items-center gap-2"
+          >
+            <Plus className="h-4 w-4" /> Añadir Registro
+          </Button>
         </div>
       </div>
 
-      <div className="flex overflow-x-auto space-x-2 border-b pb-2 mb-4">
-        <Button 
-          variant={activeTab === 'medical' ? 'default' : 'ghost'} 
-          className="rounded-full"
+      <div className="flex overflow-x-auto gap-2 border-b border-gray-200 dark:border-[#1a1a1c] pb-4 mb-6 custom-scrollbar">
+        <button 
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all ${activeTab === 'medical' ? 'bg-[#f94116] text-white shadow-md' : 'bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-white/5'}`}
           onClick={() => setActiveTab('medical')}
         >
-          <Activity className="mr-2 h-4 w-4" /> Perfil Médico
-        </Button>
-        <Button 
-          variant={activeTab === 'injuries' ? 'default' : 'ghost'} 
-          className="rounded-full"
+          <Activity className="h-4 w-4" /> Perfil Médico
+        </button>
+        <button 
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all ${activeTab === 'injuries' ? 'bg-[#f94116] text-white shadow-md' : 'bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-white/5'}`}
           onClick={() => setActiveTab('injuries')}
         >
-          <Stethoscope className="mr-2 h-4 w-4" /> Lesiones
-        </Button>
-        <Button 
-          variant={activeTab === 'performance' ? 'default' : 'ghost'} 
-          className="rounded-full"
+          <Stethoscope className="h-4 w-4" /> Lesiones
+        </button>
+        <button 
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all ${activeTab === 'performance' ? 'bg-[#f94116] text-white shadow-md' : 'bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-white/5'}`}
           onClick={() => setActiveTab('performance')}
         >
-          <Dumbbell className="mr-2 h-4 w-4" /> Rendimiento
-        </Button>
-        <Button 
-          variant={activeTab === 'diet' ? 'default' : 'ghost'} 
-          className="rounded-full"
+          <Dumbbell className="h-4 w-4" /> Rendimiento
+        </button>
+        <button 
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all ${activeTab === 'diet' ? 'bg-[#f94116] text-white shadow-md' : 'bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-white/5'}`}
           onClick={() => setActiveTab('diet')}
         >
-          <Apple className="mr-2 h-4 w-4" /> Nutrición
-        </Button>
+          <Apple className="h-4 w-4" /> Nutrición
+        </button>
       </div>
 
       {isLoading ? (
@@ -159,7 +187,7 @@ export function HealthManagementPage() {
 
               <Card className="glass-card">
                 <CardHeader>
-                  <CardTitle className="text-lg">Antropometría (�altimo Registro)</CardTitle>
+                  <CardTitle className="text-lg">Antropometría (Último Registro)</CardTitle>
                 </CardHeader>
                 <CardContent>
                   {anthropometric.length === 0 ? (
@@ -294,6 +322,16 @@ export function HealthManagementPage() {
           )}
 
         </div>
+      )}
+
+      {selectedPlayerId && (
+        <HealthRecordModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          onSuccess={fetchTabContent} 
+          activeTab={activeTab} 
+          playerId={selectedPlayerId} 
+        />
       )}
     </div>
   );

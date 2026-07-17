@@ -165,13 +165,13 @@ export function ProfilePage() {
                 Actualmente solo tienes permisos de lectura sobre el calendario de partidos y torneos. Tus estadísticas serán actualizadas por el equipo técnico.
               </p>
               <div className="grid grid-cols-2 gap-4">
-                <div className="border rounded-lg p-3 text-center">
-                  <p className="text-3xl font-bold">12</p>
-                  <p className="text-xs text-muted-foreground uppercase">Partidos Jugados</p>
+                <div className="border border-gray-200 dark:border-[#1a1a1c] bg-gray-50 dark:bg-[#151515] rounded-lg p-4 text-center">
+                  <p className="text-3xl font-bold text-gray-900 dark:text-white">0</p>
+                  <p className="text-[10px] font-bold text-gray-500 dark:text-zinc-500 mt-1 uppercase tracking-widest">Partidos Jugados</p>
                 </div>
-                <div className="border rounded-lg p-3 text-center">
-                  <p className="text-3xl font-bold">5</p>
-                  <p className="text-xs text-muted-foreground uppercase">Goles</p>
+                <div className="border border-gray-200 dark:border-[#1a1a1c] bg-gray-50 dark:bg-[#151515] rounded-lg p-4 text-center">
+                  <p className="text-3xl font-bold text-gray-900 dark:text-white">0</p>
+                  <p className="text-[10px] font-bold text-gray-500 dark:text-zinc-500 mt-1 uppercase tracking-widest">Goles</p>
                 </div>
               </div>
             </CardContent>

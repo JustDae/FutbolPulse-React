@@ -3,20 +3,12 @@ import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { ArrowLeft, Loader2, ShoppingBag } from 'lucide-react'
+
 
 import { useAuthStore } from '@/presentation/store/auth.store'
 import { Button } from '@/presentation/components/ui/button'
 import { Input } from '@/presentation/components/ui/input'
 import { Label } from '@/presentation/components/ui/label'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/presentation/components/ui/card'
 
 
 const loginSchema = z.object({
@@ -51,6 +43,11 @@ export default function LoginPage() {
     }
   }, [user, hasHydrated, from, navigate])
 
+  useEffect(() => {
+    // Limpiar errores previos al montar el componente
+    clearError()
+  }, [])
+
   const {
     register,
     handleSubmit,
@@ -77,92 +74,105 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-muted/40 px-4 py-8">
-      <Button
-        variant="ghost"
-        className="absolute top-4 left-4 md:top-8 md:left-8"
-        asChild
-      >
-        <Link to="/">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Volver al inicio
+    <div className="min-h-screen flex flex-col md:flex-row bg-white font-sans opacity-0 animate-fade-in">
+      
+      {/* Back Button */}
+      <div className="absolute top-6 left-6 md:top-8 md:left-8 z-50">
+        <Link 
+          to="/"
+          className="inline-flex items-center justify-center bg-black/50 hover:bg-black/80 backdrop-blur-sm text-white px-4 py-2 text-[10px] font-bold uppercase tracking-widest border border-white/20 transition-all duration-300 hover:scale-[1.05] active:scale-95"
+        >
+          &lt; Volver al inicio
         </Link>
-      </Button>
+      </div>
 
-      <Card className="w-full max-w-sm">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-2">
-            <div className="flex items-center gap-2 rounded-full bg-primary p-3 text-primary-foreground">
-              <ShoppingBag className="h-6 w-6" />
-            </div>
+      {/* Left Side: Image */}
+      <div className="hidden md:flex relative w-full md:w-1/2 bg-slate-900 md:[clip-path:polygon(0_0,100%_0,85%_100%,0%_100%)] z-10 h-[30vh] md:h-screen opacity-0 animate-slide-right [animation-delay:100ms]">
+        <img 
+          src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=1000&auto=format&fit=crop" 
+          alt="Login Background" 
+          className="w-full h-full object-cover opacity-90"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+        <div className="absolute bottom-12 left-12 max-w-sm">
+          <h2 className="text-3xl font-black text-white leading-tight">Vive el fútbol,<br/>siente la pasión.</h2>
+          <p className="text-sm text-slate-300 mt-2 font-medium">Ingresa para gestionar tu carrera, tus torneos y seguir a tus equipos favoritos.</p>
+        </div>
+      </div>
+
+      {/* Right Side: Form */}
+      <div className="w-full md:w-1/2 flex items-center justify-center p-8 md:p-12 h-screen md:-ml-12 relative z-0 opacity-0 animate-slide-left [animation-delay:200ms]">
+        <div className="w-full max-w-md space-y-8 md:pl-16">
+          
+          <div className="text-center md:text-left">
+            <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-2">
+              INICIAR <span className="text-[#e63946]">SESIÓN</span>
+            </h1>
+            <p className="text-slate-500 font-medium text-sm">Ingresa tus credenciales para acceder a la plataforma.</p>
           </div>
-          <CardTitle className="text-2xl">FutbolPulse</CardTitle>
-          <CardDescription>Inicia sesión para continuar</CardDescription>
-        </CardHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <CardContent className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} noValidate className="mt-8 space-y-6">
             {error && (
-              <div className="rounded-md bg-destructive/10 px-4 py-3 text-sm text-destructive">
+              <div className="rounded-none border-l-4 border-[#e63946] bg-red-50 p-4 text-sm text-[#e63946] font-bold">
                 {error}
               </div>
             )}
 
-            <div className="space-y-1">
-              <Label htmlFor="email">Email</Label>
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-[10px] font-bold uppercase tracking-widest text-slate-600">Correo Electrónico</Label>
               <Input
                 id="email"
                 type="email"
                 autoComplete="email"
                 placeholder="tu@email.com"
                 aria-invalid={!!errors.email}
+                className="rounded-none border-slate-300 focus-visible:ring-[#e63946] focus-visible:border-[#e63946] h-12"
                 {...register('email')}
               />
               {errors.email && (
-                <p className="text-xs text-destructive">{errors.email.message}</p>
+                <p className="text-xs text-[#e63946] font-bold mt-1">{errors.email.message}</p>
               )}
             </div>
 
-            <div className="space-y-1">
-              <Label htmlFor="password">Contraseña</Label>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password" className="text-[10px] font-bold uppercase tracking-widest text-slate-600">Contraseña</Label>
+              </div>
               <Input
                 id="password"
                 type="password"
                 autoComplete="current-password"
-                placeholder="⬢⬢⬢⬢⬢⬢⬢⬢"
+                placeholder="••••••••"
                 aria-invalid={!!errors.password}
+                className="rounded-none border-slate-300 focus-visible:ring-[#e63946] focus-visible:border-[#e63946] h-12"
                 {...register('password')}
               />
               {errors.password && (
-                <p className="text-xs text-destructive">{errors.password.message}</p>
+                <p className="text-xs text-[#e63946] font-bold mt-1">{errors.password.message}</p>
               )}
             </div>
-          </CardContent>
 
-          <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Iniciando sesión⬦
-                </>
-              ) : (
-                'Iniciar sesión'
-              )}
+            <Button 
+              type="submit" 
+              className="w-full rounded-none h-14 bg-[#e63946] hover:bg-[#d62828] text-white font-black text-sm uppercase tracking-widest transition-colors mt-8" 
+              disabled={isLoading}
+            >
+              {isLoading ? 'ACCEDIENDO...' : 'INGRESAR'}
             </Button>
 
-            <p className="text-center text-sm text-muted-foreground">
+            <p className="text-center md:text-left text-xs font-bold text-slate-500 uppercase tracking-wide mt-6">
               ¿No tienes cuenta?{' '}
               <Link
                 to="/register"
-                className="font-medium text-primary hover:underline"
+                className="text-[#e63946] hover:text-[#d62828] transition-colors underline underline-offset-4"
               >
-                Regístrate
+                Regístrate aquí
               </Link>
             </p>
-          </CardFooter>
-        </form>
-      </Card>
+          </form>
+
+        </div>
+      </div>
     </div>
   )
 }
