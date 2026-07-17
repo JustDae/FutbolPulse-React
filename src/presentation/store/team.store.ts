@@ -54,10 +54,14 @@ export const useTeamStore = create<TeamState>((set) => ({
       const user = useAuthStore.getState().user;
       const userId = user?.id || user?.user_id;
       const updated = await teamRepo.updateTeam(id, { ...dto, userId });
-      set((state) => ({
-        teams: state.teams.map((t) => (t.id === id ? updated : t)),
-        isLoading: false,
-      }));
+      set((state) => {
+        const existingTeam = state.teams.find(t => t.id === id);
+        const preservedBadge = existingTeam?.badgeUrl || updated.badgeUrl;
+        return {
+          teams: state.teams.map((t) => (t.id === id ? { ...updated, badgeUrl: preservedBadge } : t)),
+          isLoading: false,
+        };
+      });
       return updated;
     } catch (err: any) {
       set({ isLoading: false });
