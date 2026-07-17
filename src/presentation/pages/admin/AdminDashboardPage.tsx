@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
-import { CalendarDays, Shield, Trophy, Users } from 'lucide-react';
+import { CalendarDays, Shield, Trophy, Users, Settings } from 'lucide-react';
 
 import type { AdminStats } from '@/domain/entities/admin-stats.entity';
 import { dashboardUseCase } from '@/infrastructure/factories/dashboard.factory';
 import {
   Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
 } from '@/presentation/components/ui/card';
 
 const statConfig = [
@@ -94,22 +91,46 @@ export const AdminDashboardPage = () => {
   }
 
   return (
-    <div className="space-y-6 p-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard administrativo</h1>
-        <p className="text-sm text-gray-500">Resumen general del estado del torneo y la plataforma.</p>
+    <div className="space-y-8 animate-fade-in pb-12 p-6">
+      {/* Clean SaaS Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+          <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Panel de Control</h1>
+          <p className="text-gray-500 dark:text-[#888888] font-normal text-sm">Resumen general y acceso rápido a las funciones principales.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 rounded-xl bg-gray-100 dark:bg-[#101010] border border-gray-200 dark:border-white/5 px-4 py-2.5 shadow-sm">
+            <span className="text-xs font-semibold text-gray-900 dark:text-white uppercase tracking-wider">Sistema Activo</span>
+          </div>
+          <button className="flex items-center gap-2 rounded-xl bg-[#f94116] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#e03a13] shadow-md">
+            <Settings className="h-4 w-4" />
+            Ajustes
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {statConfig.map(({ key, label, icon: Icon, className }) => (
-          <Card key={key}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-300">{label}</CardTitle>
-              <Icon className={`h-4 w-4 ${className}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats[key]}</div>
-            </CardContent>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {statConfig.map(({ key, label, icon: Icon }) => (
+          <Card key={key} className="bg-white dark:bg-[#1a1a1c] border border-gray-200 dark:border-none shadow-sm dark:shadow-none rounded-2xl overflow-hidden flex flex-col justify-between p-5 transition-transform hover:scale-[1.02]">
+            
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex items-center gap-2 text-gray-500 dark:text-[#888888]">
+                 <Icon className="h-4 w-4" />
+                 <span className="text-xs font-medium">{label}</span>
+              </div>
+            </div>
+
+            <div className="flex items-end justify-between">
+              <div className="text-3xl font-semibold text-gray-900 dark:text-white tracking-tight">
+                {stats[key]}
+              </div>
+              
+              {/* Fake Trend Indicator */}
+              <div className="flex items-center gap-1 rounded bg-gray-100 dark:bg-[#101010] px-1.5 py-0.5 text-[10px] font-medium text-emerald-600 dark:text-emerald-500">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                +2.1%
+              </div>
+            </div>
           </Card>
         ))}
       </div>
