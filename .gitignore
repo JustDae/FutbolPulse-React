@@ -25,5 +25,6 @@ dist-ssr
 # .gitignore (agregar estas líneas)
 .env
 .env.production
+.env.development
 .env.local
 .env.*.local

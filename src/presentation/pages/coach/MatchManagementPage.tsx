@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Plus, Calendar, Loader2, MapPin, Clock } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/presentation/components/ui/card';
+
 import { Button } from '@/presentation/components/ui/button';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/presentation/components/ui/dialog';
 import { matchRepository } from '@/infrastructure/adapters/axios-match.repository';

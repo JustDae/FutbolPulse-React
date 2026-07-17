@@ -44,7 +44,7 @@ export class AxiosPlayerRepository implements PlayerRepository {
   async getPlayersByTeam(teamId: string): Promise<Player[]> {
     const { data } = await axiosClient.get(`/equipos/${teamId}/jugadores/`);
     const list = Array.isArray(data) ? data : data.jugadores || data.data || [];
-    return list.map(raw => {
+    return list.map((raw: any) => {
       const player = PlayerMapper.fromJsonToDomain(raw);
       const mockPhoto = localStorage.getItem(`mock_player_photo_${player.id}`);
       if (mockPhoto) player.photoUrl = mockPhoto;

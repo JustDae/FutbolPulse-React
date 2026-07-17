@@ -3,8 +3,8 @@ import { Link, useLocation, Outlet } from 'react-router-dom';
 
 import { Button } from '@/presentation/components/ui/button';
 import { ThemeToggle } from '@/presentation/components/ThemeToggle';
-import { LogOut, ChevronRight, Menu } from 'lucide-react';
-import { Separator } from '@/presentation/components/ui/separator';
+import { LogOut, Menu } from 'lucide-react';
+
 import {
   Sheet,
   SheetContent,
