@@ -44,13 +44,10 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_KEY }}
           script: |
-            set -e
-
-            sudo mkdir -p /var/www/futbol-pulse
-            sudo rm -rf /var/www/futbol-pulse/*
-            sudo cp -r /tmp/react_build/dist/* /var/www/futbol-pulse/
-
-            sudo chown -R www-data:www-data /var/www/futbol-pulse
-
-            sudo nginx -t
-            sudo systemctl reload nginx
+            cd /root/futbolpulse-react
+            git fetch origin
+            git reset --hard origin/main
+            npm install
+            npm run build
+            cp -r dist/* /var/www/futbolpulse-react/
+            systemctl reload nginx
