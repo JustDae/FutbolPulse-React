@@ -139,6 +139,54 @@ export function LineupBuilderPage() {
     toast.success('Alineación guardada exitosamente');
   };
 
+  const getFormationCoordinates = (form: string) => {
+    const coords: {x: number, y: number}[] = [{ x: 50, y: 88 }]; // GK
+    
+    let defs = 4, mids = 3, fwds = 3;
+    if (form === '4-4-2') { defs = 4; mids = 4; fwds = 2; }
+    else if (form === '3-5-2') { defs = 3; mids = 5; fwds = 2; }
+    else if (form === '4-2-3-1') { defs = 4; mids = 2; fwds = 1; } // simplified
+
+    const distribute = (count: number, y: number) => {
+      if (count === 1) return [{ x: 50, y }];
+      if (count === 2) return [{ x: 35, y }, { x: 65, y }];
+      if (count === 3) return [{ x: 25, y }, { x: 50, y }, { x: 75, y }];
+      if (count === 4) return [{ x: 20, y }, { x: 40, y }, { x: 60, y }, { x: 80, y }];
+      if (count === 5) return [{ x: 15, y }, { x: 32.5, y }, { x: 50, y }, { x: 67.5, y }, { x: 85, y }];
+      return [];
+    };
+
+    coords.push(...distribute(defs, 65));
+    if (form === '4-2-3-1') {
+      coords.push(...distribute(2, 50)); // DM
+      coords.push(...distribute(3, 35)); // AM
+      coords.push(...distribute(1, 20)); // ST
+    } else {
+      coords.push(...distribute(mids, 45));
+      coords.push(...distribute(fwds, 22));
+    }
+    
+    return coords;
+  };
+
+  const handleFormationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newForm = e.target.value;
+    setFormation(newForm);
+    
+    if (pitchPlayers.length > 0) {
+      const coords = getFormationCoordinates(newForm);
+      setPitchPlayers(prev => {
+        return prev.map((p, i) => {
+          if (i < coords.length) {
+            return { ...p, x: coords[i].x, y: coords[i].y };
+          }
+          return p;
+        });
+      });
+      toast.info(`Alineación ajustada a ${newForm}`);
+    }
+  };
+
   const handleDragStart = (e: React.DragEvent, player: Player) => {
     e.dataTransfer.setData('playerId', player.id);
   };
@@ -190,29 +238,32 @@ export function LineupBuilderPage() {
   );
   
   return (
-    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div className="flex-1 space-y-6 p-6 md:p-8">
+      {/* Clean SaaS Header */}
+      <div className="mb-8 pl-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Armado de Alineaciones</h2>
-          <p className="text-sm text-muted-foreground">Configura la pizarra táctica para cada equipo</p>
+          <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Armado de Alineaciones</h1>
+          <p className="text-gray-500 dark:text-[#888888] font-normal text-sm">Configura la pizarra táctica para cada equipo.</p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           <select 
-            className="px-3 py-2 bg-background border rounded-md text-sm outline-none focus:ring-2 focus:ring-ring"
+            className="px-4 py-2 bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none text-gray-700 dark:text-white shadow-sm focus:ring-2 focus:ring-[#f94116]/50"
             value={selectedTeamId}
             onChange={handleTeamChange}
             disabled={isLoading || teams.length === 0}
           >
             {teams.length === 0 ? <option value="">Sin equipos...</option> : null}
             {teams.map(t => (
-              <option key={t.id} value={t.id}>{t.name}</option>
+              <option key={t.id} value={t.id} className="bg-white dark:bg-[#101010] text-gray-900 dark:text-white">{t.name}</option>
             ))}
           </select>
 
-          <Button variant="outline" onClick={() => setPitchPlayers([])}>Limpiar Cancha</Button>
-          <Button onClick={saveLineup} className="gap-2">
+          <button onClick={() => setPitchPlayers([])} className="flex items-center gap-2 rounded-xl bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/5 px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-zinc-300 transition hover:bg-gray-200 dark:hover:bg-white/10 shadow-sm">
+            Limpiar Cancha
+          </button>
+          <button onClick={saveLineup} className="flex items-center gap-2 rounded-xl bg-[#f94116] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#e03a13] shadow-md">
             <Save className="h-4 w-4" /> Guardar
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -285,8 +336,12 @@ export function LineupBuilderPage() {
                         <p className="font-medium text-sm leading-tight">{player.firstNames} {player.lastNames}</p>
                         <p className="text-xs text-muted-foreground mt-0.5">{player.position || 'Sin posición'}</p>
                       </div>
-                      <div className="h-8 w-8 shrink-0 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center font-bold text-xs">
-                        {player.jerseyNumber || '-'}
+                      <div className="h-8 w-8 shrink-0 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center font-bold text-xs overflow-hidden">
+                        {player.photoUrl ? (
+                          <img src={player.photoUrl} alt={player.firstNames} className="h-full w-full object-cover" />
+                        ) : (
+                          player.jerseyNumber || '-'
+                        )}
                       </div>
                     </div>
                   ))
@@ -307,11 +362,12 @@ export function LineupBuilderPage() {
             <select 
               className="px-3 py-1 bg-background border rounded-md text-sm outline-none focus:ring-2 focus:ring-ring"
               value={formation}
-              onChange={(e) => setFormation(e.target.value)}
+              onChange={handleFormationChange}
             >
               <option value="4-3-3">4-3-3</option>
               <option value="4-4-2">4-4-2</option>
               <option value="3-5-2">3-5-2</option>
+              <option value="4-2-3-1">4-2-3-1</option>
             </select>
           </CardHeader>
           <CardContent>
@@ -349,10 +405,14 @@ export function LineupBuilderPage() {
                     onDragStart={(e) => isDraggable && handleDragStart(e, player)}
                   >
                     <div className="relative">
-                      <div className={`h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-white shadow-lg flex items-center justify-center font-bold text-sm md:text-base ${
+                      <div className={`h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-white shadow-lg flex items-center justify-center font-bold text-sm md:text-base overflow-hidden ${
                         isRival ? 'bg-red-600 text-white' : 'bg-primary text-primary-foreground'
                       }`}>
-                        {player.jerseyNumber || '-'}
+                        {player.photoUrl && !isGenericRival ? (
+                          <img src={player.photoUrl} alt={player.firstNames} className="h-full w-full object-cover" />
+                        ) : (
+                          player.jerseyNumber || '-'
+                        )}
                       </div>
                       {isDraggable && (
                         <button 
@@ -363,10 +423,10 @@ export function LineupBuilderPage() {
                         </button>
                       )}
                     </div>
-                    <div className={`mt-1 text-[10px] md:text-xs px-2 py-0.5 rounded shadow-sm whitespace-nowrap text-center max-w-[80px] truncate ${
+                    <div className={`mt-1 text-[10px] md:text-xs px-2 py-0.5 rounded shadow-sm whitespace-nowrap text-center max-w-[90px] truncate ${
                       isRival ? 'bg-red-900/80 text-white' : 'bg-black/60 text-white'
                     }`}>
-                      {player.firstNames.split(' ')[0]} {player.lastNames.split(' ')[0]}
+                      {player.lastNames || player.firstNames}
                     </div>
                   </div>
                 );
