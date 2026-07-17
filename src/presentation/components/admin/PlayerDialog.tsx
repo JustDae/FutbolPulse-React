@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import type { Player } from '../../../domain/entities/player.entity';
 import { usePlayerStore } from '../../store/player.store';
 import { useTeamStore } from '../../store/team.store';
+import { useAuthStore } from '../../store/auth.store';
 import { ImageUploader } from '../ImageUploader';
 
 const playerSchema = z.object({
@@ -34,6 +35,13 @@ interface PlayerDialogProps {
 export const PlayerDialog = ({ isOpen, onClose, playerToEdit, defaultTeamId }: PlayerDialogProps) => {
   const { createPlayer, updatePlayer, uploadPlayerPhoto, isLoading } = usePlayerStore();
   const { teams, fetchTeams } = useTeamStore();
+  const { user } = useAuthStore();
+
+  const displayedTeams = useMemo(() => {
+    return (user?.tipo_usuario === 'Coach' && !user?.is_staff)
+      ? teams.filter(team => team.coach === user.nombre_completo)
+      : teams;
+  }, [user, teams]);
 
   const {
     register,
@@ -74,11 +82,11 @@ export const PlayerDialog = ({ isOpen, onClose, playerToEdit, defaultTeamId }: P
         lastNames: '',
         birthDate: '',
         jerseyNumber: 10,
-        teamId: defaultTeamId || teams[0]?.id || '',
+        teamId: defaultTeamId || displayedTeams[0]?.id || '',
         isActive: true,
       });
     }
-  }, [playerToEdit, reset, teams, defaultTeamId]);
+  }, [playerToEdit, reset, displayedTeams, defaultTeamId]);
 
   if (!isOpen) return null;
 
@@ -174,7 +182,7 @@ export const PlayerDialog = ({ isOpen, onClose, playerToEdit, defaultTeamId }: P
               className="mt-1 w-full rounded border p-2 text-sm dark:bg-zinc-800 dark:border-zinc-700"
             >
               <option value="">Selecciona un equipo...</option>
-              {teams.map((team) => (
+              {displayedTeams.map((team) => (
                 <option key={team.id} value={team.id}>
                   {team.name}
                 </option>
