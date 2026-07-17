@@ -51,10 +51,14 @@ export const usePlayerStore = create<PlayerState>((set) => ({
     set({ isLoading: true });
     try {
       const updated = await playerRepo.updatePlayer(id, dto);
-      set((state) => ({
-        players: state.players.map((p) => (p.id === id ? updated : p)),
-        isLoading: false,
-      }));
+      set((state) => {
+        const existingPlayer = state.players.find(p => p.id === id);
+        const preservedPhoto = existingPlayer?.photoUrl || updated.photoUrl;
+        return {
+          players: state.players.map((p) => (p.id === id ? { ...updated, photoUrl: preservedPhoto } : p)),
+          isLoading: false,
+        };
+      });
       return updated;
     } catch (err: any) {
       set({ isLoading: false });
