@@ -15,13 +15,15 @@ const teamRepo = new AxiosTeamRepository();
 
 interface PitchPlayer {
   player: Player;
-  x: number; 
-  y: number; 
+  x: number;
+  y: number;
 }
 
 const BG_CARD = '#0B0F19';
 const BG_INNER = '#151D30';
 const BORDER = 'rgba(255, 255, 255, 0.08)';
+const ACCENT = '#22C55E';
+const RIVAL = '#E31C3D';
 
 export function LineupBuilderPage() {
   const { user } = useAuthStore();
@@ -52,7 +54,7 @@ export function LineupBuilderPage() {
         let myTeams = fetchedTeams;
 
         if (!isAdmin && user?.nombre_completo) {
-          myTeams = fetchedTeams.filter(t => 
+          myTeams = fetchedTeams.filter(t =>
             matchesCoach(t.coach, user.nombre_completo)
           );
         }
@@ -111,8 +113,8 @@ export function LineupBuilderPage() {
       if (saved) {
         const parsed = JSON.parse(saved);
         const restored = parsed.map((p: any) => ({
-          x: 100 - p.x, 
-          y: 100 - p.y, 
+          x: 100 - p.x,
+          y: 100 - p.y,
           player: players.find(ap => ap.id === p.playerId)
         })).filter((p: any) => p.player);
         setRivalPitchPlayers(restored);
@@ -138,7 +140,7 @@ export function LineupBuilderPage() {
   };
 
   const getFormationCoordinates = (form: string) => {
-    const coords: {x: number, y: number}[] = [{ x: 50, y: 88 }];
+    const coords: { x: number, y: number }[] = [{ x: 50, y: 88 }];
 
     let defs = 4, mids = 3, fwds = 3;
     if (form === '4-4-2') { defs = 4; mids = 4; fwds = 2; }
@@ -233,43 +235,60 @@ export function LineupBuilderPage() {
 
   return (
     <div className="flex-1 space-y-6 animate-fade-in pb-10" style={{ fontFamily: "'Inter', sans-serif" }}>
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b" style={{ borderColor: BORDER }}>
+
+      <div
+        className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b"
+        style={{ borderColor: BORDER }}
+      >
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Pizarra Táctica</span>
-          <h1 className="text-2xl font-bold text-slate-900 mt-1 uppercase tracking-wider">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-white/40">Pizarra Táctica</span>
+          <h1 className="text-2xl font-bold text-white mt-1 uppercase tracking-wider">
             Armado de Alineaciones
           </h1>
         </div>
+
         <div className="flex flex-wrap items-center gap-3">
-          <select 
-            className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 focus:border-slate-300 focus:outline-none transition-all shadow-sm"
+          <select
+            className="rounded-lg border px-4 py-2 text-xs font-semibold outline-none transition-colors"
+            style={{ background: BG_INNER, borderColor: BORDER, color: '#FFFFFF' }}
             value={selectedTeamId}
             onChange={handleTeamChange}
             disabled={isLoading || teams.length === 0}
           >
             {teams.length === 0 ? <option value="">Sin equipos...</option> : null}
             {teams.map(t => (
-              <option key={t.id} value={t.id} className="text-slate-800 bg-white">{t.name}</option>
+              <option key={t.id} value={t.id} style={{ background: BG_INNER, color: '#fff' }}>{t.name}</option>
             ))}
           </select>
 
-          <button onClick={() => setPitchPlayers([])} className="rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors shadow-sm">
+          <button
+            onClick={() => setPitchPlayers([])}
+            className="rounded-lg border px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors"
+            style={{ background: BG_INNER, borderColor: BORDER, color: 'rgba(255,255,255,0.75)' }}
+          >
             Limpiar Cancha
           </button>
-          <button onClick={saveLineup} className="flex items-center gap-2 rounded-lg bg-[#E31C3D] hover:bg-[#c61834] text-white px-4.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors shadow-sm">
+
+          <button
+            onClick={saveLineup}
+            className="flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:brightness-110"
+            style={{ background: ACCENT }}
+          >
             <Save className="h-4 w-4" /> Guardar
           </button>
         </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-4">
+
         <Card className="md:col-span-1 border border-white/10 text-white rounded-lg overflow-hidden flex flex-col" style={{ background: BG_CARD }}>
           <CardHeader className="border-b" style={{ borderColor: BORDER }}>
             <CardTitle className="text-sm font-bold flex items-center gap-2 uppercase tracking-wider text-white">
-              <Users className="h-4.5 w-4.5 text-[#E31C3D]" /> Plantilla ({benchPlayers.length})
+              <Users className="h-4.5 w-4.5" style={{ color: ACCENT }} /> Plantilla ({benchPlayers.length})
             </CardTitle>
             <CardDescription className="text-white/40 text-[10px] uppercase font-semibold">Arrastra jugadores a la cancha</CardDescription>
           </CardHeader>
+
           <CardContent className="p-4 flex-1">
             {isLoading ? (
               <div className="flex justify-center py-8">
@@ -281,18 +300,20 @@ export function LineupBuilderPage() {
               </p>
             ) : (
               <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
-                <div 
+
+                <div
                   draggable
                   onDragStart={(e) => {
                     e.dataTransfer.setData('playerId', 'rival_template');
                   }}
-                  className="p-3 rounded-lg border border-[#E31C3D]/20 bg-[#E31C3D]/5 hover:bg-[#E31C3D]/10 cursor-grab active:cursor-grabbing flex items-center justify-between transition-colors mb-2"
+                  className="p-3 rounded-lg border cursor-grab active:cursor-grabbing flex items-center justify-between transition-colors mb-2"
+                  style={{ borderColor: `${RIVAL}33`, background: `${RIVAL}0D` }}
                 >
                   <div>
-                    <p className="font-bold text-xs leading-tight text-[#E31C3D] uppercase tracking-wider">Oponente (Rival)</p>
-                    <p className="text-[9px] text-[#E31C3D]/60 mt-1 uppercase font-semibold">Ficha genérica</p>
+                    <p className="font-bold text-xs leading-tight uppercase tracking-wider" style={{ color: RIVAL }}>Oponente (Rival)</p>
+                    <p className="text-[9px] mt-1 uppercase font-semibold" style={{ color: `${RIVAL}99` }}>Ficha genérica</p>
                   </div>
-                  <div className="h-7 w-7 shrink-0 rounded-full bg-[#E31C3D] text-white flex items-center justify-center font-bold text-xs">
+                  <div className="h-7 w-7 shrink-0 rounded-full text-white flex items-center justify-center font-bold text-xs" style={{ background: RIVAL }}>
                     X
                   </div>
                 </div>
@@ -300,7 +321,8 @@ export function LineupBuilderPage() {
                 <div className="mb-4 p-3 rounded-lg border border-white/5" style={{ background: BG_INNER }}>
                   <p className="text-[9px] font-bold text-white/40 uppercase tracking-wider mb-2">Cargar Rival Específico:</p>
                   <select
-                    className="w-full px-3 py-2 bg-[#0B0F19] text-white border border-white/10 rounded-md text-xs font-semibold outline-none focus:border-white/20 transition-all"
+                    className="w-full px-3 py-2 border border-white/10 rounded-md text-xs font-semibold outline-none focus:border-white/20 transition-all"
+                    style={{ background: BG_CARD, color: '#fff' }}
                     value={selectedRivalId}
                     onChange={handleRivalChange}
                   >
@@ -322,11 +344,12 @@ export function LineupBuilderPage() {
                 ) : (
                   <div className="space-y-2">
                     {benchPlayers.map(player => (
-                      <div 
-                        key={player.id} 
+                      <div
+                        key={player.id}
                         draggable
                         onDragStart={(e) => handleDragStart(e, player)}
-                        className="p-3 rounded-lg border border-white/5 bg-[#151D30]/40 hover:bg-[#151D30]/80 cursor-grab active:cursor-grabbing flex items-center justify-between transition-colors"
+                        className="p-3 rounded-lg border border-white/5 hover:bg-white/[0.06] cursor-grab active:cursor-grabbing flex items-center justify-between transition-colors"
+                        style={{ background: `${BG_INNER}66` }}
                       >
                         <div>
                           <p className="font-bold text-xs text-white uppercase tracking-wider leading-tight">{player.firstNames} {player.lastNames}</p>
@@ -352,12 +375,13 @@ export function LineupBuilderPage() {
           <CardHeader className="flex flex-row items-center justify-between border-b" style={{ borderColor: BORDER }}>
             <div>
               <CardTitle className="text-sm font-bold flex items-center gap-2 uppercase tracking-wider text-white">
-                <LayoutGrid className="h-4.5 w-4.5 text-[#E31C3D]" /> Pizarra Táctica
+                <LayoutGrid className="h-4.5 w-4.5" style={{ color: ACCENT }} /> Pizarra Táctica
               </CardTitle>
               <CardDescription className="text-white/40 text-[10px] uppercase font-semibold">Jugadores en cancha: {pitchPlayers.length}/11</CardDescription>
             </div>
-            <select 
-              className="px-3 py-1.5 bg-[#151D30] text-white border border-white/10 rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer outline-none focus:border-white/20 transition-all"
+            <select
+              className="px-3 py-1.5 border border-white/10 rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer outline-none focus:border-white/20 transition-all"
+              style={{ background: BG_INNER, color: '#fff' }}
               value={formation}
               onChange={handleFormationChange}
             >
@@ -367,8 +391,9 @@ export function LineupBuilderPage() {
               <option value="4-2-3-1">4-2-3-1</option>
             </select>
           </CardHeader>
+
           <CardContent className="p-4">
-            <div 
+            <div
               className="relative w-full aspect-[2/3] md:aspect-[16/10] rounded-lg overflow-hidden border border-white/10 flex items-center justify-center"
               style={{ background: '#0F1E15' }}
               onDragOver={handleDragOver}
@@ -411,9 +436,10 @@ export function LineupBuilderPage() {
                     onDragStart={(e) => isDraggable && handleDragStart(e, player)}
                   >
                     <div className="relative">
-                      <div className={`h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-white/60 shadow-lg flex items-center justify-center font-bold text-xs md:text-sm overflow-hidden ${
-                        isRival ? 'bg-[#E31C3D] text-white' : 'bg-slate-700 text-white'
-                      }`}>
+                      <div
+                        className="h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-white/60 shadow-lg flex items-center justify-center font-bold text-xs md:text-sm overflow-hidden text-white"
+                        style={{ background: isRival ? RIVAL : '#334155' }}
+                      >
                         {player.photoUrl && !isGenericRival ? (
                           <img src={player.photoUrl} alt={player.firstNames} className="h-full w-full object-cover" />
                         ) : (
@@ -421,17 +447,19 @@ export function LineupBuilderPage() {
                         )}
                       </div>
                       {isDraggable && (
-                        <button 
+                        <button
                           onClick={() => removePlayerFromPitch(player.id)}
-                          className="absolute -top-1 -right-1 h-4 w-4 bg-[#E31C3D] text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110"
+                          className="absolute -top-1 -right-1 h-4 w-4 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110"
+                          style={{ background: RIVAL }}
                         >
                           <X className="h-3 w-3" />
                         </button>
                       )}
                     </div>
-                    <div className={`mt-1 text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shadow-sm whitespace-nowrap text-center max-w-[90px] truncate ${
-                      isRival ? 'bg-[#E31C3D]/80 text-white' : 'bg-slate-900/80 text-white'
-                    }`}>
+                    <div
+                      className="mt-1 text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shadow-sm whitespace-nowrap text-center max-w-[90px] truncate text-white"
+                      style={{ background: isRival ? `${RIVAL}CC` : 'rgba(15,23,42,0.8)' }}
+                    >
                       {player.lastNames || player.firstNames}
                     </div>
                   </div>
