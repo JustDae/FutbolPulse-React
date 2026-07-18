@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { matchRepository } from '@/infrastructure/adapters/axios-match.repository';
 import type { Match } from '@/domain/entities/match.entity';
-import { Play, ArrowRight } from 'lucide-react';
+import { Play, ArrowRight, Layers, Wifi, Calendar, CheckCircle2, Activity } from 'lucide-react';
 import { useTeamStore } from '@/presentation/store/team.store';
 import { usePlayerStore } from '@/presentation/store/player.store';
+import { useAuthStore } from '@/presentation/store/auth.store';
 import heroBg from '@/assets/hero_bg.jpg';
 
 const BG_CARD = '#0B0F19';
@@ -42,6 +43,13 @@ export function MatchManagementPage() {
   const [news, setNews] = useState<{ title: string; date: string; image: string }[]>([]);
   const { teams, fetchTeams } = useTeamStore();
   const { players, fetchPlayers } = usePlayerStore();
+  const { user } = useAuthStore();
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    const tick = setInterval(() => setNow(new Date()), 60000);
+    return () => clearInterval(tick);
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -181,35 +189,130 @@ export function MatchManagementPage() {
   const activeStandings = getDynamicStandings();
   const featuredHomeLineup = featuredMatch ? getDynamicLineup(featuredMatch.equipoLocal) : null;
 
+  const coachName = user ? `${user.firstNames ?? ''} ${user.lastNames ?? ''}`.trim() || user.username || 'Coach' : 'Coach';
+  const greeting = now.getHours() < 12 ? 'Buenos días' : now.getHours() < 18 ? 'Buenas tardes' : 'Buenas noches';
+  const dateStr = now.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  const liveCount   = matches.filter(m => m.status === 'En curso').length;
+  const schedCount  = matches.filter(m => m.status === 'Programado').length;
+  const doneCount   = matches.filter(m => m.status === 'Finalizado').length;
+  const total       = matches.length;
+
+  const statCards = [
+    {
+      label: 'Total Partidos',
+      value: String(total || 0),
+      icon: Layers,
+      accent: '#10B981',
+      bar: total > 0 ? 100 : 0,
+      sub: 'registrados',
+    },
+    {
+      label: 'En Vivo',
+      value: String(liveCount),
+      icon: Wifi,
+      accent: '#EF4444',
+      bar: total > 0 ? Math.round((liveCount / total) * 100) : 0,
+      sub: liveCount === 1 ? 'en curso ahora' : 'en curso',
+      pulse: liveCount > 0,
+    },
+    {
+      label: 'Programados',
+      value: String(schedCount),
+      icon: Calendar,
+      accent: '#3B82F6',
+      bar: total > 0 ? Math.round((schedCount / total) * 100) : 0,
+      sub: 'próximos',
+    },
+    {
+      label: 'Finalizados',
+      value: String(doneCount),
+      icon: CheckCircle2,
+      accent: '#A78BFA',
+      bar: total > 0 ? Math.round((doneCount / total) * 100) : 0,
+      sub: 'jugados',
+    },
+  ];
+
   return (
-    <div className="w-full max-w-[1300px] animate-fade-in pb-10 pt-4" style={{ fontFamily: "'Inter', sans-serif" }}>
-      <div className="flex items-end justify-between mb-8 pb-6 border-b" style={{ borderColor: BORDER }}>
-        <div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Panel Técnico</span>
-          <h1 className="text-2xl font-bold text-white mt-1 uppercase tracking-wider">
-            Gestión de Partidos
-          </h1>
-        </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 border border-white/10 bg-white/5 rounded-md">
-          <span className="w-1.5 h-1.5 bg-[#10B981] rounded-full" />
-          <span className="text-[9px] font-semibold uppercase tracking-wider text-white/60">Actualización en vivo</span>
+    <div className="w-full max-w-[1300px] animate-fade-in pb-10" style={{ fontFamily: "'Inter', sans-serif" }}>
+
+      {/* ─── HERO BANNER ─── */}
+      <div
+        className="relative w-full rounded-2xl overflow-hidden mb-8"
+        style={{ minHeight: 180 }}
+      >
+        {/* background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${heroBg})`, filter: 'brightness(0.28) saturate(0.6)' }}
+        />
+        {/* green gradient overlay */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(100deg, rgba(16,185,129,0.18) 0%, transparent 60%, rgba(0,0,0,0.4) 100%)' }} />
+        {/* left accent bar */}
+        <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl" style={{ background: '#10B981' }} />
+
+        <div className="relative flex items-center justify-between px-8 py-7 gap-6">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-1" style={{ color: '#10B981' }}>
+              {greeting}, {coachName}
+            </p>
+            <h1 className="text-3xl font-extrabold text-white tracking-tight leading-tight">
+              Gestión de Partidos
+            </h1>
+            <p className="text-[11px] text-white/40 mt-1.5 capitalize">{dateStr}</p>
+          </div>
+
+          <div className="flex flex-col items-end gap-3">
+            {/* Live pill */}
+            <div
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full"
+              style={{ background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.3)' }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
+              <span className="text-[9px] font-bold uppercase tracking-widest text-[#10B981]">Actualización en vivo</span>
+            </div>
+            {/* Activity icon */}
+            <Activity size={28} className="text-white/10" />
+          </div>
         </div>
       </div>
 
+      {/* ─── STAT CARDS ─── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        {[
-          { value: String(matches.length || '0'), label: 'Total Partidos' },
-          { value: String(matches.filter(m => m.status === 'En curso').length || '0'), label: 'En Vivo' },
-          { value: String(matches.filter(m => m.status === 'Programado').length || '0'), label: 'Programados' },
-          { value: String(matches.filter(m => m.status === 'Finalizado').length || '0'), label: 'Finalizados' },
-        ].map(({ value, label }) => (
-          <div key={label} className="flex flex-col justify-between p-5 rounded-lg overflow-hidden" style={{ background: BG_CARD, border: `1px solid ${BORDER}` }}>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              {label}
-            </span>
-            <span className="text-3xl font-bold text-white mt-2">
-              {value}
-            </span>
+        {statCards.map(({ label, value, icon: Icon, accent, bar, sub, pulse }) => (
+          <div
+            key={label}
+            className="relative flex flex-col p-5 rounded-xl overflow-hidden transition-transform hover:-translate-y-0.5"
+            style={{ background: BG_CARD, border: `1px solid ${BORDER}` }}
+          >
+            {/* top accent strip */}
+            <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-xl" style={{ background: accent }} />
+
+            <div className="flex items-start justify-between mb-3">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-white/40">{label}</span>
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${accent}22` }}>
+                {pulse ? (
+                  <span className="relative flex items-center justify-center">
+                    <span className="w-2 h-2 rounded-full animate-ping absolute" style={{ background: accent }} />
+                    <Icon size={14} style={{ color: accent }} />
+                  </span>
+                ) : (
+                  <Icon size={14} style={{ color: accent }} />
+                )}
+              </div>
+            </div>
+
+            <span className="text-4xl font-extrabold text-white leading-none mb-1">{value}</span>
+            <span className="text-[10px] text-white/30 mb-3">{sub}</span>
+
+            {/* progress bar */}
+            <div className="h-1 w-full rounded-full" style={{ background: 'rgba(255,255,255,0.06)' }}>
+              <div
+                className="h-1 rounded-full transition-all duration-700"
+                style={{ width: `${bar}%`, background: accent }}
+              />
+            </div>
           </div>
         ))}
       </div>
