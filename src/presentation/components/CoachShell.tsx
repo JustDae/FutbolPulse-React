@@ -130,7 +130,7 @@ export function CoachShell() {
   const { user } = useAuthStore();
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden" style={{ background: NAVY }}>
+    <div className="dark flex h-screen w-screen overflow-hidden text-foreground" style={{ background: NAVY }}>
 
       {}
       <aside className="hidden w-64 shrink-0 md:flex flex-col z-20 h-full">
