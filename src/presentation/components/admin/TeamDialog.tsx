@@ -100,7 +100,7 @@ function TeamDialogInner({ onClose, teamToEdit }: Omit<TeamDialogProps, 'isOpen'
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium">Nombre del Equipo</label>
+            <label className="block text-sm font-medium text-gray-900 dark:text-gray-200">Nombre del Equipo</label>
             <input
               type="text"
               {...register('name')}
@@ -111,7 +111,7 @@ function TeamDialogInner({ onClose, teamToEdit }: Omit<TeamDialogProps, 'isOpen'
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Director Técnico (DT)</label>
+            <label className="block text-sm font-medium text-gray-900 dark:text-gray-200">Director Técnico (DT)</label>
             <input
               type="text"
               {...register('coach')}
@@ -123,7 +123,7 @@ function TeamDialogInner({ onClose, teamToEdit }: Omit<TeamDialogProps, 'isOpen'
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium">Estadio principal</label>
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-200">Estadio principal</label>
               <input
                 type="text"
                 {...register('stadium')}
@@ -133,7 +133,7 @@ function TeamDialogInner({ onClose, teamToEdit }: Omit<TeamDialogProps, 'isOpen'
             </div>
 
             <div>
-              <label className="block text-sm font-medium">Año de Fundación</label>
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-200">Año de Fundación</label>
               <input
                 type="number"
                 {...register('foundedYear', { valueAsNumber: true })}
@@ -145,7 +145,7 @@ function TeamDialogInner({ onClose, teamToEdit }: Omit<TeamDialogProps, 'isOpen'
 
           <div className="flex items-center gap-2 pt-2">
             <input type="checkbox" id="isActive" {...register('isActive')} className="h-4 w-4" />
-            <label htmlFor="isActive" className="text-sm font-medium">Equipo Activo en el Torneo</label>
+            <label htmlFor="isActive" className="text-sm font-medium text-gray-900 dark:text-gray-200">Equipo Activo en el Torneo</label>
           </div>
 
           <div className="mt-6 flex justify-end gap-3 pt-4 border-t">
