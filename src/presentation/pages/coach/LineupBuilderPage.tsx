@@ -249,7 +249,7 @@ export function LineupBuilderPage() {
 
         <div className="flex flex-wrap items-center gap-3">
           <select
-            className="rounded-lg border px-4 py-2 text-xs font-semibold outline-none transition-colors"
+            className="rounded-xl border px-4 py-2.5 text-xs font-semibold outline-none transition-all shadow-sm shadow-black/20"
             style={{ background: BG_INNER, borderColor: BORDER, color: '#FFFFFF' }}
             value={selectedTeamId}
             onChange={handleTeamChange}
@@ -263,7 +263,7 @@ export function LineupBuilderPage() {
 
           <button
             onClick={() => setPitchPlayers([])}
-            className="rounded-lg border px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors"
+            className="rounded-xl border px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-all shadow-sm shadow-black/20 hover:border-white/20"
             style={{ background: BG_INNER, borderColor: BORDER, color: 'rgba(255,255,255,0.75)' }}
           >
             Limpiar Cancha
@@ -271,7 +271,7 @@ export function LineupBuilderPage() {
 
           <button
             onClick={saveLineup}
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:brightness-110"
+            className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition-all shadow-md shadow-black/30 hover:brightness-110 hover:-translate-y-px"
             style={{ background: ACCENT }}
           >
             <Save className="h-4 w-4" /> Guardar
@@ -281,7 +281,7 @@ export function LineupBuilderPage() {
 
       <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-4">
 
-        <Card className="md:col-span-1 border border-white/10 text-white rounded-lg overflow-hidden flex flex-col" style={{ background: BG_CARD }}>
+        <Card className="md:col-span-1 border border-white/10 text-white rounded-2xl overflow-hidden flex flex-col shadow-xl shadow-black/30" style={{ background: BG_CARD }}>
           <CardHeader className="border-b" style={{ borderColor: BORDER }}>
             <CardTitle className="text-sm font-bold flex items-center gap-2 uppercase tracking-wider text-white">
               <Users className="h-4.5 w-4.5" style={{ color: ACCENT }} /> Plantilla ({benchPlayers.length})
@@ -306,7 +306,7 @@ export function LineupBuilderPage() {
                   onDragStart={(e) => {
                     e.dataTransfer.setData('playerId', 'rival_template');
                   }}
-                  className="p-3 rounded-lg border cursor-grab active:cursor-grabbing flex items-center justify-between transition-colors mb-2"
+                  className="p-3.5 rounded-xl border cursor-grab active:cursor-grabbing flex items-center justify-between transition-all mb-2 hover:shadow-md hover:shadow-black/20"
                   style={{ borderColor: `${RIVAL}33`, background: `${RIVAL}0D` }}
                 >
                   <div>
@@ -318,10 +318,10 @@ export function LineupBuilderPage() {
                   </div>
                 </div>
 
-                <div className="mb-4 p-3 rounded-lg border border-white/5" style={{ background: BG_INNER }}>
+                <div className="mb-4 p-3.5 rounded-xl border border-white/5" style={{ background: BG_INNER }}>
                   <p className="text-[9px] font-bold text-white/40 uppercase tracking-wider mb-2">Cargar Rival Específico:</p>
                   <select
-                    className="w-full px-3 py-2 border border-white/10 rounded-md text-xs font-semibold outline-none focus:border-white/20 transition-all"
+                    className="w-full px-3 py-2.5 border border-white/10 rounded-lg text-xs font-semibold outline-none focus:border-white/20 transition-all"
                     style={{ background: BG_CARD, color: '#fff' }}
                     value={selectedRivalId}
                     onChange={handleRivalChange}
@@ -348,7 +348,7 @@ export function LineupBuilderPage() {
                         key={player.id}
                         draggable
                         onDragStart={(e) => handleDragStart(e, player)}
-                        className="p-3 rounded-lg border border-white/5 hover:bg-white/[0.06] cursor-grab active:cursor-grabbing flex items-center justify-between transition-colors"
+                        className="p-3.5 rounded-xl border border-white/5 hover:bg-white/[0.06] hover:border-white/10 cursor-grab active:cursor-grabbing flex items-center justify-between transition-all"
                         style={{ background: `${BG_INNER}66` }}
                       >
                         <div>
@@ -371,7 +371,7 @@ export function LineupBuilderPage() {
           </CardContent>
         </Card>
 
-        <Card className="md:col-span-2 lg:col-span-3 border border-white/10 text-white rounded-lg overflow-hidden flex flex-col" style={{ background: BG_CARD }}>
+        <Card className="md:col-span-2 lg:col-span-3 border border-white/10 text-white rounded-2xl overflow-hidden flex flex-col shadow-xl shadow-black/30" style={{ background: BG_CARD }}>
           <CardHeader className="flex flex-row items-center justify-between border-b" style={{ borderColor: BORDER }}>
             <div>
               <CardTitle className="text-sm font-bold flex items-center gap-2 uppercase tracking-wider text-white">
@@ -380,7 +380,7 @@ export function LineupBuilderPage() {
               <CardDescription className="text-white/40 text-[10px] uppercase font-semibold">Jugadores en cancha: {pitchPlayers.length}/11</CardDescription>
             </div>
             <select
-              className="px-3 py-1.5 border border-white/10 rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer outline-none focus:border-white/20 transition-all"
+              className="px-3.5 py-2 border border-white/10 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer outline-none focus:border-white/20 transition-all shadow-sm shadow-black/20"
               style={{ background: BG_INNER, color: '#fff' }}
               value={formation}
               onChange={handleFormationChange}
@@ -394,7 +394,7 @@ export function LineupBuilderPage() {
 
           <CardContent className="p-4">
             <div
-              className="relative w-full aspect-[2/3] md:aspect-[16/10] rounded-lg overflow-hidden border border-white/10 flex items-center justify-center"
+              className="relative w-full aspect-[2/3] md:aspect-[16/10] rounded-xl overflow-hidden border border-white/10 flex items-center justify-center shadow-inner shadow-black/40"
               style={{ background: '#0F1E15' }}
               onDragOver={handleDragOver}
               onDrop={handleDrop}
@@ -457,7 +457,7 @@ export function LineupBuilderPage() {
                       )}
                     </div>
                     <div
-                      className="mt-1 text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shadow-sm whitespace-nowrap text-center max-w-[90px] truncate text-white"
+                      className="mt-1 text-[9px] px-2 py-0.5 rounded-md font-bold uppercase tracking-wider shadow-sm whitespace-nowrap text-center max-w-[90px] truncate text-white"
                       style={{ background: isRival ? `${RIVAL}CC` : 'rgba(15,23,42,0.8)' }}
                     >
                       {player.lastNames || player.firstNames}
