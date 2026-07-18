@@ -107,12 +107,12 @@ export const AdminPlayersPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="space-y-4 p-4 md:p-6 max-w-8xl mx-auto">
-        <div className="bg-gradient-to-br from-primary/5 via-primary/10 to-transparent border border-primary/20 rounded-2xl p-6">
+        <div className="bg-card border border-border rounded-lg p-6">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/10 rounded-xl">
-                  <Users className="h-6 w-6 text-primary" />
+                <div className="p-2 bg-muted rounded-lg">
+                  <Users className="h-6 w-6 text-foreground/70" />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-foreground tracking-tight">
@@ -136,19 +136,19 @@ export const AdminPlayersPage = () => {
             </div>
 
             <div className="flex items-center gap-4 flex-wrap">
-              <div className="flex items-center gap-6 bg-card px-4 py-3 rounded-xl border border-border shadow-sm">
+              <div className="flex items-center gap-6 bg-muted/30 px-4 py-3 rounded-lg border border-border">
                 <div className="text-center">
                   <span className="block text-xl font-bold text-emerald-600">{activeCount}</span>
                   <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Activos</span>
                 </div>
                 <div className="w-px h-8 bg-border" />
                 <div className="text-center">
-                  <span className="block text-xl font-bold text-slate-400">{inactiveCount}</span>
+                  <span className="block text-xl font-bold text-muted-foreground/60">{inactiveCount}</span>
                   <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Inactivos</span>
                 </div>
                 <div className="w-px h-8 bg-border" />
                 <div className="text-center">
-                  <span className="block text-xl font-bold text-primary">{displayedPlayers.length}</span>
+                  <span className="block text-xl font-bold text-foreground">{displayedPlayers.length}</span>
                   <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Total</span>
                 </div>
               </div>
@@ -156,7 +156,7 @@ export const AdminPlayersPage = () => {
               <Button
                 variant="action"
                 onClick={handleOpenCreate}
-                className="rounded-xl px-6 py-3 text-sm font-bold uppercase tracking-widest shadow-lg hover:shadow-xl transition-all"
+                className="rounded-lg px-6 py-3 text-sm font-bold uppercase tracking-widest shadow-lg hover:shadow-xl transition-all"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Nuevo Jugador
@@ -165,7 +165,7 @@ export const AdminPlayersPage = () => {
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-card border border-border rounded-lg shadow-sm overflow-hidden">
           <div className="p-4 md:p-5 bg-muted/10 border-b border-border">
             <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
               <div className="relative flex-1 w-full md:max-w-md">
@@ -173,7 +173,7 @@ export const AdminPlayersPage = () => {
                 <input
                   type="text"
                   placeholder="Buscar por nombre, dorsal o equipo..."
-                  className="w-full pl-10 pr-4 py-3 text-sm bg-background border border-border rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="w-full pl-10 pr-4 py-3 text-sm bg-background border border-border rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -183,7 +183,7 @@ export const AdminPlayersPage = () => {
                 <select
                   value={selectedTeamFilter}
                   onChange={(e) => setSelectedTeamFilter(e.target.value)}
-                  className="rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all min-w-[140px]"
+                  className="rounded-lg border border-border bg-background px-4 py-3 text-sm font-medium text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all min-w-[140px]"
                 >
                   <option value="">Todos los equipos</option>
                   {coachTeams.map((t) => (
@@ -194,7 +194,7 @@ export const AdminPlayersPage = () => {
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value as any)}
-                  className="rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="rounded-lg border border-border bg-background px-4 py-3 text-sm font-medium text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                 >
                   <option value="all">Todos</option>
                   <option value="active">Activos</option>
@@ -207,13 +207,13 @@ export const AdminPlayersPage = () => {
           <div className="w-full overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gradient-to-r from-primary/5 to-transparent border-b-2 border-primary/10">
-                  <th className="py-4 px-5 text-[11px] font-bold text-foreground uppercase tracking-wider">Futbolista</th>
-                  <th className="py-4 px-5 text-[11px] font-bold text-foreground uppercase tracking-wider">Dorsal</th>
-                  <th className="py-4 px-5 text-[11px] font-bold text-foreground uppercase tracking-wider hidden lg:table-cell">Fecha Nac.</th>
-                  <th className="py-4 px-5 text-[11px] font-bold text-foreground uppercase tracking-wider">Equipo</th>
-                  <th className="py-4 px-5 text-[11px] font-bold text-foreground uppercase tracking-wider">Estado</th>
-                  <th className="py-4 px-5 text-[11px] font-bold text-foreground uppercase tracking-wider text-right">Acciones</th>
+                <tr className="border-b border-border bg-muted/20">
+                  <th className="py-4 px-5 text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Futbolista</th>
+                  <th className="py-4 px-5 text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Dorsal</th>
+                  <th className="py-4 px-5 text-[11px] font-bold text-muted-foreground uppercase tracking-wider hidden lg:table-cell">Fecha Nac.</th>
+                  <th className="py-4 px-5 text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Equipo</th>
+                  <th className="py-4 px-5 text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Estado</th>
+                  <th className="py-4 px-5 text-[11px] font-bold text-muted-foreground uppercase tracking-wider text-right">Acciones</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/60">
@@ -244,7 +244,7 @@ export const AdminPlayersPage = () => {
                             setSelectedTeamFilter('');
                             setFilterStatus('all');
                           }}
-                          className="mt-4"
+                          className="mt-4 rounded-lg"
                         >
                           Limpiar filtros
                         </Button>
@@ -255,40 +255,26 @@ export const AdminPlayersPage = () => {
                   paginatedPlayers.map((player) => (
                     <tr
                       key={player.id}
-                      className="hover:bg-primary/5 transition-colors duration-100 group"
+                      className="hover:bg-muted/30 transition-colors duration-100 group"
                     >
                       <td className="py-4 px-5">
                         <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center text-sm font-bold shrink-0 ${player.isActive
-                            ? 'bg-primary/10 border-primary/20 text-primary'
-                            : 'bg-muted/30 border-border/50 text-muted-foreground'
-                            }`}>
+                          <div className="w-10 h-10 rounded-lg border border-border bg-muted/30 flex items-center justify-center text-sm font-bold shrink-0 text-muted-foreground">
                             {player.photoUrl ? (
-                              <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover rounded-xl" />
+                              <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover rounded-lg" />
                             ) : (
                               <User className="h-5 w-5" />
                             )}
                           </div>
                           <div>
-                            <div className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors">
+                            <div className="font-semibold text-sm text-foreground">
                               {player.name}
-                            </div>
-                            <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2 mt-0.5">
-                              <span>{player.isActive ? 'Disponible' : 'No disponible'}</span>
-                              {player.isActive && (
-                                <span className="flex items-center gap-1 text-emerald-600">
-                                  <CheckCircle2 className="h-3 w-3" />
-                                </span>
-                              )}
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="py-4 px-5">
-                        <div className={`inline-flex items-center justify-center w-10 h-10 rounded-xl font-extrabold text-sm ${player.isActive
-                          ? 'bg-primary/5 text-primary border border-primary/10'
-                          : 'bg-muted/20 text-muted-foreground border border-border/30'
-                          }`}>
+                        <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg font-extrabold text-sm bg-muted/20 text-muted-foreground border border-border/30">
                           #{player.jerseyNumber}
                         </div>
                       </td>
@@ -307,20 +293,17 @@ export const AdminPlayersPage = () => {
                         )}
                       </td>
                       <td className="py-4 px-5">
-                        <span className={`inline-flex items-center gap-2 px-3 py-1.5 text-xs font-bold rounded-xl border ${player.isActive
-                          ? 'bg-card border-border text-foreground'
-                          : 'bg-muted/20 border-border/30 text-muted-foreground'
-                          }`}>
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary/30" />
+                        <span className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-bold rounded-lg border border-border bg-card text-foreground">
+                          <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30" />
                           {getTeamName(player.teamId)}
                         </span>
                       </td>
                       <td className="py-4 px-5">
-                        <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider border ${player.isActive
-                          ? 'bg-emerald-50/80 text-emerald-700 border-emerald-200'
-                          : 'bg-slate-50/80 text-slate-500 border-slate-200'
+                        <span className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider border ${player.isActive
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            : 'bg-muted/30 text-muted-foreground border-border'
                           }`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${player.isActive ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
+                          <span className={`w-1.5 h-1.5 rounded-full ${player.isActive ? 'bg-emerald-500' : 'bg-muted-foreground/30'}`} />
                           {player.isActive ? 'ACTIVO' : 'INACTIVO'}
                         </span>
                       </td>
@@ -328,14 +311,14 @@ export const AdminPlayersPage = () => {
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => handleOpenEdit(player)}
-                            className="p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-xl transition-all"
+                            className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted/30 rounded-lg transition-all"
                             title="Editar jugador"
                           >
                             <Edit2 className="h-4 w-4" />
                           </button>
                           <button
                             onClick={() => handleDelete(player.id, player.name)}
-                            className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all"
+                            className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-all"
                             title="Eliminar jugador"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -368,7 +351,7 @@ export const AdminPlayersPage = () => {
                 <button
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className="p-2.5 rounded-xl border border-border bg-card hover:bg-muted/50 text-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                  className="p-2.5 rounded-lg border border-border bg-card hover:bg-muted/50 text-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
@@ -389,9 +372,9 @@ export const AdminPlayersPage = () => {
                       <button
                         key={i}
                         onClick={() => setCurrentPage(pageNum)}
-                        className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === pageNum
-                          ? 'bg-primary text-primary-foreground shadow-md'
-                          : 'bg-card border border-border text-muted-foreground hover:bg-muted/50'
+                        className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${currentPage === pageNum
+                            ? 'bg-primary text-primary-foreground shadow-md'
+                            : 'bg-card border border-border text-muted-foreground hover:bg-muted/50'
                           }`}
                       >
                         {pageNum}
@@ -402,7 +385,7 @@ export const AdminPlayersPage = () => {
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="p-2.5 rounded-xl border border-border bg-card hover:bg-muted/50 text-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                  className="p-2.5 rounded-lg border border-border bg-card hover:bg-muted/50 text-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>
@@ -412,9 +395,9 @@ export const AdminPlayersPage = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-card border border-border rounded-xl p-4">
+          <div className="bg-card border border-border rounded-lg p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl">
+              <div className="p-2 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg">
                 <CheckCircle2 className="h-5 w-5 text-emerald-600" />
               </div>
               <div>
@@ -424,10 +407,10 @@ export const AdminPlayersPage = () => {
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-xl p-4">
+          <div className="bg-card border border-border rounded-lg p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-slate-50 dark:bg-slate-500/10 rounded-xl">
-                <XCircle className="h-5 w-5 text-slate-400" />
+              <div className="p-2 bg-muted rounded-lg">
+                <XCircle className="h-5 w-5 text-muted-foreground/60" />
               </div>
               <div>
                 <div className="text-2xl font-bold text-foreground">{inactiveCount}</div>
@@ -436,10 +419,10 @@ export const AdminPlayersPage = () => {
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-xl p-4">
+          <div className="bg-card border border-border rounded-lg p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-50 dark:bg-blue-500/10 rounded-xl">
-                <Shield className="h-5 w-5 text-blue-600" />
+              <div className="p-2 bg-muted rounded-lg">
+                <Shield className="h-5 w-5 text-muted-foreground/60" />
               </div>
               <div>
                 <div className="text-2xl font-bold text-foreground">{coachTeams.length}</div>
@@ -448,10 +431,10 @@ export const AdminPlayersPage = () => {
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-xl p-4">
+          <div className="bg-card border border-border rounded-lg p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-50 dark:bg-purple-500/10 rounded-xl">
-                <Activity className="h-5 w-5 text-purple-600" />
+              <div className="p-2 bg-muted rounded-lg">
+                <Activity className="h-5 w-5 text-muted-foreground/60" />
               </div>
               <div>
                 <div className="text-2xl font-bold text-foreground">
