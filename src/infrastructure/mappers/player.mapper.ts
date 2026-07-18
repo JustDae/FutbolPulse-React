@@ -10,6 +10,8 @@ export class PlayerMapper {
       birthDate: raw.fecha_nacimiento || '',
       jerseyNumber: Number(raw.jerseyNumber ?? raw.dorsal ?? raw.numero ?? raw.numero_camiseta ?? 0),
       teamId: raw.teamId || raw.equipo_id || raw.id_equipo || raw.entidad || '',
+      teamName: raw.nombre_entidad || '',
+      categoryName: raw.nombre_categoria || '',
       photoUrl: raw.photoUrl || raw.foto || raw.imagen_url || raw.foto_url || '',
       isActive: raw.isActive ?? raw.activo ?? raw.estado === 'Activo',
       pieDominante: raw.pie_dominante || '',
