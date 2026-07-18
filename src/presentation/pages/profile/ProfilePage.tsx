@@ -100,7 +100,7 @@ export function ProfilePage() {
                     </label>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Nombre Completo</label>
                   <input 
@@ -110,7 +110,7 @@ export function ProfilePage() {
                     onChange={e => setEditForm(prev => ({ ...prev, nombre_completo: e.target.value }))}
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Correo Electrónico</label>
                   <input 

@@ -1,5 +1,4 @@
 import type { Team } from '../../domain/entities/team.entity';
-
 export interface StandingRow {
   teamId: string;
   played: number; 
@@ -11,22 +10,18 @@ export interface StandingRow {
   goalDifference: number; 
   points: number; 
 }
-
 interface StandingsTableProps {
   standings: StandingRow[];
   teams: Team[];
   isLoading?: boolean;
 }
-
 export const StandingsTable = ({ standings, teams, isLoading }: StandingsTableProps) => {
   const getTeam = (teamId: string) => {
     return teams.find((t) => t.id === teamId);
   };
-
   if (isLoading) {
     return <div className="p-8 text-center text-gray-500">Calculando tabla de posiciones...</div>;
   }
-
   if (standings.length === 0) {
     return (
       <div className="rounded-lg border border-dashed p-10 text-center text-gray-500 dark:border-zinc-800">
@@ -34,12 +29,10 @@ export const StandingsTable = ({ standings, teams, isLoading }: StandingsTablePr
       </div>
     );
   }
-
   const sortedStandings = [...standings].sort((a, b) => {
     if (b.points !== a.points) return b.points - a.points;
     return b.goalDifference - a.goalDifference;
   });
-
   return (
     <div className="overflow-x-auto rounded-xl border bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
       <table className="w-full text-left text-sm">
@@ -61,9 +54,7 @@ export const StandingsTable = ({ standings, teams, isLoading }: StandingsTablePr
           {sortedStandings.map((row, index) => {
             const team = getTeam(row.teamId);
             const position = index + 1;
-
             const isTop3 = position <= 3;
-
             return (
               <tr 
                 key={row.teamId} 

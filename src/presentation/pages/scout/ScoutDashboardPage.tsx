@@ -3,7 +3,6 @@ import { Users, Star, FileText } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/presentation/components/ui/card';
 import { KpiCard } from '@/presentation/components/KpiCard';
 
-
 export function ScoutDashboardPage() {
   return (
     <div className="space-y-6">

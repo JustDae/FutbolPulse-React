@@ -6,7 +6,7 @@ import type { UserRepository } from '@/domain/ports/user.repository';
 
 export class AxiosUserRepository implements UserRepository {
   async getUsers(): Promise<LoggedUser[]> {
-    const { data } = await axiosClient.get<any>('/users/');
+    const { data } = await axiosClient.get<any>('/users/?page_size=100');
     return data.results ? data.results : data;
   }
 

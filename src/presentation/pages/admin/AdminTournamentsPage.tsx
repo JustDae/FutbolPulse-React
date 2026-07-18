@@ -38,7 +38,7 @@ export const AdminTournamentsPage = () => {
 
   return (
     <div className="space-y-6 p-6">
-      {/* Clean SaaS Header */}
+      {}
       <div className="mb-8 pl-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Gestión de Torneos</h1>

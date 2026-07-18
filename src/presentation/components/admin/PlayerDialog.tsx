@@ -9,6 +9,7 @@ import { usePlayerStore } from '../../store/player.store';
 import { useTeamStore } from '../../store/team.store';
 import { useAuthStore } from '../../store/auth.store';
 import { ImageUploader } from '../ImageUploader';
+import { matchesCoach } from '@/presentation/utils/name.utils';
 
 const playerSchema = z.object({
   firstNames: z.string().min(1, { message: 'Los nombres son obligatorios' }),
@@ -39,7 +40,7 @@ export const PlayerDialog = ({ isOpen, onClose, playerToEdit, defaultTeamId }: P
 
   const displayedTeams = useMemo(() => {
     return (user?.tipo_usuario === 'Coach' && !user?.is_staff)
-      ? teams.filter(team => team.coach === user.nombre_completo)
+      ? teams.filter(team => matchesCoach(team.coach, user.nombre_completo))
       : teams;
   }, [user, teams]);
 

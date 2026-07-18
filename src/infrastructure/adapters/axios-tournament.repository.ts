@@ -28,7 +28,7 @@ export class AxiosTournamentRepository implements TournamentRepository {
   }
 
   async getTournaments(): Promise<Tournament[]> {
-    const { data } = await axiosClient.get(this.baseUrl);
+    const { data } = await axiosClient.get(`${this.baseUrl}?page_size=100`);
     const list = this.normalizeListResponse<unknown>(data);
     return list.map(TournamentMapper.fromJsonToDomain);
   }

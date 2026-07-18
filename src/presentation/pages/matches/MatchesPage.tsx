@@ -1,98 +1,169 @@
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/presentation/store/auth.store';
-import { Button } from '@/presentation/components/ui/button';
-import { CalendarPlus } from 'lucide-react';
+import { Plus, MapPin, Calendar, Clock, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { matchRepository } from '@/infrastructure/adapters/axios-match.repository';
 import type { Match } from '@/domain/entities/match.entity';
+import { useTeamStore } from '@/presentation/store/team.store';
+
+const RED = '#E31C3D';
+const OFF_WHITE = '#F4F4F5';
+const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 
 export function MatchesPage() {
   const { user } = useAuthStore();
   const isCoach = user?.tipo_usuario === 'Coach';
   const [matches, setMatches] = useState<Match[]>([]);
+  const { teams, fetchTeams } = useTeamStore();
 
   useEffect(() => {
+    fetchTeams();
     matchRepository.getMatches().then(setMatches).catch(console.error);
-  }, []);
+  }, [fetchTeams]);
+
+  const getTeamBadge = (teamName: string) => {
+    const team = teams.find(t => t.name.toLowerCase() === teamName.toLowerCase() || t.name.toLowerCase().includes(teamName.toLowerCase()) || teamName.toLowerCase().includes(t.name.toLowerCase()));
+    return team?.badgeUrl || '';
+  };
 
   return (
-    <div className="w-screen relative left-1/2 -translate-x-1/2 -mt-6 bg-slate-50 min-h-[calc(100vh-4rem)] pb-12">
-      {/* Header ESPN Style */}
-      <div className="bg-slate-900 text-white py-12 px-6 md:px-12 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#e63946] rounded-full blur-[100px] opacity-20"></div>
-        <div className="relative z-10">
-          <h2 className="text-4xl font-black tracking-tighter uppercase italic drop-shadow-sm">
-            Calendario de <span className="text-[#e63946]">Partidos</span>
-          </h2>
-          <p className="text-slate-400 mt-2 font-medium">Revisa los encuentros programados y los resultados finales.</p>
+    <div className="w-full min-h-[calc(100vh-4rem)] pb-20 text-slate-800" style={{ background: OFF_WHITE, fontFamily: "'Inter', sans-serif" }}>
+
+      {}
+      <div className="bg-slate-950 text-white py-14 px-6 md:px-12 relative overflow-hidden">
+        {}
+        <div className="absolute right-10 bottom-0 opacity-10 select-none pointer-events-none hidden md:block">
+          <span style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '180px', lineHeight: 1 }}>MATCHES</span>
         </div>
-        
-        {isCoach && (
-          <Button className="bg-[#e63946] hover:bg-[#d62828] text-white rounded-none uppercase tracking-widest text-xs font-bold px-6 py-6 skew-x-[-10deg] relative z-10">
-            <span className="skew-x-[10deg] flex items-center">
-              <CalendarPlus className="mr-2 h-4 w-4" /> Programar Partido
-            </span>
-          </Button>
-        )}
+
+        <div className="max-w-[1300px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
+          <div>
+            <span className="text-[9px] font-bold uppercase tracking-[0.2em]" style={{ color: RED }}>Calendario Oficial</span>
+            <h1
+              className="uppercase text-white mt-1 leading-none"
+              style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 'clamp(32px, 5vw, 52px)', letterSpacing: '-0.02em' }}
+            >
+              CALENDARIO<br />DE PARTIDOS
+            </h1>
+            <p className="text-white/40 text-xs mt-3 max-w-md font-medium">
+              Revisa los partidos programados, resultados en tiempo real y el histórico de competiciones.
+            </p>
+          </div>
+
+          {isCoach && (
+            <Link
+              to="/coach"
+              className="inline-flex items-center gap-3 px-8 py-4 text-[11px] font-bold uppercase tracking-[0.15em] transition-opacity hover:opacity-90 shrink-0 self-start md:self-auto"
+              style={{ background: RED, color: '#FFF' }}
+            >
+              <Plus className="w-4 h-4" /> Programar Partido
+            </Link>
+          )}
+        </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-8">
-        {matches.map((match, index) => {
-          const colors = [
-            { bg: 'bg-blue-50', border: 'border-blue-100', text: 'text-blue-600' },
-            { bg: 'bg-red-50', border: 'border-red-100', text: 'text-red-600' },
-            { bg: 'bg-emerald-50', border: 'border-emerald-100', text: 'text-emerald-600' },
-          ];
-          const colorHome = colors[index % 3];
-          const colorAway = { bg: 'bg-slate-50', border: 'border-slate-200', text: 'text-slate-700' };
+      {}
+      <div className="max-w-[1300px] mx-auto px-6 md:px-12 grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-12">
+        {matches.map((match) => (
+          <div
+            key={match.id}
+            className="flex flex-col bg-white border border-slate-200 transition-all duration-300 hover:shadow-xl group"
+            style={{ borderRadius: '0px' }}
+          >
+            {}
+            <div className="p-6 flex justify-between items-center border-b border-slate-100 bg-slate-50/50">
 
-          return (
-            <div key={match.id} className="bg-white rounded shadow-lg overflow-hidden flex flex-col transform hover:-translate-y-1 transition-transform duration-300 text-slate-900 border border-slate-100">
-              <div className="bg-slate-50 p-6 flex justify-between items-center border-b border-slate-200">
-                 <div className={`w-16 h-16 rounded-full ${colorHome.bg} border ${colorHome.border} flex items-center justify-center font-black ${colorHome.text} shadow-sm text-lg`}>
-                   {match.equipoLocal.substring(0, 3).toUpperCase()}
-                 </div>
-                 <div className="flex flex-col items-center">
-                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
-                     {match.status}
-                   </span>
-                   {match.status === 'Finalizado' ? (
-                     <div className="flex items-center gap-2 text-2xl font-black text-slate-900">
-                       <span>{match.homeScore ?? 0}</span>
-                       <span className="text-slate-300">-</span>
-                       <span>{match.awayScore ?? 0}</span>
-                     </div>
-                   ) : (
-                     <span className="text-sm font-bold text-slate-300">v</span>
-                   )}
-                 </div>
-                 <div className={`w-16 h-16 rounded-full ${colorAway.bg} border ${colorAway.border} flex items-center justify-center font-black ${colorAway.text} shadow-sm text-lg`}>
-                   {match.equipoVisitante.substring(0, 3).toUpperCase()}
-                 </div>
-              </div>
-              
-              <div className="p-6 flex-1 flex flex-col">
-                <h3 className="text-slate-900 font-bold text-lg mb-1">{match.equipoLocal} v {match.equipoVisitante}</h3>
-                <p className="text-xs text-slate-500 font-semibold mb-4">{match.matchType || 'Liga Profesional'}</p>
-                <div className="mt-auto space-y-1 pt-4 border-t border-slate-100">
-                  <p className="text-xs font-medium text-slate-400">{match.stadium || 'Sede Por Definir'}</p>
-                  <p className="text-xs font-medium text-slate-400 capitalize">
-                    {new Date(match.matchDate).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' })}
-                  </p>
-                  <p className="text-xs font-medium text-slate-400">
-                    {new Date(match.matchDate).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
-                  </p>
+              {}
+              <div className="flex flex-col items-center gap-2 flex-1">
+                <div className="w-20 h-[52px] flex items-center justify-center bg-white border border-slate-200 shadow-sm overflow-hidden" style={{ borderRadius: '0px' }}>
+                  {getTeamBadge(match.equipoLocal) ? (
+                    <img src={getTeamBadge(match.equipoLocal)} alt={match.equipoLocal} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-slate-400 font-bold text-xs uppercase" style={{ fontFamily: FONT_DISPLAY }}>{match.equipoLocal.substring(0, 3)}</span>
+                  )}
                 </div>
-                
-                <Link to={`/partidos/${match.id}`} className="mt-6 flex items-center justify-center w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-[10px] uppercase tracking-widest py-3 transition-colors">
-                  Ver Detalles <span className="ml-2 text-[#e63946]">&gt;</span>
-                </Link>
+                <span className="text-xs font-bold text-slate-800 text-center leading-tight max-w-[80px] truncate">{match.equipoLocal}</span>
               </div>
+
+              {}
+              <div className="flex flex-col items-center px-2">
+                <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{match.status}</span>
+                {match.status === 'Finalizado' || match.status === 'En curso' ? (
+                  <div className="flex items-center gap-3">
+                    <span style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '36px', color: '#0F172A', lineHeight: 1 }}>{match.homeScore ?? 0}</span>
+                    <span className="text-slate-300 text-xl font-light">:</span>
+                    <span style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '36px', color: '#0F172A', lineHeight: 1 }}>{match.awayScore ?? 0}</span>
+                  </div>
+                ) : (
+                  <span className="text-xs font-bold px-3 py-1 bg-slate-200/50 text-slate-500 uppercase tracking-wider">VS</span>
+                )}
+              </div>
+
+              {}
+              <div className="flex flex-col items-center gap-2 flex-1">
+                <div className="w-20 h-[52px] flex items-center justify-center bg-white border border-slate-200 shadow-sm overflow-hidden" style={{ borderRadius: '0px' }}>
+                  {getTeamBadge(match.equipoVisitante) ? (
+                    <img src={getTeamBadge(match.equipoVisitante)} alt={match.equipoVisitante} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-slate-400 font-bold text-xs uppercase" style={{ fontFamily: FONT_DISPLAY }}>{match.equipoVisitante.substring(0, 3)}</span>
+                  )}
+                </div>
+                <span className="text-xs font-bold text-slate-800 text-center leading-tight max-w-[80px] truncate">{match.equipoVisitante}</span>
+              </div>
+
             </div>
-          );
-        })}
+
+            {}
+            <div className="p-6 flex-1 flex flex-col">
+
+              {}
+              <span className="text-[9px] font-bold uppercase tracking-[0.15em]" style={{ color: RED }}>{match.matchType || 'Liga Profesional'}</span>
+              <h3
+                className="text-slate-900 uppercase font-black tracking-tight mt-1.5 mb-4"
+                style={{ fontFamily: FONT_DISPLAY, fontSize: '20px' }}
+              >
+                {match.equipoLocal} vs {match.equipoVisitante}
+              </h3>
+
+              {}
+              <div className="mt-auto space-y-2 border-t border-slate-100 pt-4">
+
+                {}
+                <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+                  <MapPin className="w-4 h-4 text-slate-300 shrink-0" />
+                  <span className="truncate">{match.stadium || 'Estadio por definir'}</span>
+                </div>
+
+                {}
+                <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+                  <Calendar className="w-4 h-4 text-slate-300 shrink-0" />
+                  <span className="capitalize">{new Date(match.matchDate).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                </div>
+
+                {}
+                <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+                  <Clock className="w-4 h-4 text-slate-300 shrink-0" />
+                  <span>{new Date(match.matchDate).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} HS</span>
+                </div>
+
+              </div>
+
+              {}
+              <Link
+                to={`/partidos/${match.id}`}
+                className="mt-6 flex items-center justify-center gap-2 w-full text-[10px] font-bold uppercase tracking-widest py-3.5 border transition-all text-slate-700 border-slate-200 hover:border-transparent hover:text-white"
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = RED; (e.currentTarget as HTMLElement).style.color = '#FFF'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = '#334155'; }}
+              >
+                Ver Detalles <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+
+            </div>
+          </div>
+        ))}
+
         {matches.length === 0 && (
-          <div className="col-span-full text-center py-12 text-slate-500">
+          <div className="col-span-full text-center py-20 text-slate-400 font-bold uppercase tracking-widest text-xs border-2 border-dashed border-slate-200 bg-white">
             Aún no hay partidos programados.
           </div>
         )}
@@ -100,4 +171,3 @@ export function MatchesPage() {
     </div>
   );
 }
-

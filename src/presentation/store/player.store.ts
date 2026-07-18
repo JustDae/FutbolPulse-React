@@ -1,30 +1,23 @@
 import { create } from 'zustand';
-
 import type { Player } from '../../domain/entities/player.entity';
 import type { CreatePlayerDto } from '../../application/dtos/create-player.dto';
 import type { UpdatePlayerDto } from '../../application/dtos/update-player.dto';
 import { AxiosPlayerRepository } from '../../infrastructure/adapters/axios-player.repository';
-
-
 interface PlayerState {
   players: Player[];
   isLoading: boolean;
   error: string | null;
-  
   fetchPlayers: () => Promise<void>;
   createPlayer: (dto: CreatePlayerDto) => Promise<Player>;
   updatePlayer: (id: string, dto: UpdatePlayerDto) => Promise<Player>;
   deletePlayer: (id: string) => Promise<void>;
   uploadPlayerPhoto: (id: string, file: File) => Promise<void>;
 }
-
 const playerRepo = new AxiosPlayerRepository();
-
 export const usePlayerStore = create<PlayerState>((set) => ({
   players: [],
   isLoading: false,
   error: null,
-
   fetchPlayers: async () => {
     set({ isLoading: true, error: null });
     try {
@@ -34,7 +27,6 @@ export const usePlayerStore = create<PlayerState>((set) => ({
       set({ error: err.message || 'Error cargando jugadores', isLoading: false });
     }
   },
-
   createPlayer: async (dto) => {
     set({ isLoading: true });
     try {
@@ -46,7 +38,6 @@ export const usePlayerStore = create<PlayerState>((set) => ({
       throw err;
     }
   },
-
   updatePlayer: async (id, dto) => {
     set({ isLoading: true });
     try {
@@ -65,7 +56,6 @@ export const usePlayerStore = create<PlayerState>((set) => ({
       throw err;
     }
   },
-
   deletePlayer: async (id) => {
     try {
       await playerRepo.deletePlayer(id);
@@ -77,7 +67,6 @@ export const usePlayerStore = create<PlayerState>((set) => ({
       throw err;
     }
   },
-
   uploadPlayerPhoto: async (id, file) => {
     try {
       const { photoUrl } = await playerRepo.uploadPhoto(id, file);

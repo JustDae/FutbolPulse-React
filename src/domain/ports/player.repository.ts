@@ -1,7 +1,6 @@
 import type { Player } from '../entities/player.entity';
 import type { CreatePlayerDto } from '../../application/dtos/create-player.dto';
 import type { UpdatePlayerDto } from '../../application/dtos/update-player.dto';
-
 export interface PlayerRepository {
   getPlayers(): Promise<Player[]>;
   getPlayersByTeam(teamId: string): Promise<Player[]>;

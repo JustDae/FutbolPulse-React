@@ -1,33 +1,29 @@
 import { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-
-
-import { Button } from '@/presentation/components/ui/button';
-import { ThemeToggle } from '@/presentation/components/ThemeToggle';
-import { LogOut, ChevronRight, Menu } from 'lucide-react';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/presentation/components/ui/sheet';
+import { LogOut, Menu, CalendarDays, Users, UserPlus, ClipboardList, Activity, MonitorPlay, ShieldAlert } from 'lucide-react';
 import { cn } from '@/presentation/utils/cn';
 import { useAuthStore } from '../store/auth.store';
+
+const NAVY = '#0B1220';
+const NAVY_MID = '#10182B';
+const NAVY_LIGHT = '#1C2B45';
+const RED = '#E31C3D';
+const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 
 interface NavItem {
   label: string;
   href: string;
+  icon: React.ElementType;
 }
 
 const navItems: NavItem[] = [
-  { label: 'Gestión Partidos', href: '/coach' },
-  { label: 'Equipos', href: '/coach/equipos' },
-  { label: 'Jugadores', href: '/coach/jugadores' },
-  { label: 'Alineaciones', href: '/coach/alineaciones' },
-  { label: 'Salud y Rendimiento', href: '/coach/salud' },
-  { label: 'En Vivo', href: '/coach/live' },
-  { label: 'Evaluaciones', href: '/coach/evaluaciones' },
+  { label: 'Panel Principal', href: '/coach', icon: CalendarDays },
+  { label: 'Equipos', href: '/coach/equipos', icon: Users },
+  { label: 'Jugadores', href: '/coach/jugadores', icon: UserPlus },
+  { label: 'Alineaciones', href: '/coach/alineaciones', icon: ClipboardList },
+  { label: 'Salud', href: '/coach/salud', icon: Activity },
+  { label: 'En Vivo', href: '/coach/live', icon: MonitorPlay },
+  { label: 'Evaluaciones', href: '/coach/evaluaciones', icon: ShieldAlert },
 ];
 
 interface SideNavLinkProps {
@@ -39,19 +35,25 @@ interface SideNavLinkProps {
 function SideNavLink({ item, currentPath, onClick }: SideNavLinkProps) {
   const isActive =
     item.href === '/coach' ? currentPath === '/coach' : currentPath.startsWith(item.href);
+  const Icon = item.icon;
 
   return (
     <Link
       to={item.href}
       onClick={onClick}
       className={cn(
-        'group flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300',
+        'group flex items-center gap-4 px-6 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] transition-all duration-200 relative border-l-[3px]',
         isActive
-          ? 'bg-[#f94116] text-white shadow-md'
-          : 'text-gray-600 dark:text-zinc-500 hover:text-gray-900 dark:hover:text-white',
+          ? 'text-white'
+          : 'text-white/40 hover:text-white/80 border-transparent',
       )}
+      style={{
+        borderLeftColor: isActive ? RED : 'transparent',
+        background: isActive ? NAVY_LIGHT : 'transparent',
+      }}
     >
-      <span className="tracking-wide">{item.label}</span>
+      <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-white" : "text-white/30 group-hover:text-white/70")} />
+      <span>{item.label}</span>
     </Link>
   );
 }
@@ -62,33 +64,61 @@ interface SidebarContentProps {
 }
 
 function SidebarContent({ currentPath, onLinkClick }: SidebarContentProps) {
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
+
   return (
-    <div className="flex h-full flex-col bg-white dark:bg-[#101010] relative overflow-hidden border-r border-gray-200 dark:border-[#1a1a1c]">
-      <div className="px-6 py-8 relative z-10 flex flex-col items-center justify-center border-b border-gray-200 dark:border-[#1a1a1c] mb-6">
-        <h2 className="text-[22px] font-black tracking-tighter uppercase italic flex items-center gap-1.5">
-          <span className="text-[#f94116]">FÚTBOL</span>
-          <span className="text-gray-900 dark:text-white">PULSE</span>
-        </h2>
-        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-[#888888] mt-2">Cuerpo Técnico</p>
+    <div
+      className="flex h-full flex-col"
+      style={{ background: NAVY_MID, borderRight: `1px solid rgba(255,255,255,0.06)` }}
+    >
+      {}
+      <div className="px-6 py-8 border-b border-white/5">
+        <Link to="/" className="flex items-center gap-0">
+          <span style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '22px', color: RED, letterSpacing: '-0.01em', lineHeight: 1 }}>
+            FÚTBOL
+          </span>
+          <span style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '22px', color: '#FFF', letterSpacing: '-0.01em', lineHeight: 1 }}>
+            PULSE
+          </span>
+          <span className="ml-1.5 w-1.5 h-1.5 shrink-0" style={{ background: RED }} />
+        </Link>
+        <p className="text-[9px] font-bold uppercase tracking-[0.2em] mt-2" style={{ color: 'rgba(255,255,255,0.25)' }}>
+          Panel Técnico
+        </p>
       </div>
-      <nav className="flex-1 space-y-1.5 px-4 relative z-10 overflow-y-auto custom-scrollbar">
+
+      {}
+      <nav className="flex-1 py-4 overflow-y-auto">
         {navItems.map((item) => (
           <SideNavLink key={item.href} item={item} currentPath={currentPath} onClick={onLinkClick} />
         ))}
       </nav>
-      <div className="p-4 mt-auto relative z-10">
-        <Button
-          variant="ghost"
-          className="flex items-center justify-start gap-4 rounded-xl px-4 py-3 text-sm font-medium text-gray-600 dark:text-zinc-500 hover:text-gray-900 dark:hover:text-white transition-all w-full h-auto"
-          onClick={() => {
-            logout();
-            onLinkClick?.();
-          }}
+
+      {}
+      <div className="border-t border-white/5 p-4 space-y-2">
+        {user && (
+          <div className="flex items-center gap-3 px-2 py-2">
+            <div
+              className="w-8 h-8 flex items-center justify-center text-xs font-bold text-white shrink-0"
+              style={{ background: RED }}
+            >
+              {(user.nombre_completo || user.username || 'C').charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <p className="text-white text-xs font-semibold leading-none truncate max-w-[140px]">
+                {user.nombre_completo || user.username}
+              </p>
+              <p className="text-white/30 text-[9px] uppercase tracking-widest mt-0.5">DT Principal</p>
+            </div>
+          </div>
+        )}
+        <button
+          onClick={() => { logout(); onLinkClick?.(); }}
+          className="flex items-center gap-3 w-full px-2 py-2 text-[10px] font-bold uppercase tracking-widest transition-colors text-white/30 hover:text-white"
         >
-          <LogOut className="h-5 w-5 text-gray-500 dark:text-zinc-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
-          <span className="tracking-wide">Cerrar sesión</span>
-        </Button>
+          <LogOut className="h-4 w-4 shrink-0" />
+          Cerrar sesión
+        </button>
       </div>
     </div>
   );
@@ -96,73 +126,89 @@ function SidebarContent({ currentPath, onLinkClick }: SidebarContentProps) {
 
 export function CoachShell() {
   const { pathname } = useLocation();
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useAuthStore();
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-[#101010] text-gray-900 dark:text-zinc-50 transition-colors">
-      {/* Sidebar Desktop */}
-      <aside className="hidden w-[260px] shrink-0 bg-white dark:bg-[#101010] md:flex flex-col z-20 transition-colors">
+    <div className="flex h-screen w-screen overflow-hidden" style={{ background: NAVY }}>
+
+      {}
+      <aside className="hidden w-64 shrink-0 md:flex flex-col z-20 h-full">
         <SidebarContent currentPath={pathname} />
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        {/* Header */}
-        <header className="sticky top-0 z-30 flex h-20 items-center justify-between gap-4 bg-white dark:bg-[#101010] border-b border-gray-200 dark:border-[#1a1a1c] px-8 transition-colors">
-          <div className="flex items-center md:hidden">
-            <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Abrir menú" className="hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-900 dark:text-white">
-                  <Menu className="h-5 w-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-[280px] border-r border-gray-200 dark:border-[#1a1a1c] bg-white dark:bg-[#101010] p-0 text-gray-900 dark:text-white">
-                <SheetHeader className="sr-only">
-                  <SheetTitle>Menú Coach</SheetTitle>
-                </SheetHeader>
-                <SidebarContent currentPath={pathname} onLinkClick={() => setSheetOpen(false)} />
-              </SheetContent>
-            </Sheet>
-            <span className="ml-3 text-sm font-black text-gray-900 dark:text-white tracking-wide uppercase">Fútbol Pulse</span>
+      {}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 flex md:hidden">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setSidebarOpen(false)} />
+          <div className="relative w-64 h-full z-10">
+            <SidebarContent currentPath={pathname} onLinkClick={() => setSidebarOpen(false)} />
           </div>
+        </div>
+      )}
 
-          <div className="hidden md:flex flex-1">
-             <div className="text-sm font-medium text-gray-500 dark:text-zinc-400 bg-gray-100 dark:bg-[#1a1a1c] px-4 py-2 rounded-full border border-gray-200 dark:border-white/5 shadow-sm">
-               Panel de Control
-             </div>
-          </div>
+      {}
+      <div className="flex min-w-0 flex-1 flex-col h-full overflow-hidden">
 
-          <div className="ml-auto flex items-center gap-6">
-            <div className="hidden sm:flex items-center gap-2 text-xs font-medium px-4 py-2 rounded-full bg-gray-100 dark:bg-[#1a1a1c] text-gray-800 dark:text-white border border-gray-200 dark:border-white/5">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+        {}
+        <header
+          className="flex h-16 items-center justify-between px-6 md:px-8 shrink-0"
+          style={{ background: NAVY_MID, borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+        >
+          {}
+          <div className="flex items-center gap-4">
+            <button
+              className="flex md:hidden text-white/50 hover:text-white transition-colors"
+              onClick={() => setSidebarOpen(true)}
+              aria-label="Abrir menú"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            <div className="hidden md:flex items-center gap-2">
+              <div className="w-1 h-5" style={{ background: RED }} />
+              <span
+                className="uppercase font-bold text-white/50 text-[10px] tracking-[0.15em]"
+                style={{ fontFamily: "'Inter', sans-serif" }}
+              >
+                {navItems.find(i => i.href === pathname || (i.href !== '/coach' && pathname.startsWith(i.href)))?.label ?? 'Panel de Control'}
               </span>
-              En Línea
             </div>
-            
-            <ThemeToggle />
-            
+          </div>
+
+          {}
+          <div className="flex items-center gap-4">
+            {}
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 border border-white/8 text-[9px] font-bold uppercase tracking-[0.15em] text-white/35" style={{ background: 'rgba(255,255,255,0.03)' }}>
+              <span className="w-1.5 h-1.5" style={{ background: '#22C55E' }} />
+              En línea
+            </div>
+
+            {}
             {user && (
-              <Link to="perfil" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                <div className="hidden text-right sm:block">
-                  <p className="text-sm font-semibold leading-none">{user.nombre_completo}</p>
-                  <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">DT Principal</p>
+              <Link
+                to="perfil"
+                className="flex items-center gap-3 px-3 py-1.5 border border-white/10 hover:border-white/25 transition-colors"
+                style={{ background: 'rgba(255,255,255,0.03)' }}
+              >
+                <div
+                  className="w-7 h-7 flex items-center justify-center text-[10px] font-bold text-white shrink-0"
+                  style={{ background: RED }}
+                >
+                  {(user.nombre_completo || user.username || 'C').charAt(0).toUpperCase()}
                 </div>
-                {user.foto_perfil ? (
-                  <img src={user.foto_perfil} alt="Perfil" className="h-9 w-9 rounded-full object-cover border border-gray-200 dark:border-[#2a2a2c]" />
-                ) : (
-                  <div className="h-9 w-9 rounded-full bg-gray-100 dark:bg-[#1a1a1c] border border-gray-200 dark:border-[#2a2a2c] flex items-center justify-center text-gray-800 dark:text-white font-medium text-sm">
-                    {(user.nombre_completo || user.username || 'C').charAt(0).toUpperCase()}
-                  </div>
-                )}
-                <ChevronRight className="h-4 w-4 text-gray-400 dark:text-zinc-600 rotate-90 hidden sm:block" />
+                <div className="hidden sm:block text-left">
+                  <p className="text-white text-[11px] font-semibold leading-none">
+                    {user.nombre_completo || user.username}
+                  </p>
+                  <p className="text-white/30 text-[9px] uppercase tracking-widest mt-0.5">DT Principal</p>
+                </div>
               </Link>
             )}
           </div>
         </header>
 
-        <main className="flex-1 overflow-auto bg-gray-50 dark:bg-[#101010] p-4 md:p-8 transition-colors">
+        {}
+        <main className="flex-1 overflow-y-auto p-6 md:p-8 text-white">
           <Outlet />
         </main>
       </div>

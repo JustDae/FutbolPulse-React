@@ -44,7 +44,7 @@ export function TournamentDetailPage() {
               <CalendarDays className="h-4 w-4 text-primary" />
               <span className="font-medium">Fecha de Inicio:</span> {new Date(t.inicio).toLocaleDateString()}
             </div>
-            
+
             <div className="mt-8 border-t pt-6">
               <h4 className="font-semibold mb-4 text-lg">Tabla de Posiciones (Demostración)</h4>
               <div className="rounded-md border">

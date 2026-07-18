@@ -7,7 +7,6 @@ interface DjangoErrorResponse {
   [field: string]: string[] | string | undefined
 }
 
-
 export function parseApiError(error: unknown): ApiException {
   if (error instanceof ApiException) {
     return error

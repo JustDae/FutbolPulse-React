@@ -19,7 +19,7 @@ export function ScoutShell() {
 
   return (
     <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans selection:bg-emerald-500/30">
-      {/* Dynamic Background Elements */}
+      {}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-600/20 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[120px] pointer-events-none" />
 
@@ -36,7 +36,7 @@ export function ScoutShell() {
             {user.username}
           </p>
         </div>
-        
+
         <nav className="flex-1 p-6 space-y-3 overflow-y-auto">
           {navigation.map((item) => {
             const isActive = location.pathname === item.href;
@@ -69,7 +69,7 @@ export function ScoutShell() {
             );
           })}
         </nav>
-        
+
         <div className="p-6 border-t border-slate-800/60">
           <div className="p-5 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 shadow-lg">
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Rendimiento</p>

@@ -44,10 +44,25 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_KEY }}
           script: |
-            cd /root/futbolpulse-react
-            git fetch origin
-            git reset --hard origin/main
-            npm install
-            npm run build
-            cp -r dist/* /var/www/futbolpulse-react/
+            rm -rf /var/www/futbolpulse-react/*
+            rm -rf /var/www/futbol-pulse/*
+            mkdir -p /var/www/futbol-pulse
+            cp -r /tmp/react_build/dist/* /var/www/futbolpulse-react/
+            cp -r /tmp/react_build/dist/* /var/www/futbol-pulse/
+            
+            {
+              echo "=== NGINX CONFIG ==="
+              cat /etc/nginx/sites-enabled/*
+              echo "=== /var/www/futbolpulse-react/ ==="
+              ls -la /var/www/futbolpulse-react/
+              echo "=== /var/www/futbol-pulse/ ==="
+              ls -la /var/www/futbol-pulse/
+              echo "=== CURRENT VPS WORKING DIRECTORY ==="
+              pwd
+              echo "=== NGINX USER ==="
+              whoami
+            } > /var/www/futbolpulse-react/test_nginx.txt
+            
+            cp /var/www/futbolpulse-react/test_nginx.txt /var/www/futbol-pulse/test_nginx.txt
+            
             systemctl reload nginx

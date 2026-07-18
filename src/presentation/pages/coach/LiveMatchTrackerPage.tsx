@@ -31,18 +31,16 @@ export function LiveMatchTrackerPage() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
-  
+
   const [selectedMatchId, setSelectedMatchId] = useState<string>('');
   const [pitchPlayers, setPitchPlayers] = useState<PitchPlayer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Match State
   const [matchStarted, setMatchStarted] = useState(false);
-  const [matchTime, setMatchTime] = useState(0); // in seconds
+  const [matchTime, setMatchTime] = useState(0);
   const [period, setPeriod] = useState<'Previo' | '1T' | 'ET' | '2T' | 'Final'>('Previo');
   const [stoppageTime, setStoppageTime] = useState<number>(0);
-  
-  
+
   const [events, setEvents] = useState<MatchEvent[]>([]);
   const [selectedPlayerForEvent, setSelectedPlayerForEvent] = useState<Player | null>(null);
 
@@ -60,7 +58,7 @@ export function LiveMatchTrackerPage() {
         setAllPlayers(fetchedPlayers);
         setTeams(fetchedTeams);
         setMatches(fetchedMatches);
-        
+
         if (fetchedMatches.length > 0) {
           const firstMatchId = fetchedMatches[0].id;
           setSelectedMatchId(firstMatchId);
@@ -101,13 +99,12 @@ export function LiveMatchTrackerPage() {
 
       let combined: PitchPlayer[] = [];
 
-      
       if (localTeam) {
         const savedLocal = localStorage.getItem(`lineup_${localTeam.id}`);
         if (savedLocal) {
           const parsedLocal = JSON.parse(savedLocal);
           const restoredLocal = parsedLocal.map((p: any) => {
-            
+
             let player = players.find(ap => ap.id === p.playerId);
             if (!player && p.playerId.startsWith('rival_')) {
               player = {
@@ -124,7 +121,6 @@ export function LiveMatchTrackerPage() {
         }
       }
 
-      
       if (visitorTeam) {
         const savedVisitor = localStorage.getItem(`lineup_${visitorTeam.id}`);
         if (savedVisitor) {
@@ -237,13 +233,13 @@ export function LiveMatchTrackerPage() {
 
   return (
     <div className="flex-1 space-y-6 p-6 md:p-8">
-      {/* Clean SaaS Header */}
+      {}
       <div className="mb-8 pl-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Tracker en Vivo</h1>
           <p className="text-gray-500 dark:text-[#888888] font-normal text-sm">Monitorea el desarrollo del encuentro en tiempo real.</p>
         </div>
-        
+
         <div className="flex flex-wrap items-center gap-3">
           <select 
             className="px-4 py-2 bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none text-gray-700 dark:text-white shadow-sm focus:ring-2 focus:ring-[#f94116]/50"
@@ -284,7 +280,7 @@ export function LiveMatchTrackerPage() {
                     {period === 'Previo' ? 'Iniciar 1er Tiempo' : 'Iniciar 2do Tiempo'}
                   </Button>
                 )}
-                
+
                 {(period === '1T' || period === '2T') && matchStarted && (
                   <>
                     <Button variant="outline" className="border-zinc-700 bg-transparent text-white hover:bg-zinc-800 hover:text-white" onClick={() => addStoppageTime(1)}>

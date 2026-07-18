@@ -9,7 +9,7 @@ interface TeamState {
   teams: Team[];
   isLoading: boolean;
   error: string | null;
-  
+
   fetchTeams: () => Promise<void>;
   createTeam: (dto: CreateTeamDto) => Promise<Team>;
   updateTeam: (id: string, dto: UpdateTeamDto) => Promise<Team>;

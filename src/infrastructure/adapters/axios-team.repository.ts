@@ -30,7 +30,7 @@ export class AxiosTeamRepository implements TeamRepository {
   }
 
   async getTeams(): Promise<Team[]> {
-    const { data } = await axiosClient.get(this.baseUrl);
+    const { data } = await axiosClient.get(`${this.baseUrl}?page_size=100`);
     const list = this.normalizeListResponse<unknown>(data);
     return list.map(raw => {
       const team = TeamMapper.fromJsonToDomain(raw);

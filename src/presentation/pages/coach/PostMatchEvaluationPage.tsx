@@ -9,6 +9,7 @@ import type { Player } from '@/domain/entities/player.entity';
 import type { Team } from '@/domain/entities/team.entity';
 import { useAuthStore } from '@/presentation/store/auth.store';
 import { toast } from 'sonner';
+import { matchesCoach } from '@/presentation/utils/name.utils';
 
 const playerRepo = new AxiosPlayerRepository();
 const teamRepo = new AxiosTeamRepository();
@@ -30,33 +31,27 @@ export function PostMatchEvaluationPage() {
           playerRepo.getPlayers(),
           teamRepo.getTeams()
         ]);
-        
+
         let myTeams = fetchedTeams;
         const isAdmin = user?.tipo_usuario?.toLowerCase() === 'admin' || user?.is_staff;
-        
+
         if (!isAdmin && user?.nombre_completo) {
           myTeams = fetchedTeams.filter(t => 
-            t.coach && t.coach.toLowerCase().includes(user.nombre_completo.toLowerCase())
+            matchesCoach(t.coach, user.nombre_completo)
           );
-          
-          if (myTeams.length === 0) {
-            myTeams = fetchedTeams;
-            toast.info('No tienes equipos asignados a tu nombre. Mostrando todos por ahora.');
-          }
         }
-        
+
         setCoachTeams(myTeams);
-        
-        // Filter matches to only show matches where the coach's team is playing
+
         let myMatches = fetchedMatches.filter(m => m.status === 'Finalizado' || m.status === 'Programado' || m.status === 'En curso');
-        
+
         if (!isAdmin && myTeams.length > 0) {
           const myTeamNames = myTeams.map(t => t.name);
           myMatches = myMatches.filter(m => 
             myTeamNames.includes(m.equipoLocal) || myTeamNames.includes(m.equipoVisitante)
           );
         }
-        
+
         setMatches(myMatches);
         setPlayers(fetchedPlayers);
       } catch (error) {
@@ -72,14 +67,13 @@ export function PostMatchEvaluationPage() {
   const handleMatchChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const matchId = e.target.value;
     setSelectedMatchId(matchId);
-    
+
     if (matchId) {
       const match = matches.find(m => m.id === matchId);
       if (!match) return;
-      
+
       let relevantTeamIds = coachTeams.map(t => t.id);
-      
-      // If no teams assigned, just show players from both teams (or fallback)
+
       if (relevantTeamIds.length === 0) {
         const localTeam = coachTeams.find(t => t.name === match.equipoLocal);
         const awayTeam = coachTeams.find(t => t.name === match.equipoVisitante);
@@ -87,7 +81,6 @@ export function PostMatchEvaluationPage() {
         if (awayTeam) relevantTeamIds.push(awayTeam.id);
       }
 
-      // Filter players that belong to the coach's teams that are playing in this match
       const filteredPlayers = players.filter(p => relevantTeamIds.includes(p.teamId));
 
       setEvaluations(filteredPlayers.map(p => ({
@@ -111,16 +104,16 @@ export function PostMatchEvaluationPage() {
   const handleSave = () => {
     toast.success('Evaluaciones guardadas exitosamente');
   };
-  
+
   return (
     <div className="flex-1 space-y-6 p-6 md:p-8">
-      {/* Clean SaaS Header */}
+      {}
       <div className="mb-8 pl-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Evaluaciones Post-Partido</h1>
           <p className="text-gray-500 dark:text-[#888888] font-normal text-sm">Califica y provee retroalimentación sobre el rendimiento.</p>
         </div>
-        
+
         <div className="flex flex-wrap items-center gap-3">
           <select 
             className="px-4 py-2 bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none text-gray-700 dark:text-white shadow-sm focus:ring-2 focus:ring-[#f94116]/50"
@@ -170,7 +163,7 @@ export function PostMatchEvaluationPage() {
                     <h4 className="font-semibold text-gray-900 dark:text-white">{ev.player.firstNames} {ev.player.lastNames}</h4>
                     <p className="text-xs text-gray-500 dark:text-[#888888] mt-1">{ev.player.position}</p>
                   </div>
-                  
+
                   <div className="flex items-center gap-4 flex-wrap flex-1 justify-end">
                     <div className="flex items-center gap-2">
                       <label className="text-xs font-medium text-gray-600 dark:text-[#888888]">Calificación (1-10):</label>
@@ -182,7 +175,7 @@ export function PostMatchEvaluationPage() {
                         className="w-16 h-8 rounded-md border border-gray-200 dark:border-white/10 bg-white dark:bg-[#101010] px-2 text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-[#f94116]"
                       />
                     </div>
-                    
+
                     <input 
                       type="text" 
                       placeholder="Comentario sobre el rendimiento..." 
@@ -190,7 +183,7 @@ export function PostMatchEvaluationPage() {
                       onChange={(e) => updateEvaluation(ev.playerId, 'comment', e.target.value)}
                       className="w-full md:w-[250px] h-8 rounded-md border border-gray-200 dark:border-white/10 bg-white dark:bg-[#101010] px-3 text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-[#f94116]"
                     />
-                    
+
                     <label className="flex items-center gap-2 text-xs text-gray-600 dark:text-[#888888] cursor-pointer">
                       <input 
                         type="checkbox" 

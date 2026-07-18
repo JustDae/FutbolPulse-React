@@ -16,7 +16,6 @@ interface Props {
 export function HealthRecordModal({ isOpen, onClose, onSuccess, activeTab, playerId }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Form states
   const [tipoSangre, setTipoSangre] = useState('');
   const [alergias, setAlergias] = useState('');
   const [medicamentos, setMedicamentos] = useState('');
@@ -41,16 +40,16 @@ export function HealthRecordModal({ isOpen, onClose, onSuccess, activeTab, playe
     setIsSubmitting(true);
     try {
       if (activeTab === 'medical') {
-        // Antecedentes
+
         await healthRepository.createHealthBackground({
           jugador: playerId,
           tipo_sangre: tipoSangre,
           alergias,
           medicamentos_regulares: medicamentos
         });
-        
+
         if (pesoKg || alturaCm) {
-          // Antropometria (often added at the same time in medical tab for convenience)
+
           await healthRepository.createAnthropometric({
             jugador: playerId,
             peso_kg: parseFloat(pesoKg) || 0,
@@ -103,14 +102,14 @@ export function HealthRecordModal({ isOpen, onClose, onSuccess, activeTab, playe
           <DialogTitle>Añadir Registro</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
-          
+
           {activeTab === 'medical' && (
             <div className="space-y-3">
               <h3 className="font-semibold text-sm">Antecedentes Clínicos</h3>
               <Input placeholder="Tipo de Sangre (ej. O+)" value={tipoSangre} onChange={e => setTipoSangre(e.target.value)} />
               <Input placeholder="Alergias" value={alergias} onChange={e => setAlergias(e.target.value)} />
               <Input placeholder="Medicamentos" value={medicamentos} onChange={e => setMedicamentos(e.target.value)} />
-              
+
               <h3 className="font-semibold text-sm pt-2">Antropometría</h3>
               <div className="grid grid-cols-2 gap-2">
                 <Input type="number" placeholder="Peso (kg)" value={pesoKg} onChange={e => setPesoKg(e.target.value)} />

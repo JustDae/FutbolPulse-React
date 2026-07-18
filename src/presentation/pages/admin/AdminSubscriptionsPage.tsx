@@ -28,7 +28,7 @@ export const AdminSubscriptionsPage = () => {
 
   return (
     <div className="space-y-6 p-6">
-      {/* Clean SaaS Header */}
+      {}
       <div className="mb-8 pl-2">
         <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Suscripciones</h1>
         <p className="text-gray-500 dark:text-[#888888] font-normal text-sm">Supervisa los planes de pago y membresías de los usuarios.</p>
@@ -47,7 +47,7 @@ export const AdminSubscriptionsPage = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="bg-white dark:bg-[#1a1a1c] border border-gray-200 dark:border-none shadow-sm dark:shadow-none rounded-2xl p-5">
           <CardHeader className="p-0 pb-6 flex flex-row items-center justify-between">
             <CardTitle className="text-xs font-medium text-gray-500 dark:text-[#888888] flex items-center gap-2">

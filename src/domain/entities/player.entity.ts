@@ -9,4 +9,6 @@ export interface Player {
   teamId: string;
   photoUrl?: string;
   isActive: boolean;
+  pieDominante?: string;
+  nacionalidad?: string;
 }

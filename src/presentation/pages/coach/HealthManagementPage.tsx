@@ -15,6 +15,7 @@ import type {
 const playerRepo = new AxiosPlayerRepository();
 import { AxiosTeamRepository } from '@/infrastructure/adapters/axios-team.repository';
 import { useAuthStore } from '@/presentation/store/auth.store';
+import { matchesCoach } from '@/presentation/utils/name.utils';
 
 const teamRepo = new AxiosTeamRepository();
 
@@ -41,7 +42,7 @@ export function HealthManagementPage() {
           playerRepo.getPlayers(),
           teamRepo.getTeams()
         ]);
-        
+
         const isAdmin = user?.tipo_usuario?.toLowerCase() === 'admin' || user?.is_staff;
 
         if (isAdmin) {
@@ -49,7 +50,7 @@ export function HealthManagementPage() {
            if (fetchedPlayers.length > 0) setSelectedPlayerId(fetchedPlayers[0].id);
         } else if (user?.nombre_completo) {
            const myTeams = fetchedTeams.filter(t => 
-             t.coach && t.coach.toLowerCase().includes(user.nombre_completo.toLowerCase())
+             matchesCoach(t.coach, user.nombre_completo)
            );
            const myTeamIds = new Set(myTeams.map(t => t.id));
            const filteredPlayers = fetchedPlayers.filter(p => myTeamIds.has(p.teamId));
@@ -99,13 +100,13 @@ export function HealthManagementPage() {
 
   return (
     <div className="flex-1 space-y-6 p-6 md:p-8">
-      {/* Clean SaaS Header */}
+      {}
       <div className="mb-8 pl-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Salud y Rendimiento</h1>
           <p className="text-gray-500 dark:text-[#888888] font-normal text-sm">Gestiona el perfil médico y rendimiento de los jugadores.</p>
         </div>
-        
+
         <div className="flex flex-wrap items-center gap-3">
           <select 
             className="px-4 py-2 bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none text-gray-700 dark:text-white shadow-sm focus:ring-2 focus:ring-[#f94116]/50"
@@ -159,7 +160,7 @@ export function HealthManagementPage() {
         </div>
       ) : (
         <div className="space-y-4">
-          
+
           {activeTab === 'medical' && (
             <div className="grid gap-4 md:grid-cols-2">
               <Card>

@@ -6,15 +6,16 @@ import type { Team } from '../../../domain/entities/team.entity';
 import { useTeamStore } from '../../store/team.store';
 import { useAuthStore } from '../../store/auth.store';
 import { TeamDialog } from '../../components/admin/TeamDialog';
+import { matchesCoach } from '@/presentation/utils/name.utils';
 
 export const AdminTeamsPage = () => {
-  const { teams, isLoading, fetchTeams, deleteTeam } = useTeamStore();
+  const { teams, isLoading, fetchTeams, deleteTeam, error } = useTeamStore();
   const { user } = useAuthStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
 
   const displayedTeams = (user?.tipo_usuario === 'Coach' && !user?.is_staff)
-    ? teams.filter(team => team.coach === user.nombre_completo)
+    ? teams.filter(team => matchesCoach(team.coach, user.nombre_completo))
     : teams;
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export const AdminTeamsPage = () => {
 
   return (
     <div className="space-y-6 p-6">
-      {/* Clean SaaS Header */}
+      {}
       <div className="mb-8 pl-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Equipos Registrados</h1>
@@ -58,6 +59,12 @@ export const AdminTeamsPage = () => {
           Añadir Equipo
         </button>
       </div>
+
+      {error && (
+        <div className="rounded-none border-l-4 border-[#e63946] bg-red-50 p-4 text-sm text-[#e63946] font-bold">
+          Error: {error}
+        </div>
+      )}
 
       {isLoading ? (
         <div className="py-12 text-center text-gray-500">Cargando equipos...</div>

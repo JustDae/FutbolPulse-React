@@ -21,7 +21,6 @@ export class AuthUseCase {
     return this.authRepository.logout()
   }
 
-  
   async restoreSession(): Promise<AuthSession | null> {
     const tokens = this.authRepository.getStoredTokens()
     if (!tokens) return null

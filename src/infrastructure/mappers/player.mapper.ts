@@ -1,6 +1,5 @@
 import type { Player } from '../../domain/entities/player.entity';
 
-
 export class PlayerMapper {
   static fromJsonToDomain(raw: any): Player {
     return {
@@ -13,6 +12,8 @@ export class PlayerMapper {
       teamId: raw.teamId || raw.equipo_id || raw.id_equipo || raw.entidad || '',
       photoUrl: raw.photoUrl || raw.foto || raw.imagen_url || raw.foto_url || '',
       isActive: raw.isActive ?? raw.activo ?? raw.estado === 'Activo',
+      pieDominante: raw.pie_dominante || '',
+      nacionalidad: raw.nacionalidad || '',
     };
   }
 
@@ -24,6 +25,8 @@ export class PlayerMapper {
       fecha_nacimiento: dto.birthDate,
       numero_camiseta: dto.jerseyNumber,
       estado: dto.isActive === false ? 'Inactivo' : 'Activo',
+      pie_dominante: dto.pieDominante,
+      nacionalidad: dto.nacionalidad,
     };
   }
 }
