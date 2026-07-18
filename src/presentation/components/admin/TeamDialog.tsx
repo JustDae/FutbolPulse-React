@@ -48,12 +48,13 @@ export const TeamDialog = ({ isOpen, onClose, teamToEdit }: TeamDialogProps) => 
   });
 
   useEffect(() => {
+    if (!isOpen) return;
     if (teamToEdit) {
       reset({
         name: teamToEdit.name,
         coach: teamToEdit.coach,
         stadium: teamToEdit.stadium || '',
-        foundedYear: teamToEdit.foundedYear,
+        foundedYear: teamToEdit.foundedYear || 2000,
         isActive: teamToEdit.isActive,
       });
     } else {
@@ -65,7 +66,8 @@ export const TeamDialog = ({ isOpen, onClose, teamToEdit }: TeamDialogProps) => 
         isActive: true,
       });
     }
-  }, [teamToEdit, reset]);
+  }, [isOpen, teamToEdit, reset]);
+
 
   if (!isOpen) return null;
 
