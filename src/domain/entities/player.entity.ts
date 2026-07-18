@@ -7,6 +7,8 @@ export interface Player {
   jerseyNumber: number;
   position?: 'Portero' | 'Defensa' | 'Mediocampista' | 'Delantero';
   teamId: string;
+  teamName?: string;
+  categoryName?: string;
   photoUrl?: string;
   isActive: boolean;
   pieDominante?: string;
