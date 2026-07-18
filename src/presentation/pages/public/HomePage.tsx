@@ -16,6 +16,34 @@ const RED = '#E31C3D';
 const OFF_WHITE = '#F4F4F5';
 const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 
+const BADGE_COLORS = [
+  ['#1E3A5F', '#4A90D9'], ['#1A3C2A', '#3DAA6A'], ['#3C1A1A', '#D94A4A'],
+  ['#2D1A3C', '#9B4AD9'], ['#3C2D1A', '#D9924A'], ['#1A2D3C', '#4AB5D9'],
+];
+function badgePalette(name: string) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) | 0;
+  return BADGE_COLORS[Math.abs(h) % BADGE_COLORS.length];
+}
+function TeamBadge({ url, name, size = 56 }: { url?: string; name: string; size?: number }) {
+  const [failed, setFailed] = useState(false);
+  const [bg, fg] = badgePalette(name);
+  if (url && !failed) {
+    return (
+      <img src={url} alt={name} width={size} height={Math.round(size * 0.67)}
+        className="w-full h-full object-contain" referrerPolicy="no-referrer"
+        crossOrigin="anonymous" onError={() => setFailed(true)} loading="lazy" />
+    );
+  }
+  return (
+    <div className="w-full h-full flex items-center justify-center" style={{ background: bg }}>
+      <span style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: size * 0.3, color: fg, lineHeight: 1 }}>
+        {name.substring(0, 3).toUpperCase()}
+      </span>
+    </div>
+  );
+}
+
 function SectionNumber({ n, dark = true }: { n: string; dark?: boolean }) {
   return (
     <span
@@ -198,12 +226,8 @@ export function HomePage() {
                 <p className="text-[9px] font-bold uppercase tracking-widest text-white/40 mb-4">{displayMatches[0].matchType || 'Liga Profesional'}</p>
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex flex-col items-center gap-2 flex-1">
-                    <div className="w-14 aspect-[3/2] flex items-center justify-center border border-white/10 overflow-hidden shadow-sm bg-slate-950">
-                      {getTeamBadge(displayMatches[0].equipoLocal) ? (
-                        <img src={getTeamBadge(displayMatches[0].equipoLocal)} alt={displayMatches[0].equipoLocal} className="w-full h-full object-cover" />
-                      ) : (
-                        <span className="text-white font-bold text-sm">{displayMatches[0].equipoLocal.substring(0, 3).toUpperCase()}</span>
-                      )}
+                    <div className="w-14 aspect-[3/2] overflow-hidden shadow-sm bg-slate-950">
+                      <TeamBadge url={getTeamBadge(displayMatches[0].equipoLocal)} name={displayMatches[0].equipoLocal} size={56} />
                     </div>
                     <p className="text-white/80 text-xs font-semibold text-center leading-tight mt-1">{displayMatches[0].equipoLocal}</p>
                   </div>
@@ -228,12 +252,8 @@ export function HomePage() {
                   </div>
 
                   <div className="flex flex-col items-center gap-2 flex-1">
-                    <div className="w-14 aspect-[3/2] flex items-center justify-center border border-white/10 overflow-hidden shadow-sm bg-slate-950">
-                      {getTeamBadge(displayMatches[0].equipoVisitante) ? (
-                        <img src={getTeamBadge(displayMatches[0].equipoVisitante)} alt={displayMatches[0].equipoVisitante} className="w-full h-full object-cover" />
-                      ) : (
-                        <span className="text-white font-bold text-sm">{displayMatches[0].equipoVisitante.substring(0, 3).toUpperCase()}</span>
-                      )}
+                    <div className="w-14 aspect-[3/2] overflow-hidden shadow-sm bg-slate-950">
+                      <TeamBadge url={getTeamBadge(displayMatches[0].equipoVisitante)} name={displayMatches[0].equipoVisitante} size={56} />
                     </div>
                     <p className="text-white/80 text-xs font-semibold text-center leading-tight mt-1">{displayMatches[0].equipoVisitante}</p>
                   </div>
@@ -325,12 +345,8 @@ export function HomePage() {
                   <div className="flex items-center justify-between gap-4 my-4">
 
                     <div className="flex flex-col items-center gap-2 flex-1 min-w-0">
-                      <div className="w-14 aspect-[3/2] flex items-center justify-center border border-white/10 overflow-hidden shadow bg-slate-950">
-                        {getTeamBadge(match.equipoLocal) ? (
-                          <img src={getTeamBadge(match.equipoLocal)} alt={match.equipoLocal} className="w-full h-full object-cover" />
-                        ) : (
-                          <span className="text-white/60 font-bold text-xs uppercase" style={{ fontFamily: FONT_DISPLAY }}>{match.equipoLocal.substring(0, 3)}</span>
-                        )}
+                      <div className="w-14 aspect-[3/2] overflow-hidden shadow bg-slate-950">
+                        <TeamBadge url={getTeamBadge(match.equipoLocal)} name={match.equipoLocal} size={56} />
                       </div>
                       <span className="text-white font-bold text-xs text-center truncate w-full leading-tight">{match.equipoLocal}</span>
                     </div>
@@ -346,12 +362,8 @@ export function HomePage() {
                     </div>
 
                     <div className="flex flex-col items-center gap-2 flex-1 min-w-0">
-                      <div className="w-14 aspect-[3/2] flex items-center justify-center border border-white/10 overflow-hidden shadow bg-slate-950">
-                        {getTeamBadge(match.equipoVisitante) ? (
-                          <img src={getTeamBadge(match.equipoVisitante)} alt={match.equipoVisitante} className="w-full h-full object-cover" />
-                        ) : (
-                          <span className="text-white/60 font-bold text-xs uppercase" style={{ fontFamily: FONT_DISPLAY }}>{match.equipoVisitante.substring(0, 3)}</span>
-                        )}
+                      <div className="w-14 aspect-[3/2] overflow-hidden shadow bg-slate-950">
+                        <TeamBadge url={getTeamBadge(match.equipoVisitante)} name={match.equipoVisitante} size={56} />
                       </div>
                       <span className="text-white font-bold text-xs text-center truncate w-full leading-tight">{match.equipoVisitante}</span>
                     </div>
