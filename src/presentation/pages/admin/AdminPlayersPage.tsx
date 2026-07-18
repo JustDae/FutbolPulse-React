@@ -18,7 +18,7 @@ import { usePlayerStore } from '../../store/player.store';
 import { useTeamStore } from '../../store/team.store';
 import { useAuthStore } from '../../store/auth.store';
 import { PlayerDialog } from '../../components/admin/PlayerDialog';
-import { matchesCoach } from '../../../presentation/utils/name.utils';
+import { matchesCoach } from '../../utils/name.utils';
 
 export const AdminPlayersPage = () => {
   const { players, isLoading, fetchPlayers, deletePlayer } = usePlayerStore();
