@@ -189,7 +189,7 @@ export function MatchManagementPage() {
   const activeStandings = getDynamicStandings();
   const featuredHomeLineup = featuredMatch ? getDynamicLineup(featuredMatch.equipoLocal) : null;
 
-  const coachName = user ? `${user.firstNames ?? ''} ${user.lastNames ?? ''}`.trim() || user.username || 'Coach' : 'Coach';
+  const coachName = user ? user.nombre_completo || user.username || 'Coach' : 'Coach';
   const greeting = now.getHours() < 12 ? 'Buenos días' : now.getHours() < 18 ? 'Buenas tardes' : 'Buenas noches';
   const dateStr = now.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
