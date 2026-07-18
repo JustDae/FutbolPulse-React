@@ -104,7 +104,7 @@ function TeamDialogInner({ onClose, teamToEdit }: Omit<TeamDialogProps, 'isOpen'
             <input
               type="text"
               {...register('name')}
-              className="mt-1 w-full rounded border p-2 text-sm dark:bg-zinc-800"
+              className="mt-1 w-full rounded border p-2 text-sm text-gray-900 dark:text-white dark:bg-zinc-800"
               placeholder="Ej. Liga de Quito, Barcelona SC..."
             />
             {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>}
@@ -115,7 +115,7 @@ function TeamDialogInner({ onClose, teamToEdit }: Omit<TeamDialogProps, 'isOpen'
             <input
               type="text"
               {...register('coach')}
-              className="mt-1 w-full rounded border p-2 text-sm dark:bg-zinc-800"
+              className="mt-1 w-full rounded border p-2 text-sm text-gray-900 dark:text-white dark:bg-zinc-800"
               placeholder="Nombre del entrenador"
             />
             {errors.coach && <p className="text-xs text-red-500 mt-1">{errors.coach.message}</p>}
@@ -127,7 +127,7 @@ function TeamDialogInner({ onClose, teamToEdit }: Omit<TeamDialogProps, 'isOpen'
               <input
                 type="text"
                 {...register('stadium')}
-                className="mt-1 w-full rounded border p-2 text-sm dark:bg-zinc-800"
+                className="mt-1 w-full rounded border p-2 text-sm text-gray-900 dark:text-white dark:bg-zinc-800"
                 placeholder="Ej. Rodrigo Paz Delgado"
               />
             </div>
@@ -137,7 +137,7 @@ function TeamDialogInner({ onClose, teamToEdit }: Omit<TeamDialogProps, 'isOpen'
               <input
                 type="number"
                 {...register('foundedYear', { valueAsNumber: true })}
-                className="mt-1 w-full rounded border p-2 text-sm dark:bg-zinc-800"
+                className="mt-1 w-full rounded border p-2 text-sm text-gray-900 dark:text-white dark:bg-zinc-800"
               />
               {errors.foundedYear && <p className="text-xs text-red-500 mt-1">{errors.foundedYear.message}</p>}
             </div>
