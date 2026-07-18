@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -29,47 +28,33 @@ interface TeamDialogProps {
 }
 
 export const TeamDialog = ({ isOpen, onClose, teamToEdit }: TeamDialogProps) => {
+  if (!isOpen) return null;
+  // Key forces full remount of the form whenever the target team changes,
+  // guaranteeing useForm re-initializes with fresh defaultValues.
+  return <TeamDialogInner key={teamToEdit?.id ?? '__new__'} onClose={onClose} teamToEdit={teamToEdit} />;
+};
+
+function TeamDialogInner({ onClose, teamToEdit }: Omit<TeamDialogProps, 'isOpen'>) {
   const { createTeam, updateTeam, uploadTeamBadge, isLoading } = useTeamStore();
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<TeamFormValues>({
     resolver: zodResolver(teamSchema),
-    defaultValues: {
-      name: '',
-      coach: '',
-      stadium: '',
-      foundedYear: 2000,
-      isActive: true,
-    },
+    defaultValues: teamToEdit
+      ? {
+          name: teamToEdit.name ?? '',
+          coach: teamToEdit.coach && teamToEdit.coach !== 'Sin DT' ? teamToEdit.coach : '',
+          stadium: teamToEdit.stadium && teamToEdit.stadium !== 'Estadio no asignado' ? teamToEdit.stadium : '',
+          foundedYear: teamToEdit.foundedYear && teamToEdit.foundedYear > 0 ? teamToEdit.foundedYear : 2000,
+          isActive: teamToEdit.isActive ?? true,
+        }
+      : { name: '', coach: '', stadium: '', foundedYear: 2000, isActive: true },
   });
 
-  useEffect(() => {
-    if (!isOpen) return;
-    if (teamToEdit) {
-      reset({
-        name: teamToEdit.name,
-        coach: teamToEdit.coach,
-        stadium: teamToEdit.stadium || '',
-        foundedYear: teamToEdit.foundedYear || 2000,
-        isActive: teamToEdit.isActive,
-      });
-    } else {
-      reset({
-        name: '',
-        coach: '',
-        stadium: '',
-        foundedYear: 2000,
-        isActive: true,
-      });
-    }
-  }, [isOpen, teamToEdit, reset]);
 
-
-  if (!isOpen) return null;
 
   const onSubmit = async (data: TeamFormValues) => {
     try {
