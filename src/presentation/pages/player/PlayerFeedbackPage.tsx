@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Star, MessageSquare, TrendingUp, AlertCircle, Activity } from 'lucide-react';
+import { Star, MessageSquare, TrendingUp, Activity } from 'lucide-react';
 import { usePlayerStore } from '@/presentation/store/player.store';
 import { useMatchStore } from '@/presentation/store/match.store';
 import { axiosClient } from '@/infrastructure/http/axios-client';

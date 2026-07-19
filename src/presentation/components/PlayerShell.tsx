@@ -65,7 +65,7 @@ interface SidebarContentProps {
 }
 
 function SidebarContent({ currentPath, onLinkClick }: SidebarContentProps) {
-  const { logout, user } = useAuthStore();
+  const { logout } = useAuthStore();
   const { currentPlayer } = usePlayerStore();
   const { matches } = useMatchStore();
 
@@ -104,7 +104,6 @@ function SidebarContent({ currentPath, onLinkClick }: SidebarContentProps) {
     matchTimeText = `${formatMatchDate(nextMatch.matchDate)} • ${isHome ? 'Local' : 'Visitante'}`;
   }
 
-  const displayName = user?.nombre_completo || user?.username || 'Jugador';
 
   return (
     <div className="flex h-full flex-col glass-card relative overflow-hidden border-r-0 rounded-r-3xl my-4 ml-4">
