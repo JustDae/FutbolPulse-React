@@ -52,7 +52,7 @@ export function ImageUploader({
 
     if (previewUrl?.startsWith('blob:')) URL.revokeObjectURL(previewUrl)
     setPreviewUrl(URL.createObjectURL(file))
-    
+
     setIsUploading(true)
     try {
       await onImageSelected(file)
@@ -111,7 +111,7 @@ export function ImageUploader({
         className="hidden"
         aria-hidden="true"
       />
-      
+
       <p className="text-xs text-muted-foreground">Máximo {maxSizeMB} MB · JPG, PNG, WebP</p>
     </div>
   )

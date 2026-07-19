@@ -10,7 +10,6 @@ interface RawAuthResponse extends LoggedUser {
   refresh: string
 }
 
-
 function toAuthSession(raw: RawAuthResponse): AuthSession {
   const { access, refresh, ...user } = raw
   return { user, tokens: { access, refresh } }
@@ -32,7 +31,6 @@ export class AxiosAuthRepository implements AuthRepository {
     }
   }
 
-
   async register(registerData: import('../../application/dtos/register.dto').RegisterDto): Promise<AuthSession> {
     try {
       const { data } = await axiosClient.post<RawAuthResponse>('/auth/register/', registerData)
@@ -44,19 +42,17 @@ export class AxiosAuthRepository implements AuthRepository {
     }
   }
 
-
   async logout(): Promise<void> {
     const refresh = localTokenStorage.getRefreshToken()
     if (refresh) {
       try {
         await axiosClient.post('/auth/logout/', { refresh }) 
       } catch {
-      
+
       }
     }
     localTokenStorage.clearTokens()
   }
-
 
   async getCurrentUser(): Promise<LoggedUser> {
     try {

@@ -1,19 +1,8 @@
 import { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Shield, 
-  Users, 
-  CalendarDays, 
-  Trophy, 
-  Menu, 
-  ArrowLeft,
-  UserRound,
-  CircleDot,
-} from 'lucide-react';
-
+import { useAuthStore } from '@/presentation/store/auth.store';
 import { Button } from '@/presentation/components/ui/button';
-import { Separator } from '@/presentation/components/ui/separator';
+import { ThemeToggle } from '@/presentation/components/ThemeToggle';
 import {
   Sheet,
   SheetContent,
@@ -22,7 +11,10 @@ import {
   SheetTrigger,
 } from '@/presentation/components/ui/sheet';
 import { cn } from '@/presentation/utils/cn';
-import { useAuthStore } from '@/presentation/store/auth.store';
+import { Trophy, Users, UserSquare2, Shield, CalendarDays, LayoutDashboard, CreditCard, ChevronRight, LogOut } from 'lucide-react';
+
+const RED = '#E31C3D';
+const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 
 interface NavItem {
   label: string;
@@ -34,10 +26,10 @@ const navItems: NavItem[] = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { label: 'Torneos', href: '/admin/torneos', icon: Trophy },
   { label: 'Equipos', href: '/admin/equipos', icon: Shield },
-  { label: 'Jugadores', href: '/admin/jugadores', icon: Users },
+  { label: 'Jugadores', href: '/admin/jugadores', icon: UserSquare2 },
   { label: 'Partidos', href: '/admin/partidos', icon: CalendarDays },
-  { label: 'Suscripciones', href: '/admin/suscripciones', icon: CircleDot },
-  { label: 'Usuarios', href: '/admin/usuarios', icon: UserRound },
+  { label: 'Suscripciones', href: '/admin/suscripciones', icon: CreditCard },
+  { label: 'Usuarios', href: '/admin/usuarios', icon: Users },
 ];
 
 interface SideNavLinkProps {
@@ -47,8 +39,7 @@ interface SideNavLinkProps {
 }
 
 function SideNavLink({ item, currentPath, onClick }: SideNavLinkProps) {
-  const isActive =
-    item.href === '/admin' ? currentPath === '/admin' : currentPath.startsWith(item.href);
+  const isActive = item.href === '/admin' ? currentPath === '/admin' : currentPath.startsWith(item.href);
   const Icon = item.icon;
 
   return (
@@ -56,14 +47,14 @@ function SideNavLink({ item, currentPath, onClick }: SideNavLinkProps) {
       to={item.href}
       onClick={onClick}
       className={cn(
-        'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 border-l-4 active:scale-[0.98]',
+        'group relative flex items-center gap-3 px-4 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200 rounded-lg',
         isActive
-          ? 'bg-zinc-900/80 text-red-500 border-l-red-600 shadow-inner'
-          : 'border-l-transparent text-zinc-400 hover:bg-zinc-900/50 hover:text-zinc-100',
+          ? 'bg-red-50 text-[#E31C3D]'
+          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50/80',
       )}
     >
-      <Icon className={cn("h-4 w-4 shrink-0 transition-colors", isActive ? "text-red-500" : "text-zinc-400")} />
-      {item.label}
+      <Icon className={cn("h-4.5 w-4.5 transition-colors", isActive ? "text-[#E31C3D]" : "text-slate-400 group-hover:text-slate-950")} />
+      <span style={{ fontFamily: "'Inter', sans-serif" }}>{item.label}</span>
     </Link>
   );
 }
@@ -75,34 +66,29 @@ interface SidebarContentProps {
 
 function SidebarContent({ currentPath, onLinkClick }: SidebarContentProps) {
   return (
-    <div className="flex h-full flex-col gap-2 bg-zinc-950 text-white">
-      <div className="px-4 py-6">
-        <div className="mb-1 flex items-center gap-2 text-lg font-bold">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-600 text-white shadow-lg shadow-red-600/25">
-            <Trophy className="h-5 w-5" />
-          </div>
-          <div className="flex items-center gap-1 tracking-tight">
-            <span className="text-red-500 font-extrabold">FÚTBOL</span>
-            <span className="text-white font-bold">PULSE</span>
-            <span className="text-red-500 font-black">•</span>
-          </div>
-        </div>
-        <p className="pl-11 text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500">Panel administrativo</p>
+    <div className="flex h-full flex-col relative overflow-hidden border-r border-slate-200 bg-white">
+      <div className="px-6 py-8 relative z-10 flex items-center justify-center border-b border-slate-200 mb-6">
+        <Link to="/" className="flex items-center gap-0">
+          <span style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '24px', color: RED, letterSpacing: '-0.01em' }}>FÚTBOL</span>
+          <span className="text-slate-900 ml-1" style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '24px', letterSpacing: '-0.01em' }}>PULSE</span>
+          <span className="ml-1.5 w-1.5 h-1.5 rounded-full" style={{ background: RED }} />
+        </Link>
       </div>
-      <nav className="flex-1 space-y-1 px-3">
+
+      <nav className="flex-1 space-y-1 px-4 relative z-10 overflow-y-auto custom-scrollbar">
         {navItems.map((item) => (
           <SideNavLink key={item.href} item={item} currentPath={currentPath} onClick={onLinkClick} />
         ))}
       </nav>
-      <div className="px-3 pb-4">
-        <Separator className="mb-4 bg-zinc-800" />
+
+      <div className="p-4 mt-auto relative z-10 border-t border-slate-200">
         <Link
           to="/"
           onClick={onLinkClick}
-          className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-900 hover:text-zinc-100"
+          className="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-slate-550 hover:text-slate-900 hover:bg-slate-50 transition-all rounded-lg w-full"
         >
-          <ArrowLeft className="h-4 w-4 shrink-0" />
-          Volver al portal público
+          <LogOut className="h-4.5 w-4.5 text-slate-450 group-hover:text-slate-900 transition-colors" />
+          <span style={{ fontFamily: "'Inter', sans-serif" }}>Portal Público</span>
         </Link>
       </div>
     </div>
@@ -115,70 +101,66 @@ export function AdminShell() {
   const { user } = useAuthStore();
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-zinc-800 bg-zinc-950 md:flex">
+    <div className="flex h-screen w-screen overflow-hidden text-slate-800 transition-colors bg-slate-50">
+      <aside className="hidden w-[260px] shrink-0 md:flex flex-col z-20 transition-colors bg-white h-full">
         <SidebarContent currentPath={pathname} />
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 bg-background/85 px-4 backdrop-blur-md md:px-6 shadow-sm">
+      <div className="flex min-w-0 flex-1 flex-col h-full overflow-hidden">
+        <header className="flex h-20 items-center justify-between gap-4 border-b border-slate-200 px-8 transition-colors bg-white shrink-0">
           <div className="flex items-center md:hidden">
             <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Abrir menú" className="hover:bg-red-500/10 hover:text-red-500 transition-colors">
-                  <Menu className="h-6 w-6" />
+                <Button variant="ghost" size="icon" aria-label="Abrir menú" className="hover:bg-slate-50 text-slate-700 rounded-lg">
+                  <LayoutDashboard className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-64 border-zinc-800 bg-zinc-950 p-0 text-white">
+              <SheetContent side="left" className="w-[280px] border-r border-slate-200 bg-white p-0 text-slate-900">
                 <SheetHeader className="sr-only">
-                  <SheetTitle>Navegación de administración</SheetTitle>
+                  <SheetTitle>Menú Administrativo</SheetTitle>
                 </SheetHeader>
                 <SidebarContent currentPath={pathname} onLinkClick={() => setSheetOpen(false)} />
               </SheetContent>
             </Sheet>
-            <span className="ml-3 text-xs font-extrabold text-foreground tracking-widest uppercase">
-              <span className="text-red-600">Fútbol</span> Pulse
-            </span>
+            <span className="ml-3 text-sm font-black text-slate-900 tracking-wider uppercase" style={{ fontFamily: FONT_DISPLAY }}>Fútbol Pulse</span>
           </div>
 
           <div className="hidden md:flex flex-1">
-             <div className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
-               Administración
-             </div>
+            <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-600 bg-slate-100 px-3 py-1.5 border border-slate-200/60 rounded-md" style={{ fontFamily: "'Inter', sans-serif" }}>
+              Panel de Administración
+            </div>
           </div>
 
-          <div className="ml-auto flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-full bg-red-500/10 text-red-600 border border-red-500/20 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500/70" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
+          <div className="ml-auto flex items-center gap-6">
+            <div className="hidden sm:flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider px-3 py-1.5 bg-emerald-50/80 text-emerald-700 border border-emerald-200 rounded-md">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
               </span>
               Temporada Activa
             </div>
-            
+
+            <ThemeToggle />
+
             {user && (
-              <Link to="perfil" className="flex items-center gap-3 border-l border-zinc-200 dark:border-zinc-800 pl-4 hover:opacity-85 transition-opacity">
-                <div className="hidden text-right sm:block">
-                  <p className="text-xs font-bold leading-none text-foreground">{user.nombre_completo || user.username}</p>
-                  <p className="text-[10px] font-bold text-zinc-400 uppercase mt-1">Administrador</p>
-                </div>
+              <Link to="perfil" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                 {user.foto_perfil ? (
-                  <img src={user.foto_perfil} alt="Perfil" className="h-9 w-9 rounded-full object-cover border border-red-500/25 shadow-sm" />
+                  <img src={user.foto_perfil} alt="Perfil" className="h-9 w-9 rounded-full object-cover border border-slate-200" />
                 ) : (
-                  <div className="h-9 w-9 rounded-full bg-red-500/10 border border-red-500/25 flex items-center justify-center text-red-500 font-bold shadow-sm text-sm">
+                  <div className="h-9 w-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 font-semibold text-sm">
                     {(user.nombre_completo || user.username || 'A').charAt(0).toUpperCase()}
                   </div>
                 )}
+                <ChevronRight className="h-4 w-4 text-slate-400 rotate-90" />
               </Link>
             )}
           </div>
         </header>
 
-        <main className="flex-1 overflow-auto bg-muted/20">
+        <main className="flex-1 overflow-y-auto p-6 md:p-10 transition-colors bg-slate-50">
           <Outlet />
         </main>
       </div>
     </div>
   );
 }
-

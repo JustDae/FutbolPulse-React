@@ -1,28 +1,14 @@
 import { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { 
-  CalendarDays, 
-  Trophy, 
-  Menu, 
-  ArrowLeft,
-  Users,
-  Activity,
-  ClipboardList,
-  HeartPulse,
-  Shield
-} from 'lucide-react';
-
-import { Button } from '@/presentation/components/ui/button';
-import { Separator } from '@/presentation/components/ui/separator';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/presentation/components/ui/sheet';
+import { LogOut, Menu, CalendarDays, Users, UserPlus, ClipboardList, Activity, MonitorPlay, ShieldAlert } from 'lucide-react';
 import { cn } from '@/presentation/utils/cn';
 import { useAuthStore } from '../store/auth.store';
+
+const NAVY = '#0B1220';
+const NAVY_MID = '#10182B';
+const NAVY_LIGHT = '#1C2B45';
+const RED = '#E31C3D';
+const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 
 interface NavItem {
   label: string;
@@ -31,13 +17,13 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Gestión Partidos', href: '/coach', icon: CalendarDays },
-  { label: 'Equipos', href: '/coach/equipos', icon: Shield },
-  { label: 'Jugadores', href: '/coach/jugadores', icon: Users },
-  { label: 'Alineaciones', href: '/coach/alineaciones', icon: Users },
-  { label: 'Salud y Rendimiento', href: '/coach/salud', icon: HeartPulse },
-  { label: 'En Vivo', href: '/coach/live', icon: Activity },
-  { label: 'Evaluaciones', href: '/coach/evaluaciones', icon: ClipboardList },
+  { label: 'Panel Principal', href: '/coach', icon: CalendarDays },
+  { label: 'Equipos', href: '/coach/equipos', icon: Users },
+  { label: 'Jugadores', href: '/coach/jugadores', icon: UserPlus },
+  { label: 'Alineaciones', href: '/coach/alineaciones', icon: ClipboardList },
+  { label: 'Salud', href: '/coach/salud', icon: Activity },
+  { label: 'En Vivo', href: '/coach/live', icon: MonitorPlay },
+  { label: 'Evaluaciones', href: '/coach/evaluaciones', icon: ShieldAlert },
 ];
 
 interface SideNavLinkProps {
@@ -56,14 +42,18 @@ function SideNavLink({ item, currentPath, onClick }: SideNavLinkProps) {
       to={item.href}
       onClick={onClick}
       className={cn(
-        'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+        'group flex items-center gap-4 px-6 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] transition-all duration-200 relative border-l-[3px]',
         isActive
-          ? 'bg-sidebar-primary text-sidebar-primary-foreground shadow-sm'
-          : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+          ? 'text-white'
+          : 'text-white/40 hover:text-white/80 border-transparent',
       )}
+      style={{
+        borderLeftColor: isActive ? RED : 'transparent',
+        background: isActive ? NAVY_LIGHT : 'transparent',
+      }}
     >
-      <Icon className="h-4 w-4 shrink-0" />
-      {item.label}
+      <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-white" : "text-white/30 group-hover:text-white/70")} />
+      <span>{item.label}</span>
     </Link>
   );
 }
@@ -74,36 +64,61 @@ interface SidebarContentProps {
 }
 
 function SidebarContent({ currentPath, onLinkClick }: SidebarContentProps) {
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
+
   return (
-    <div className="flex h-full flex-col gap-2">
-      <div className="px-4 py-6">
-        <div className="mb-1 flex items-center gap-2 text-lg font-bold text-sidebar-foreground">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-black/10">
-            <Trophy className="h-5 w-5" />
-          </div>
-          Fútbol Pulse
-        </div>
-        <p className="pl-11 text-[11px] font-semibold uppercase tracking-[0.16em] text-sidebar-foreground/50">Cuerpo Técnico</p>
+    <div
+      className="flex h-full flex-col"
+      style={{ background: NAVY_MID, borderRight: `1px solid rgba(255,255,255,0.06)` }}
+    >
+      {}
+      <div className="px-6 py-8 border-b border-white/5">
+        <Link to="/" className="flex items-center gap-0">
+          <span style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '22px', color: RED, letterSpacing: '-0.01em', lineHeight: 1 }}>
+            FÚTBOL
+          </span>
+          <span style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '22px', color: '#FFF', letterSpacing: '-0.01em', lineHeight: 1 }}>
+            PULSE
+          </span>
+          <span className="ml-1.5 w-1.5 h-1.5 shrink-0" style={{ background: RED }} />
+        </Link>
+        <p className="text-[9px] font-bold uppercase tracking-[0.2em] mt-2" style={{ color: 'rgba(255,255,255,0.25)' }}>
+          Panel Técnico
+        </p>
       </div>
-      <nav className="flex-1 space-y-1 px-3">
+
+      {}
+      <nav className="flex-1 py-4 overflow-y-auto">
         {navItems.map((item) => (
           <SideNavLink key={item.href} item={item} currentPath={currentPath} onClick={onLinkClick} />
         ))}
       </nav>
-      <div className="px-3 pb-4">
-        <Separator className="mb-4 bg-sidebar-border" />
-        <Button
-          variant="ghost"
-          className="w-full justify-start text-sidebar-foreground/70 hover:text-sidebar-accent-foreground"
-          onClick={() => {
-            logout();
-            onLinkClick?.();
-          }}
+
+      {}
+      <div className="border-t border-white/5 p-4 space-y-2">
+        {user && (
+          <div className="flex items-center gap-3 px-2 py-2">
+            <div
+              className="w-8 h-8 flex items-center justify-center text-xs font-bold text-white shrink-0"
+              style={{ background: RED }}
+            >
+              {(user.nombre_completo || user.username || 'C').charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <p className="text-white text-xs font-semibold leading-none truncate max-w-[140px]">
+                {user.nombre_completo || user.username}
+              </p>
+              <p className="text-white/30 text-[9px] uppercase tracking-widest mt-0.5">DT Principal</p>
+            </div>
+          </div>
+        )}
+        <button
+          onClick={() => { logout(); onLinkClick?.(); }}
+          className="flex items-center gap-3 w-full px-2 py-2 text-[10px] font-bold uppercase tracking-widest transition-colors text-white/30 hover:text-white"
         >
-          <ArrowLeft className="mr-2 h-4 w-4 shrink-0" />
+          <LogOut className="h-4 w-4 shrink-0" />
           Cerrar sesión
-        </Button>
+        </button>
       </div>
     </div>
   );
@@ -111,68 +126,89 @@ function SidebarContent({ currentPath, onLinkClick }: SidebarContentProps) {
 
 export function CoachShell() {
   const { pathname } = useLocation();
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useAuthStore();
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar md:flex">
+    <div className="dark flex h-screen w-screen overflow-hidden text-foreground" style={{ background: NAVY }}>
+
+      {}
+      <aside className="hidden w-64 shrink-0 md:flex flex-col z-20 h-full">
         <SidebarContent currentPath={pathname} />
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b bg-card/60 px-4 backdrop-blur-md md:px-6 shadow-sm">
-          <div className="flex items-center md:hidden">
-            <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Abrir menú" className="hover:bg-primary/10 hover:text-primary transition-colors">
-                  <Menu className="h-6 w-6" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-64 border-sidebar-border bg-sidebar p-0">
-                <SheetHeader className="sr-only">
-                  <SheetTitle>Navegación del Coach</SheetTitle>
-                </SheetHeader>
-                <SidebarContent currentPath={pathname} onLinkClick={() => setSheetOpen(false)} />
-              </SheetContent>
-            </Sheet>
-            <span className="ml-3 text-sm font-bold text-foreground tracking-wide uppercase">Cuerpo Técnico</span>
+      {}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 flex md:hidden">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setSidebarOpen(false)} />
+          <div className="relative w-64 h-full z-10">
+            <SidebarContent currentPath={pathname} onLinkClick={() => setSidebarOpen(false)} />
           </div>
+        </div>
+      )}
 
-          <div className="hidden md:flex flex-1">
-             <div className="text-sm font-medium text-muted-foreground">
-               Panel de Control
-             </div>
-          </div>
+      {}
+      <div className="flex min-w-0 flex-1 flex-col h-full overflow-hidden">
 
-          <div className="ml-auto flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full bg-green-500/10 text-green-600 border border-green-500/20">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500/70" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
+        {}
+        <header
+          className="flex h-16 items-center justify-between px-6 md:px-8 shrink-0"
+          style={{ background: NAVY_MID, borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+        >
+          {}
+          <div className="flex items-center gap-4">
+            <button
+              className="flex md:hidden text-white/50 hover:text-white transition-colors"
+              onClick={() => setSidebarOpen(true)}
+              aria-label="Abrir menú"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            <div className="hidden md:flex items-center gap-2">
+              <div className="w-1 h-5" style={{ background: RED }} />
+              <span
+                className="uppercase font-bold text-white/50 text-[10px] tracking-[0.15em]"
+                style={{ fontFamily: "'Inter', sans-serif" }}
+              >
+                {navItems.find(i => i.href === pathname || (i.href !== '/coach' && pathname.startsWith(i.href)))?.label ?? 'Panel de Control'}
               </span>
-              En Línea
             </div>
-            
+          </div>
+
+          {}
+          <div className="flex items-center gap-4">
+            {}
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 border border-white/8 text-[9px] font-bold uppercase tracking-[0.15em] text-white/35" style={{ background: 'rgba(255,255,255,0.03)' }}>
+              <span className="w-1.5 h-1.5" style={{ background: '#22C55E' }} />
+              En línea
+            </div>
+
+            {}
             {user && (
-              <Link to="perfil" className="flex items-center gap-3 border-l pl-4 hover:opacity-80 transition-opacity">
-                <div className="hidden text-right sm:block">
-                  <p className="text-sm font-semibold leading-none">{user.nombre_completo}</p>
-                  <p className="text-xs text-muted-foreground mt-1">DT Principal</p>
+              <Link
+                to="perfil"
+                className="flex items-center gap-3 px-3 py-1.5 border border-white/10 hover:border-white/25 transition-colors"
+                style={{ background: 'rgba(255,255,255,0.03)' }}
+              >
+                <div
+                  className="w-7 h-7 flex items-center justify-center text-[10px] font-bold text-white shrink-0"
+                  style={{ background: RED }}
+                >
+                  {(user.nombre_completo || user.username || 'C').charAt(0).toUpperCase()}
                 </div>
-                {user.foto_perfil ? (
-                  <img src={user.foto_perfil} alt="Perfil" className="h-9 w-9 rounded-full object-cover border border-primary/20 shadow-sm" />
-                ) : (
-                  <div className="h-9 w-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold shadow-sm">
-                    {user.nombre_completo.charAt(0).toUpperCase()}
-                  </div>
-                )}
+                <div className="hidden sm:block text-left">
+                  <p className="text-white text-[11px] font-semibold leading-none">
+                    {user.nombre_completo || user.username}
+                  </p>
+                  <p className="text-white/30 text-[9px] uppercase tracking-widest mt-0.5">DT Principal</p>
+                </div>
               </Link>
             )}
           </div>
         </header>
 
-        <main className="flex-1 overflow-auto bg-muted/20">
+        {}
+        <main className="flex-1 overflow-y-auto p-6 md:p-8 text-white">
           <Outlet />
         </main>
       </div>

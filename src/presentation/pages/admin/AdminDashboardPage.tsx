@@ -1,53 +1,45 @@
 import { useEffect, useState } from 'react';
 import { CalendarDays, Shield, Trophy, Users, Settings } from 'lucide-react';
-import { Link } from 'react-router-dom';
-
 import type { AdminStats } from '@/domain/entities/admin-stats.entity';
 import { dashboardUseCase } from '@/infrastructure/factories/dashboard.factory';
-import { Button } from '@/presentation/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/presentation/components/ui/card';
+import { Card } from '@/presentation/components/ui/card';
 
 const statConfig = [
   {
     key: 'totalTeams',
     label: 'Equipos totales',
-    icon: Shield,
     description: 'Clubes creados en la base de datos',
+    icon: Shield,
   },
   {
     key: 'activeTeams',
     label: 'Equipos activos',
-    icon: Shield,
     description: 'Equipos habilitados para torneos',
+    icon: Shield,
   },
   {
     key: 'totalPlayers',
     label: 'Jugadores registrados',
-    icon: Users,
     description: 'Atletas con ficha federativa activa',
+    icon: Users,
   },
   {
     key: 'totalMatches',
     label: 'Partidos registrados',
-    icon: CalendarDays,
     description: 'Encuentros totales en la temporada',
+    icon: CalendarDays,
   },
   {
     key: 'pendingMatches',
     label: 'Partidos pendientes',
-    icon: CalendarDays,
     description: 'Encuentros pendientes de juego',
+    icon: CalendarDays,
   },
   {
     key: 'activeTournaments',
     label: 'Torneos activos',
-    icon: Trophy,
     description: 'Competiciones oficiales en curso',
+    icon: Trophy,
   },
 ] as const;
 
@@ -85,7 +77,7 @@ export const AdminDashboardPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex h-[50vh] items-center justify-center text-zinc-500">
+      <div className="py-20 text-center text-slate-400 font-semibold uppercase tracking-wider text-xs">
         Cargando estadísticas del dashboard...
       </div>
     );
@@ -93,10 +85,8 @@ export const AdminDashboardPage = () => {
 
   if (error) {
     return (
-      <div className="p-6">
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700 dark:border-red-900/30 dark:bg-red-950/20 dark:text-red-400">
-          {error}
-        </div>
+      <div className="p-4 border-l-4 border-[#E31C3D] bg-red-50 text-[#E31C3D] text-xs font-semibold uppercase tracking-wider rounded-r-lg">
+        {error}
       </div>
     );
   }
@@ -106,49 +96,55 @@ export const AdminDashboardPage = () => {
   }
 
   return (
-    <div className="space-y-8 p-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="space-y-8 animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-slate-200/80 pb-6">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
-            Panel de Control
-          </h1>
-          <p className="text-sm text-zinc-500 mt-1">Resumen general y acceso rápido a las funciones principales.</p>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Panel de Control</h1>
+          <p className="text-slate-500 text-sm mt-1">Resumen general y acceso rápido a las funciones principales.</p>
         </div>
-        
+
         <div className="flex items-center gap-3">
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            SISTEMA ACTIVO
+          <div className="flex items-center gap-2 bg-emerald-50/80 text-emerald-700 border border-emerald-100 px-4 py-2 rounded-lg">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-wider">Sistema Activo</span>
           </div>
-          <Button asChild className="bg-red-600 hover:bg-red-700 text-white font-semibold shadow-sm transition-all duration-200 active:scale-95 gap-2">
-            <Link to="/admin/perfil">
-              <Settings className="h-4 w-4" />
-              AJUSTES
-            </Link>
-          </Button>
+          <button 
+            className="flex items-center gap-2 bg-[#E31C3D] hover:bg-[#c61834] text-white rounded-lg px-4 py-2.5 text-xs font-bold uppercase tracking-widest transition-colors shadow-sm"
+          >
+            <Settings className="h-4 w-4" />
+            <span>Ajustes</span>
+          </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {statConfig.map(({ key, label, icon: Icon, description }) => (
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {statConfig.map(({ key, label, description, icon: Icon }) => (
           <Card 
             key={key} 
-            className="border-zinc-200 dark:border-zinc-800 hover:shadow-md hover:shadow-red-500/5 hover:-translate-y-0.5 transition-all duration-200 bg-card"
+            className="bg-white border border-slate-200/85 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+            style={{ minHeight: '150px' }}
           >
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-xs font-bold text-zinc-400 uppercase tracking-widest">{label}</CardTitle>
-              <div className="p-2 rounded-lg bg-red-500/10 text-red-600 dark:bg-red-500/20 dark:text-red-400">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-500 tracking-normal">{label}</span>
+              <div className="p-2 bg-slate-50 text-slate-400 rounded-lg border border-slate-100">
                 <Icon className="h-4 w-4" />
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-black text-zinc-900 dark:text-white">{stats[key]}</div>
-              <p className="text-[11px] text-zinc-400 mt-2 font-medium">{description}</p>
-            </CardContent>
+            </div>
+
+            <div className="mt-4 flex items-baseline justify-between gap-4">
+              <span className="text-3xl font-bold text-slate-900 tracking-tight">
+                {stats[key]}
+              </span>
+              <span className="text-[11px] font-medium text-slate-400 text-right max-w-[160px]">
+                {description}
+              </span>
+            </div>
           </Card>
         ))}
       </div>
     </div>
   );
 };
-

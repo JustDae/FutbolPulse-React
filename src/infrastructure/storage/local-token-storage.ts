@@ -9,7 +9,6 @@ const KEYS = {
   REFRESH: 'futbolpulse_refresh',
 } as const
 
-
 export const localTokenStorage = {
   getTokens(): LocalTokens | null {
     const access = localStorage.getItem(KEYS.ACCESS)

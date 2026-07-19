@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -7,7 +7,9 @@ import { toast } from 'sonner';
 import type { Player } from '../../../domain/entities/player.entity';
 import { usePlayerStore } from '../../store/player.store';
 import { useTeamStore } from '../../store/team.store';
+import { useAuthStore } from '../../store/auth.store';
 import { ImageUploader } from '../ImageUploader';
+import { matchesCoach } from '@/presentation/utils/name.utils';
 
 const playerSchema = z.object({
   firstNames: z.string().min(1, { message: 'Los nombres son obligatorios' }),
@@ -18,6 +20,7 @@ const playerSchema = z.object({
     .int()
     .min(1, { message: 'Mínimo 1' })
     .max(99, { message: 'Máximo 99' }),
+  position: z.enum(['Portero', 'Defensa', 'Mediocampista', 'Delantero']).optional().or(z.literal('')),
   teamId: z.string().min(1, { message: 'Debe pertenecer a un equipo' }),
   isActive: z.boolean(),
 });
@@ -34,6 +37,13 @@ interface PlayerDialogProps {
 export const PlayerDialog = ({ isOpen, onClose, playerToEdit, defaultTeamId }: PlayerDialogProps) => {
   const { createPlayer, updatePlayer, uploadPlayerPhoto, isLoading } = usePlayerStore();
   const { teams, fetchTeams } = useTeamStore();
+  const { user } = useAuthStore();
+
+  const displayedTeams = useMemo(() => {
+    return (user?.tipo_usuario === 'Coach' && !user?.is_staff)
+      ? teams.filter(team => matchesCoach(team.coach, user.nombre_completo))
+      : teams;
+  }, [user, teams]);
 
   const {
     register,
@@ -47,6 +57,7 @@ export const PlayerDialog = ({ isOpen, onClose, playerToEdit, defaultTeamId }: P
       lastNames: '',
       birthDate: '',
       jerseyNumber: 10,
+      position: undefined,
       teamId: '',
       isActive: true,
     },
@@ -65,6 +76,7 @@ export const PlayerDialog = ({ isOpen, onClose, playerToEdit, defaultTeamId }: P
         lastNames: playerToEdit.lastNames,
         birthDate: playerToEdit.birthDate,
         jerseyNumber: playerToEdit.jerseyNumber,
+        position: playerToEdit.position,
         teamId: playerToEdit.teamId,
         isActive: playerToEdit.isActive,
       });
@@ -74,21 +86,27 @@ export const PlayerDialog = ({ isOpen, onClose, playerToEdit, defaultTeamId }: P
         lastNames: '',
         birthDate: '',
         jerseyNumber: 10,
-        teamId: defaultTeamId || teams[0]?.id || '',
+        position: undefined,
+        teamId: defaultTeamId || displayedTeams[0]?.id || '',
         isActive: true,
       });
     }
-  }, [playerToEdit, reset, teams, defaultTeamId]);
+  }, [playerToEdit, reset, displayedTeams, defaultTeamId]);
 
   if (!isOpen) return null;
 
   const onSubmit = async (data: PlayerFormValues) => {
     try {
+      const payload = {
+        ...data,
+        position: data.position === '' ? undefined : data.position,
+      };
+
       if (playerToEdit) {
-        await updatePlayer(playerToEdit.id, data);
+        await updatePlayer(playerToEdit.id, payload);
         toast.success('Jugador actualizado correctamente');
       } else {
-        await createPlayer(data);
+        await createPlayer(payload);
         toast.success('Jugador creado correctamente');
       }
       onClose();
@@ -168,13 +186,28 @@ export const PlayerDialog = ({ isOpen, onClose, playerToEdit, defaultTeamId }: P
           </div>
 
           <div>
+            <label className="block text-sm font-medium">Posición</label>
+            <select
+              {...register('position')}
+              className="mt-1 w-full rounded border p-2 text-sm dark:bg-zinc-800 dark:border-zinc-700"
+            >
+              <option value="">Selecciona una posición...</option>
+              <option value="Portero">Portero</option>
+              <option value="Defensa">Defensa</option>
+              <option value="Mediocampista">Mediocampista</option>
+              <option value="Delantero">Delantero</option>
+            </select>
+            {errors.position && <p className="mt-1 text-xs text-red-500">{errors.position.message}</p>}
+          </div>
+
+          <div>
             <label className="block text-sm font-medium">Equipo</label>
             <select
               {...register('teamId')}
               className="mt-1 w-full rounded border p-2 text-sm dark:bg-zinc-800 dark:border-zinc-700"
             >
               <option value="">Selecciona un equipo...</option>
-              {teams.map((team) => (
+              {displayedTeams.map((team) => (
                 <option key={team.id} value={team.id}>
                   {team.name}
                 </option>

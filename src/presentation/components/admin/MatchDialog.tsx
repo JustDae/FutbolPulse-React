@@ -52,7 +52,7 @@ export function MatchDialog({ isOpen, onClose, matchToEdit }: MatchDialogProps) 
     if (matchToEdit) {
       setTournamentId(matchToEdit.tournamentId);
       setMatchType(matchToEdit.matchType);
-      
+
       setLocalTeamInput(matchToEdit.equipoLocal);
       setAwayTeamInput(matchToEdit.equipoVisitante);
 

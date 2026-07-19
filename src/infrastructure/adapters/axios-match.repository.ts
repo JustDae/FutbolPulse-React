@@ -51,7 +51,7 @@ export interface UpdateMatchDTO {
 export const matchRepository = {
   getMatches: async (): Promise<Match[]> => {
     try {
-      const { data } = await axiosClient.get<unknown>('/matches/');
+      const { data } = await axiosClient.get<unknown>('/matches/?page_size=100');
       const rawMatches = normalizeListResponse<any>(data);
       return rawMatches.map(MatchMapper.fromJsonToDomain);
     } catch (error) {

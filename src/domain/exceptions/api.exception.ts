@@ -1,6 +1,5 @@
 import { DomainException } from './domain.exception'
 
-
 export class ApiException extends DomainException {
   status: number
   detail: string

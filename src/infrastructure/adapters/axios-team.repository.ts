@@ -29,15 +29,42 @@ export class AxiosTeamRepository implements TeamRepository {
     return list as T[];
   }
 
-  async getTeams(): Promise<Team[]> {
-    const { data } = await axiosClient.get(this.baseUrl);
-    const list = this.normalizeListResponse<unknown>(data);
-    return list.map(TeamMapper.fromJsonToDomain);
+  /** Migrate any badge stored only in localStorage → backend (fire-and-forget) */
+  private syncLocalBadgesToBackend(teams: Team[]): void {
+    teams.forEach(team => {
+      const localBadge = localStorage.getItem(`mock_team_badge_${team.id}`);
+      // Only sync if backend has no logo and we have a local copy
+      if (localBadge && !team.badgeUrl) {
+        axiosClient
+          .patch(`${this.baseUrl}${team.id}/`, { logo_url: localBadge })
+          .then(() => { team.badgeUrl = localBadge; })
+          .catch(() => { /* non-critical */ });
+      }
+    });
   }
+
+  async getTeams(): Promise<Team[]> {
+    const { data } = await axiosClient.get(`${this.baseUrl}?page_size=100`);
+    const list = this.normalizeListResponse<unknown>(data);
+    const teams = list.map(raw => {
+      const team = TeamMapper.fromJsonToDomain(raw);
+      const localBadge = localStorage.getItem(`mock_team_badge_${team.id}`);
+      // Prefer backend URL; fall back to local if backend has none
+      if (!team.badgeUrl && localBadge) team.badgeUrl = localBadge;
+      return team;
+    });
+    // Fire-and-forget: migrate local-only badges to backend
+    this.syncLocalBadgesToBackend(teams);
+    return teams;
+  }
+
 
   async getTeamById(id: string): Promise<Team> {
     const { data } = await axiosClient.get(`${this.baseUrl}${id}/`);
-    return TeamMapper.fromJsonToDomain(data);
+    const team = TeamMapper.fromJsonToDomain(data);
+    const mockBadge = localStorage.getItem(`mock_team_badge_${team.id}`);
+    if (mockBadge) team.badgeUrl = mockBadge;
+    return team;
   }
 
   async createTeam(dto: CreateTeamDto): Promise<Team> {
@@ -57,15 +84,26 @@ export class AxiosTeamRepository implements TeamRepository {
   }
 
   async uploadBadge(id: string, file: File): Promise<{ badgeUrl: string }> {
-    const formData = new FormData();
-    formData.append('escudo', file);
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64 = reader.result as string;
 
-    const { data } = await axiosClient.patch(`${this.baseUrl}${id}/escudo/`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+        // Always save locally as fast cache
+        try { localStorage.setItem(`mock_team_badge_${id}`, base64); } catch { /* quota exceeded — skip */ }
+
+        // Persist to backend so all browsers can see the badge
+        try {
+          await axiosClient.patch(`${this.baseUrl}${id}/`, { logo_url: base64 });
+        } catch (err) {
+          console.warn('[uploadBadge] Could not persist badge to backend, stored locally only:', err);
+        }
+
+        resolve({ badgeUrl: base64 });
+      };
+      reader.onerror = () => reject(new Error('Error leyendo el archivo'));
+      reader.readAsDataURL(file);
     });
-
-    return { badgeUrl: data.badgeUrl || data.url || data.escudo };
   }
+
 }

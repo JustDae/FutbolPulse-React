@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Play, Square, Activity, AlertCircle, LayoutGrid, Clock, Pause, PlusCircle } from 'lucide-react';
+import { Play, Square, AlertCircle, LayoutGrid, Clock, PlusCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/presentation/components/ui/card';
 import { Button } from '@/presentation/components/ui/button';
 import { AxiosPlayerRepository } from '@/infrastructure/adapters/axios-player.repository';
@@ -31,22 +31,20 @@ export function LiveMatchTrackerPage() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
-  
+
   const [selectedMatchId, setSelectedMatchId] = useState<string>('');
   const [pitchPlayers, setPitchPlayers] = useState<PitchPlayer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Match State
   const [matchStarted, setMatchStarted] = useState(false);
-  const [matchTime, setMatchTime] = useState(0); // in seconds
+  const [matchTime, setMatchTime] = useState(0);
   const [period, setPeriod] = useState<'Previo' | '1T' | 'ET' | '2T' | 'Final'>('Previo');
   const [stoppageTime, setStoppageTime] = useState<number>(0);
-  
-  
+
   const [events, setEvents] = useState<MatchEvent[]>([]);
   const [selectedPlayerForEvent, setSelectedPlayerForEvent] = useState<Player | null>(null);
 
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,7 +58,7 @@ export function LiveMatchTrackerPage() {
         setAllPlayers(fetchedPlayers);
         setTeams(fetchedTeams);
         setMatches(fetchedMatches);
-        
+
         if (fetchedMatches.length > 0) {
           const firstMatchId = fetchedMatches[0].id;
           setSelectedMatchId(firstMatchId);
@@ -101,13 +99,12 @@ export function LiveMatchTrackerPage() {
 
       let combined: PitchPlayer[] = [];
 
-      
       if (localTeam) {
         const savedLocal = localStorage.getItem(`lineup_${localTeam.id}`);
         if (savedLocal) {
           const parsedLocal = JSON.parse(savedLocal);
           const restoredLocal = parsedLocal.map((p: any) => {
-            
+
             let player = players.find(ap => ap.id === p.playerId);
             if (!player && p.playerId.startsWith('rival_')) {
               player = {
@@ -124,7 +121,6 @@ export function LiveMatchTrackerPage() {
         }
       }
 
-      
       if (visitorTeam) {
         const savedVisitor = localStorage.getItem(`lineup_${visitorTeam.id}`);
         if (savedVisitor) {
@@ -236,23 +232,24 @@ export function LiveMatchTrackerPage() {
   };
 
   return (
-    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-2 gap-4">
+    <div className="flex-1 space-y-6 p-6 md:p-8">
+      {}
+      <div className="mb-8 pl-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Tracker en Vivo</h2>
-          <p className="text-sm text-muted-foreground">Monitorea el desarrollo del encuentro en tiempo real.</p>
+          <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Tracker en Vivo</h1>
+          <p className="text-gray-500 dark:text-[#888888] font-normal text-sm">Monitorea el desarrollo del encuentro en tiempo real.</p>
         </div>
-        
-        <div className="flex flex-wrap items-center gap-2">
+
+        <div className="flex flex-wrap items-center gap-3">
           <select 
-            className="px-3 py-2 bg-background border rounded-md text-sm outline-none focus:ring-2 focus:ring-ring"
+            className="px-4 py-2 bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none text-gray-700 dark:text-white shadow-sm focus:ring-2 focus:ring-[#f94116]/50"
             value={selectedMatchId}
             onChange={handleMatchChange}
             disabled={isLoading || period !== 'Previo'}
           >
             {matches.length === 0 ? <option value="">Sin partidos programados...</option> : null}
             {matches.map(m => (
-              <option key={m.id} value={m.id}>{m.equipoLocal} vs {m.equipoVisitante}</option>
+              <option key={m.id} value={m.id} className="bg-white dark:bg-[#101010] text-gray-900 dark:text-white">{m.equipoLocal} vs {m.equipoVisitante}</option>
             ))}
           </select>
         </div>
@@ -283,7 +280,7 @@ export function LiveMatchTrackerPage() {
                     {period === 'Previo' ? 'Iniciar 1er Tiempo' : 'Iniciar 2do Tiempo'}
                   </Button>
                 )}
-                
+
                 {(period === '1T' || period === '2T') && matchStarted && (
                   <>
                     <Button variant="outline" className="border-zinc-700 bg-transparent text-white hover:bg-zinc-800 hover:text-white" onClick={() => addStoppageTime(1)}>

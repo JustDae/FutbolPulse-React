@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -29,45 +28,33 @@ interface TeamDialogProps {
 }
 
 export const TeamDialog = ({ isOpen, onClose, teamToEdit }: TeamDialogProps) => {
+  if (!isOpen) return null;
+  // Key forces full remount of the form whenever the target team changes,
+  // guaranteeing useForm re-initializes with fresh defaultValues.
+  return <TeamDialogInner key={teamToEdit?.id ?? '__new__'} onClose={onClose} teamToEdit={teamToEdit} />;
+};
+
+function TeamDialogInner({ onClose, teamToEdit }: Omit<TeamDialogProps, 'isOpen'>) {
   const { createTeam, updateTeam, uploadTeamBadge, isLoading } = useTeamStore();
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<TeamFormValues>({
     resolver: zodResolver(teamSchema),
-    defaultValues: {
-      name: '',
-      coach: '',
-      stadium: '',
-      foundedYear: 2000,
-      isActive: true,
-    },
+    defaultValues: teamToEdit
+      ? {
+          name: teamToEdit.name ?? '',
+          coach: teamToEdit.coach && teamToEdit.coach !== 'Sin DT' ? teamToEdit.coach : '',
+          stadium: teamToEdit.stadium && teamToEdit.stadium !== 'Estadio no asignado' ? teamToEdit.stadium : '',
+          foundedYear: teamToEdit.foundedYear && teamToEdit.foundedYear > 0 ? teamToEdit.foundedYear : 2000,
+          isActive: teamToEdit.isActive ?? true,
+        }
+      : { name: '', coach: '', stadium: '', foundedYear: 2000, isActive: true },
   });
 
-  useEffect(() => {
-    if (teamToEdit) {
-      reset({
-        name: teamToEdit.name,
-        coach: teamToEdit.coach,
-        stadium: teamToEdit.stadium || '',
-        foundedYear: teamToEdit.foundedYear,
-        isActive: teamToEdit.isActive,
-      });
-    } else {
-      reset({
-        name: '',
-        coach: '',
-        stadium: '',
-        foundedYear: 2000,
-        isActive: true,
-      });
-    }
-  }, [teamToEdit, reset]);
 
-  if (!isOpen) return null;
 
   const onSubmit = async (data: TeamFormValues) => {
     try {
@@ -113,22 +100,22 @@ export const TeamDialog = ({ isOpen, onClose, teamToEdit }: TeamDialogProps) => 
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium">Nombre del Equipo</label>
+            <label className="block text-sm font-medium text-gray-900 dark:text-gray-200">Nombre del Equipo</label>
             <input
               type="text"
               {...register('name')}
-              className="mt-1 w-full rounded border p-2 text-sm dark:bg-zinc-800"
+              className="mt-1 w-full rounded border p-2 text-sm text-gray-900 dark:text-white dark:bg-zinc-800"
               placeholder="Ej. Liga de Quito, Barcelona SC..."
             />
             {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Director Técnico (DT)</label>
+            <label className="block text-sm font-medium text-gray-900 dark:text-gray-200">Director Técnico (DT)</label>
             <input
               type="text"
               {...register('coach')}
-              className="mt-1 w-full rounded border p-2 text-sm dark:bg-zinc-800"
+              className="mt-1 w-full rounded border p-2 text-sm text-gray-900 dark:text-white dark:bg-zinc-800"
               placeholder="Nombre del entrenador"
             />
             {errors.coach && <p className="text-xs text-red-500 mt-1">{errors.coach.message}</p>}
@@ -136,21 +123,21 @@ export const TeamDialog = ({ isOpen, onClose, teamToEdit }: TeamDialogProps) => 
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium">Estadio principal</label>
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-200">Estadio principal</label>
               <input
                 type="text"
                 {...register('stadium')}
-                className="mt-1 w-full rounded border p-2 text-sm dark:bg-zinc-800"
+                className="mt-1 w-full rounded border p-2 text-sm text-gray-900 dark:text-white dark:bg-zinc-800"
                 placeholder="Ej. Rodrigo Paz Delgado"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium">Año de Fundación</label>
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-200">Año de Fundación</label>
               <input
                 type="number"
                 {...register('foundedYear', { valueAsNumber: true })}
-                className="mt-1 w-full rounded border p-2 text-sm dark:bg-zinc-800"
+                className="mt-1 w-full rounded border p-2 text-sm text-gray-900 dark:text-white dark:bg-zinc-800"
               />
               {errors.foundedYear && <p className="text-xs text-red-500 mt-1">{errors.foundedYear.message}</p>}
             </div>
@@ -158,7 +145,7 @@ export const TeamDialog = ({ isOpen, onClose, teamToEdit }: TeamDialogProps) => 
 
           <div className="flex items-center gap-2 pt-2">
             <input type="checkbox" id="isActive" {...register('isActive')} className="h-4 w-4" />
-            <label htmlFor="isActive" className="text-sm font-medium">Equipo Activo en el Torneo</label>
+            <label htmlFor="isActive" className="text-sm font-medium text-gray-900 dark:text-gray-200">Equipo Activo en el Torneo</label>
           </div>
 
           <div className="mt-6 flex justify-end gap-3 pt-4 border-t">

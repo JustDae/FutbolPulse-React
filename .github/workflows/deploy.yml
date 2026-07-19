@@ -1,0 +1,68 @@
+name: ⚛️ Deploy React to VPS (Nginx)
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Create env for build
+        run: |
+          printf "%s" "${{ secrets.REACT_ENV }}" > .env.production
+
+      - name: Install deps
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload build to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_KEY }}
+          source: "dist"
+          target: "/tmp/react_build"
+
+      - name: Activate build on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_KEY }}
+          script: |
+            rm -rf /var/www/futbolpulse-react/*
+            rm -rf /var/www/futbol-pulse/*
+            mkdir -p /var/www/futbol-pulse
+            cp -r /tmp/react_build/dist/* /var/www/futbolpulse-react/
+            cp -r /tmp/react_build/dist/* /var/www/futbol-pulse/
+            
+            {
+              echo "=== NGINX CONFIG ==="
+              cat /etc/nginx/sites-enabled/*
+              echo "=== /var/www/futbolpulse-react/ ==="
+              ls -la /var/www/futbolpulse-react/
+              echo "=== /var/www/futbol-pulse/ ==="
+              ls -la /var/www/futbol-pulse/
+              echo "=== CURRENT VPS WORKING DIRECTORY ==="
+              pwd
+              echo "=== NGINX USER ==="
+              whoami
+            } > /var/www/futbolpulse-react/test_nginx.txt
+            
+            cp /var/www/futbolpulse-react/test_nginx.txt /var/www/futbol-pulse/test_nginx.txt
+            
+            systemctl reload nginx

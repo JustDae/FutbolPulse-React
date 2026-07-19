@@ -4,14 +4,11 @@ import { localTokenStorage } from '@/infrastructure/storage/local-token-storage'
 import { ApiException } from '@/domain/exceptions/api.exception'
 import { parseApiError } from './parse-api-error'
 
-
 export const AUTH_EXPIRED_EVENT = 'authExpired'
 
 export interface AuthExpiredEventDetail {
   reason: string
 }
-
-
 
 export const axiosClient = axios.create({
   baseURL: API_CONFIG.BASE_URL,
@@ -20,8 +17,6 @@ export const axiosClient = axios.create({
     'Content-Type': 'application/json',
   },
 })
-
-
 
 axiosClient.interceptors.request.use(
   (config) => {
@@ -33,8 +28,6 @@ axiosClient.interceptors.request.use(
   },
   (error) => Promise.reject(parseApiError(error)),
 )
-
-
 
 let isRefreshing = false
 
@@ -48,7 +41,6 @@ function notifySubscribers(token: string) {
   refreshSubscribers.forEach((cb) => cb(token))
   refreshSubscribers = []
 }
-
 
 function dispatchAuthExpired(reason: string) {
   const event = new CustomEvent<AuthExpiredEventDetail>(AUTH_EXPIRED_EVENT, {
