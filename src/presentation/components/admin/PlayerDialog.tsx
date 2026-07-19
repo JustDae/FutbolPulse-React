@@ -20,6 +20,7 @@ const playerSchema = z.object({
     .int()
     .min(1, { message: 'Mínimo 1' })
     .max(99, { message: 'Máximo 99' }),
+  position: z.enum(['Portero', 'Defensa', 'Mediocampista', 'Delantero']).optional().or(z.literal('')),
   teamId: z.string().min(1, { message: 'Debe pertenecer a un equipo' }),
   isActive: z.boolean(),
 });
@@ -56,6 +57,7 @@ export const PlayerDialog = ({ isOpen, onClose, playerToEdit, defaultTeamId }: P
       lastNames: '',
       birthDate: '',
       jerseyNumber: 10,
+      position: undefined,
       teamId: '',
       isActive: true,
     },
@@ -74,6 +76,7 @@ export const PlayerDialog = ({ isOpen, onClose, playerToEdit, defaultTeamId }: P
         lastNames: playerToEdit.lastNames,
         birthDate: playerToEdit.birthDate,
         jerseyNumber: playerToEdit.jerseyNumber,
+        position: playerToEdit.position,
         teamId: playerToEdit.teamId,
         isActive: playerToEdit.isActive,
       });
@@ -83,6 +86,7 @@ export const PlayerDialog = ({ isOpen, onClose, playerToEdit, defaultTeamId }: P
         lastNames: '',
         birthDate: '',
         jerseyNumber: 10,
+        position: undefined,
         teamId: defaultTeamId || displayedTeams[0]?.id || '',
         isActive: true,
       });
@@ -93,11 +97,16 @@ export const PlayerDialog = ({ isOpen, onClose, playerToEdit, defaultTeamId }: P
 
   const onSubmit = async (data: PlayerFormValues) => {
     try {
+      const payload = {
+        ...data,
+        position: data.position === '' ? undefined : data.position,
+      };
+
       if (playerToEdit) {
-        await updatePlayer(playerToEdit.id, data);
+        await updatePlayer(playerToEdit.id, payload);
         toast.success('Jugador actualizado correctamente');
       } else {
-        await createPlayer(data);
+        await createPlayer(payload);
         toast.success('Jugador creado correctamente');
       }
       onClose();
@@ -174,6 +183,21 @@ export const PlayerDialog = ({ isOpen, onClose, playerToEdit, defaultTeamId }: P
               />
               {errors.birthDate && <p className="mt-1 text-xs text-red-500">{errors.birthDate.message}</p>}
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium">Posición</label>
+            <select
+              {...register('position')}
+              className="mt-1 w-full rounded border p-2 text-sm dark:bg-zinc-800 dark:border-zinc-700"
+            >
+              <option value="">Selecciona una posición...</option>
+              <option value="Portero">Portero</option>
+              <option value="Defensa">Defensa</option>
+              <option value="Mediocampista">Mediocampista</option>
+              <option value="Delantero">Delantero</option>
+            </select>
+            {errors.position && <p className="mt-1 text-xs text-red-500">{errors.position.message}</p>}
           </div>
 
           <div>
