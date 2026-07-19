@@ -99,86 +99,99 @@ export function HealthManagementPage() {
   }, [selectedPlayerId, activeTab]);
 
   return (
-    <div className="flex-1 space-y-6 p-6 md:p-8">
-      {}
-      <div className="mb-8 pl-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="flex-1 space-y-8 p-6 md:p-8 overflow-y-auto custom-scrollbar">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 glass-panel p-6 rounded-2xl relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-1 h-full bg-primary" />
         <div>
-          <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Salud y Rendimiento</h1>
-          <p className="text-gray-500 dark:text-[#888888] font-normal text-sm">Gestiona el perfil médico y rendimiento de los jugadores.</p>
+          <h1 className="text-3xl font-black tracking-tighter text-foreground uppercase neon-text-glow mb-1">
+            Salud y Rendimiento
+          </h1>
+          <p className="text-muted-foreground font-medium text-sm tracking-wide">
+            GESTIÓN DEL PERFIL MÉDICO Y FÍSICO DE LA PLANTILLA
+          </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <select 
-            className="px-4 py-2 bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none text-gray-700 dark:text-white shadow-sm focus:ring-2 focus:ring-[#f94116]/50"
-            value={selectedPlayerId}
-            onChange={(e) => setSelectedPlayerId(e.target.value)}
-          >
-            <option value="" disabled>Selecciona un jugador...</option>
-            {players.map(p => (
-              <option key={p.id} value={p.id} className="bg-white dark:bg-[#101010] text-gray-900 dark:text-white">{p.firstNames} {p.lastNames}</option>
-            ))}
-          </select>
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="relative">
+            <select 
+              className="appearance-none pl-4 pr-10 py-2.5 bg-black/50 border border-white/10 rounded-xl text-sm font-semibold outline-none text-foreground shadow-inner focus:ring-2 focus:ring-primary/50 transition-all cursor-pointer backdrop-blur-md"
+              value={selectedPlayerId}
+              onChange={(e) => setSelectedPlayerId(e.target.value)}
+            >
+              <option value="" disabled className="bg-zinc-900">Seleccionar Jugador...</option>
+              {players.map(p => (
+                <option key={p.id} value={p.id} className="bg-zinc-900">{p.firstNames} {p.lastNames}</option>
+              ))}
+            </select>
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-primary">
+              ▼
+            </div>
+          </div>
           <Button 
             onClick={() => setIsModalOpen(true)} 
-            className="bg-[#f94116] hover:bg-[#d83610] text-white shadow-sm rounded-xl px-4 flex items-center gap-2"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_0_15px_rgba(249,65,22,0.3)] rounded-xl px-5 py-2.5 flex items-center gap-2 font-bold tracking-wide uppercase text-xs transition-all"
           >
             <Plus className="h-4 w-4" /> Añadir Registro
           </Button>
         </div>
       </div>
 
-      <div className="flex overflow-x-auto gap-2 border-b border-gray-200 dark:border-[#1a1a1c] pb-4 mb-6 custom-scrollbar">
-        <button 
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all ${activeTab === 'medical' ? 'bg-[#f94116] text-white shadow-md' : 'bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-white/5'}`}
-          onClick={() => setActiveTab('medical')}
-        >
-          <Activity className="h-4 w-4" /> Perfil Médico
-        </button>
-        <button 
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all ${activeTab === 'injuries' ? 'bg-[#f94116] text-white shadow-md' : 'bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-white/5'}`}
-          onClick={() => setActiveTab('injuries')}
-        >
-          <Stethoscope className="h-4 w-4" /> Lesiones
-        </button>
-        <button 
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all ${activeTab === 'performance' ? 'bg-[#f94116] text-white shadow-md' : 'bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-white/5'}`}
-          onClick={() => setActiveTab('performance')}
-        >
-          <Dumbbell className="h-4 w-4" /> Rendimiento
-        </button>
-        <button 
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all ${activeTab === 'diet' ? 'bg-[#f94116] text-white shadow-md' : 'bg-white dark:bg-[#101010] border border-gray-200 dark:border-white/10 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-white/5'}`}
-          onClick={() => setActiveTab('diet')}
-        >
-          <Apple className="h-4 w-4" /> Nutrición
-        </button>
+      {/* Tabs */}
+      <div className="flex overflow-x-auto gap-3 pb-2 custom-scrollbar">
+        {[
+          { id: 'medical', label: 'Perfil Médico', icon: Activity },
+          { id: 'injuries', label: 'Lesiones', icon: Stethoscope },
+          { id: 'performance', label: 'Rendimiento', icon: Dumbbell },
+          { id: 'diet', label: 'Nutrición', icon: Apple },
+        ].map(tab => (
+          <button 
+            key={tab.id}
+            className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold tracking-wide transition-all border ${
+              activeTab === tab.id 
+                ? 'bg-primary/10 border-primary text-primary neon-glow' 
+                : 'bg-black/20 border-white/5 text-muted-foreground hover:bg-white/5 hover:text-foreground'
+            }`}
+            onClick={() => setActiveTab(tab.id as Tab)}
+          >
+            <tab.icon className="h-4 w-4" /> {tab.label}
+          </button>
+        ))}
       </div>
 
       {isLoading ? (
         <div className="flex justify-center items-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-6">
 
           {activeTab === 'medical' && (
-            <div className="grid gap-4 md:grid-cols-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Antecedentes Clínicos</CardTitle>
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card className="glass-card border-white/10 bg-black/40 backdrop-blur-xl">
+                <CardHeader className="border-b border-white/5 pb-4">
+                  <CardTitle className="text-lg font-black uppercase tracking-wider text-primary flex items-center gap-2">
+                    <Activity className="h-5 w-5" /> Antecedentes Clínicos
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                   {medical.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No hay antecedentes registrados.</p>
+                    <div className="flex flex-col items-center justify-center py-10 text-muted-foreground opacity-70">
+                      <Stethoscope className="h-10 w-10 mb-3" />
+                      <p className="text-sm font-semibold uppercase tracking-wider">No hay antecedentes</p>
+                    </div>
                   ) : (
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       {medical.map(m => (
-                        <div key={m.id} className="grid grid-cols-2 gap-2 text-sm">
-                          <div className="font-semibold">Tipo Sangre:</div><div>{m.tipoSangre || '-'}</div>
-                          <div className="font-semibold">Alergias:</div><div>{m.alergias || 'Ninguna'}</div>
-                          <div className="font-semibold">Medicamentos:</div><div>{m.medicamentosRegulares || 'Ninguno'}</div>
-                          <div className="font-semibold">Condiciones:</div><div>{m.condicionesCronicas || 'Ninguna'}</div>
-                          <div className="font-semibold">Contacto Médico:</div><div>{m.contactoMedicoNombre} ({m.contactoMedicoTel})</div>
+                        <div key={m.id} className="grid grid-cols-2 gap-4 text-sm bg-white/5 p-4 rounded-xl border border-white/5">
+                          <div><span className="block text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">Tipo Sangre</span><span className="font-semibold text-foreground">{m.tipoSangre || '-'}</span></div>
+                          <div><span className="block text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">Alergias</span><span className="font-semibold text-foreground">{m.alergias || 'Ninguna'}</span></div>
+                          <div><span className="block text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">Medicamentos</span><span className="font-semibold text-foreground">{m.medicamentosRegulares || 'Ninguno'}</span></div>
+                          <div><span className="block text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">Condiciones</span><span className="font-semibold text-foreground">{m.condicionesCronicas || 'Ninguna'}</span></div>
+                          <div className="col-span-2 mt-2 pt-2 border-t border-white/5">
+                            <span className="block text-[10px] uppercase font-bold text-primary tracking-wider mb-1">Contacto Médico</span>
+                            <span className="font-semibold text-foreground">{m.contactoMedicoNombre} <span className="text-muted-foreground">({m.contactoMedicoTel})</span></span>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -186,30 +199,35 @@ export function HealthManagementPage() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card">
-                <CardHeader>
-                  <CardTitle className="text-lg">Antropometría (Último Registro)</CardTitle>
+              <Card className="glass-card border-white/10 bg-black/40 backdrop-blur-xl">
+                <CardHeader className="border-b border-white/5 pb-4">
+                  <CardTitle className="text-lg font-black uppercase tracking-wider text-primary flex items-center gap-2">
+                    <Activity className="h-5 w-5" /> Antropometría
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                   {anthropometric.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No hay registros antropométricos.</p>
+                    <div className="flex flex-col items-center justify-center py-10 text-muted-foreground opacity-70">
+                      <Activity className="h-10 w-10 mb-3" />
+                      <p className="text-sm font-semibold uppercase tracking-wider">Sin Registros</p>
+                    </div>
                   ) : (
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                       <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-muted p-3 rounded-lg text-center">
-                          <div className="text-2xl font-bold">{anthropometric[0].pesoKg} kg</div>
-                          <div className="text-xs text-muted-foreground uppercase font-semibold">Peso</div>
+                        <div className="bg-primary/10 border border-primary/20 p-4 rounded-xl text-center neon-glow">
+                          <div className="text-3xl font-black text-foreground">{anthropometric[0].pesoKg} <span className="text-sm text-primary">kg</span></div>
+                          <div className="text-[10px] text-primary uppercase font-black tracking-widest mt-1">Peso Actual</div>
                         </div>
-                        <div className="bg-muted p-3 rounded-lg text-center">
-                          <div className="text-2xl font-bold">{anthropometric[0].imc}</div>
-                          <div className="text-xs text-muted-foreground uppercase font-semibold">IMC</div>
+                        <div className="bg-white/5 border border-white/10 p-4 rounded-xl text-center">
+                          <div className="text-3xl font-black text-foreground">{anthropometric[0].imc}</div>
+                          <div className="text-[10px] text-muted-foreground uppercase font-black tracking-widest mt-1">Índice Masa (IMC)</div>
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 gap-2 text-sm">
-                        <div className="font-semibold">Altura:</div><div>{anthropometric[0].alturaCm} cm</div>
-                        <div className="font-semibold">Grasa Corporal:</div><div>{anthropometric[0].grasaCorporal}%</div>
-                        <div className="font-semibold">Masa Muscular:</div><div>{anthropometric[0].masaMuscular} kg</div>
-                        <div className="font-semibold">Fecha de Toma:</div><div>{new Date(anthropometric[0].fechaToma).toLocaleDateString()}</div>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="bg-white/5 p-3 rounded-lg border border-white/5"><span className="block text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">Altura</span><span className="font-semibold">{anthropometric[0].alturaCm} cm</span></div>
+                        <div className="bg-white/5 p-3 rounded-lg border border-white/5"><span className="block text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">Grasa Corp.</span><span className="font-semibold">{anthropometric[0].grasaCorporal}%</span></div>
+                        <div className="bg-white/5 p-3 rounded-lg border border-white/5"><span className="block text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">Masa Musc.</span><span className="font-semibold">{anthropometric[0].masaMuscular} kg</span></div>
+                        <div className="bg-white/5 p-3 rounded-lg border border-white/5"><span className="block text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">Fecha Toma</span><span className="font-semibold text-primary">{new Date(anthropometric[0].fechaToma).toLocaleDateString()}</span></div>
                       </div>
                     </div>
                   )}
@@ -219,35 +237,38 @@ export function HealthManagementPage() {
           )}
 
           {activeTab === 'injuries' && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Historial de Lesiones</CardTitle>
-                <CardDescription>Registro médico de lesiones y tratamientos en curso.</CardDescription>
+            <Card className="glass-card border-white/10 bg-black/40 backdrop-blur-xl">
+              <CardHeader className="border-b border-white/5 pb-4">
+                <CardTitle className="text-lg font-black uppercase tracking-wider text-primary flex items-center gap-2">
+                  <Stethoscope className="h-5 w-5" /> Historial de Lesiones
+                </CardTitle>
+                <CardDescription className="text-muted-foreground/70 tracking-wide text-xs">REGISTRO MÉDICO DE LESIONES Y TRATAMIENTOS</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-6">
                 {injuries.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground border-2 border-dashed rounded-lg">
-                    <AlertCircle className="mx-auto h-12 w-12 mb-4 text-muted-foreground/50" />
-                    <p>El jugador no tiene historial de lesiones.</p>
+                  <div className="flex flex-col items-center justify-center py-12 text-muted-foreground opacity-70 border-2 border-dashed border-white/10 rounded-xl bg-white/5">
+                    <AlertCircle className="h-12 w-12 mb-3" />
+                    <p className="text-sm font-semibold uppercase tracking-wider">Sin lesiones registradas</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
                     {injuries.map(injury => (
-                      <div key={injury.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
-                        <div>
-                          <h4 className="font-semibold text-lg">{injury.zonaCuerpo} - {injury.tipoLesion}</h4>
-                          <p className="text-sm text-muted-foreground">{injury.descripcion}</p>
-                          <div className="text-xs text-muted-foreground mt-2 space-x-4">
-                            <span>Desde: {injury.fechaInicio}</span>
-                            {injury.fechaAlta && <span>Alta: {injury.fechaAlta}</span>}
-                            <span>Médico: {injury.medicoTratante}</span>
+                      <div key={injury.id} className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors group relative overflow-hidden">
+                        <div className={`absolute left-0 top-0 w-1 h-full ${injury.activa ? 'bg-red-500' : 'bg-green-500'}`} />
+                        <div className="pl-4">
+                          <h4 className="font-black text-lg text-foreground uppercase tracking-wide">{injury.zonaCuerpo} <span className="text-muted-foreground font-medium text-sm ml-2">| {injury.tipoLesion}</span></h4>
+                          <p className="text-sm text-muted-foreground mt-1 font-medium">{injury.descripcion}</p>
+                          <div className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider mt-3 flex items-center gap-4">
+                            <span className="flex items-center gap-1"><span className="text-primary">DESDE:</span> {injury.fechaInicio}</span>
+                            {injury.fechaAlta && <span className="flex items-center gap-1"><span className="text-primary">ALTA:</span> {injury.fechaAlta}</span>}
+                            <span className="flex items-center gap-1"><span className="text-primary">DR.</span> {injury.medicoTratante}</span>
                           </div>
                         </div>
-                        <div className="mt-4 md:mt-0 flex gap-2">
-                          <span className="px-3 py-1 bg-secondary text-secondary-foreground text-xs rounded-full font-medium">
+                        <div className="mt-4 md:mt-0 flex gap-3 pl-4 md:pl-0">
+                          <span className="px-3 py-1 bg-white/10 border border-white/10 text-foreground text-[10px] uppercase tracking-widest rounded-full font-bold">
                             {injury.gravedad}
                           </span>
-                          <span className={`px-3 py-1 text-xs rounded-full font-medium ${injury.activa ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
+                          <span className={`px-3 py-1 text-[10px] uppercase tracking-widest rounded-full font-bold border ${injury.activa ? 'bg-red-500/20 text-red-400 border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.2)]' : 'bg-green-500/20 text-green-400 border-green-500/50'}`}>
                             {injury.activa ? 'Activa' : 'Recuperado'}
                           </span>
                         </div>
@@ -260,23 +281,42 @@ export function HealthManagementPage() {
           )}
 
           {activeTab === 'performance' && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Tests Físicos</CardTitle>
+            <Card className="glass-card border-white/10 bg-black/40 backdrop-blur-xl">
+              <CardHeader className="border-b border-white/5 pb-4">
+                <CardTitle className="text-lg font-black uppercase tracking-wider text-primary flex items-center gap-2">
+                  <Dumbbell className="h-5 w-5" /> Pruebas Físicas
+                </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-6">
                 {tests.length === 0 ? (
-                   <p className="text-sm text-muted-foreground">No hay tests registrados.</p>
+                   <div className="flex flex-col items-center justify-center py-12 text-muted-foreground opacity-70">
+                     <Dumbbell className="h-10 w-10 mb-3" />
+                     <p className="text-sm font-semibold uppercase tracking-wider">No hay pruebas registradas</p>
+                   </div>
                 ) : (
                   <div className="space-y-4">
                     {tests.map(test => (
-                      <div key={test.id} className="border p-4 rounded-lg">
-                        <div className="font-bold mb-4 border-b pb-2">Fecha: {new Date(test.fechaTest).toLocaleDateString()}</div>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                          <div><span className="text-muted-foreground block text-xs">Velocidad 30m</span>{test.velocidad30mSeg}s</div>
-                          <div><span className="text-muted-foreground block text-xs">Salto Vertical</span>{test.saltoVerticalCm} cm</div>
-                          <div><span className="text-muted-foreground block text-xs">VO2Max</span>{test.resistenciaVo2max}</div>
-                          <div><span className="text-muted-foreground block text-xs">Agilidad</span>{test.agilidadSeg}s</div>
+                      <div key={test.id} className="bg-white/5 border border-white/10 p-5 rounded-xl">
+                        <div className="font-black text-sm uppercase tracking-widest text-primary mb-4 pb-2 border-b border-white/10">
+                          Test Físico — {new Date(test.fechaTest).toLocaleDateString()}
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                          <div className="bg-black/30 rounded-lg p-3 border border-white/5">
+                            <span className="block text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">Velocidad 30m</span>
+                            <div className="font-black text-xl text-foreground">{test.velocidad30mSeg} <span className="text-xs text-primary">s</span></div>
+                          </div>
+                          <div className="bg-black/30 rounded-lg p-3 border border-white/5">
+                            <span className="block text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">Salto Vertical</span>
+                            <div className="font-black text-xl text-foreground">{test.saltoVerticalCm} <span className="text-xs text-primary">cm</span></div>
+                          </div>
+                          <div className="bg-black/30 rounded-lg p-3 border border-white/5">
+                            <span className="block text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">VO2 Max</span>
+                            <div className="font-black text-xl text-foreground">{test.resistenciaVo2max}</div>
+                          </div>
+                          <div className="bg-black/30 rounded-lg p-3 border border-white/5">
+                            <span className="block text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">Agilidad</span>
+                            <div className="font-black text-xl text-foreground">{test.agilidadSeg} <span className="text-xs text-primary">s</span></div>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -287,32 +327,52 @@ export function HealthManagementPage() {
           )}
 
           {activeTab === 'diet' && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Plan Nutricional</CardTitle>
+            <Card className="glass-card border-white/10 bg-black/40 backdrop-blur-xl">
+              <CardHeader className="border-b border-white/5 pb-4">
+                <CardTitle className="text-lg font-black uppercase tracking-wider text-primary flex items-center gap-2">
+                  <Apple className="h-5 w-5" /> Plan Nutricional
+                </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-6">
                 {diets.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">No hay planes nutricionales activos.</p>
+                  <div className="flex flex-col items-center justify-center py-12 text-muted-foreground opacity-70">
+                    <Apple className="h-10 w-10 mb-3" />
+                    <p className="text-sm font-semibold uppercase tracking-wider">Sin Plan Nutricional</p>
+                  </div>
                 ) : (
                   <div className="space-y-4">
                     {diets.map(diet => (
-                      <div key={diet.id} className="border p-4 rounded-lg">
-                        <div className="flex justify-between items-center mb-4">
-                          <h4 className="font-semibold text-lg">{diet.descripcionDieta || 'Dieta Estándar'}</h4>
-                          <span className={`px-3 py-1 text-xs rounded-full font-medium ${diet.activo ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                            {diet.activo ? 'Activo' : 'Inactivo'}
-                          </span>
+                      <div key={diet.id} className="bg-white/5 border border-white/10 p-5 rounded-xl relative overflow-hidden">
+                        <div className={`absolute top-0 right-0 px-3 py-1 text-[10px] uppercase font-black tracking-widest rounded-bl-lg ${diet.activo ? 'bg-primary text-primary-foreground shadow-md' : 'bg-zinc-800 text-zinc-400'}`}>
+                          {diet.activo ? 'Plan Activo' : 'Inactivo'}
                         </div>
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
-                          <div className="bg-muted p-2 rounded text-center"><div className="font-bold">{diet.caloriasTotales}</div><div className="text-xs uppercase">Kcal</div></div>
-                          <div className="bg-muted p-2 rounded text-center"><div className="font-bold">{diet.proteinaGr}g</div><div className="text-xs uppercase">Prot</div></div>
-                          <div className="bg-muted p-2 rounded text-center"><div className="font-bold">{diet.carbohidratosGr}g</div><div className="text-xs uppercase">Carb</div></div>
-                          <div className="bg-muted p-2 rounded text-center"><div className="font-bold">{diet.grasasGr}g</div><div className="text-xs uppercase">Grasa</div></div>
-                          <div className="bg-muted p-2 rounded text-center"><div className="font-bold">{diet.hidratacionMl}</div><div className="text-xs uppercase">ml/día</div></div>
+                        <h4 className="font-black text-xl text-foreground uppercase tracking-wide mb-5 mt-2">{diet.descripcionDieta || 'Dieta Estándar'}</h4>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-5">
+                          <div className="bg-black/40 p-3 rounded-lg border border-white/5 text-center">
+                            <div className="text-2xl font-black text-foreground">{diet.caloriasTotales}</div>
+                            <div className="text-[10px] uppercase font-bold tracking-widest text-primary mt-1">Kcal</div>
+                          </div>
+                          <div className="bg-black/40 p-3 rounded-lg border border-white/5 text-center">
+                            <div className="text-xl font-bold text-foreground">{diet.proteinaGr}g</div>
+                            <div className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground mt-1">Proteína</div>
+                          </div>
+                          <div className="bg-black/40 p-3 rounded-lg border border-white/5 text-center">
+                            <div className="text-xl font-bold text-foreground">{diet.carbohidratosGr}g</div>
+                            <div className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground mt-1">Carbos</div>
+                          </div>
+                          <div className="bg-black/40 p-3 rounded-lg border border-white/5 text-center">
+                            <div className="text-xl font-bold text-foreground">{diet.grasasGr}g</div>
+                            <div className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground mt-1">Grasas</div>
+                          </div>
+                          <div className="bg-black/40 p-3 rounded-lg border border-white/5 text-center">
+                            <div className="text-xl font-bold text-foreground">{diet.hidratacionMl}</div>
+                            <div className="text-[10px] uppercase font-bold tracking-widest text-blue-400 mt-1">ml/día</div>
+                          </div>
                         </div>
-                        <div className="text-sm text-muted-foreground">
-                          Asignado por: {diet.nutricionista} | Desde: {diet.fechaInicio}
+                        <div className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider flex gap-4 pt-4 border-t border-white/5">
+                          <span><span className="text-primary">NUTRICIONISTA:</span> {diet.nutricionista}</span>
+                          <span><span className="text-primary">DESDE:</span> {diet.fechaInicio}</span>
                         </div>
                       </div>
                     ))}
