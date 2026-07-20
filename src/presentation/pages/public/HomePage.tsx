@@ -130,6 +130,7 @@ export function HomePage() {
   };
 
   const displayMatches = matches.slice(0, 3);
+  const liveMatch = matches.find(m => m.status === 'En curso');
 
   return (
     <div className="w-full overflow-x-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>
@@ -221,15 +222,15 @@ export function HomePage() {
               <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/60">Partido en Curso</span>
             </div>
 
-            {displayMatches[0] ? (
+            {liveMatch ? (
               <div className="p-6 border border-white/10" style={{ background: 'rgba(16,24,43,0.8)' }}>
-                <p className="text-[9px] font-bold uppercase tracking-widest text-white/40 mb-4">{displayMatches[0].matchType || 'Liga Profesional'}</p>
+                <p className="text-[9px] font-bold uppercase tracking-widest text-white/40 mb-4">{liveMatch.matchType || 'Liga Profesional'}</p>
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex flex-col items-center gap-2 flex-1">
                     <div className="w-14 aspect-[3/2] overflow-hidden shadow-sm bg-slate-950">
-                      <TeamBadge url={getTeamBadge(displayMatches[0].equipoLocal)} name={displayMatches[0].equipoLocal} size={56} />
+                      <TeamBadge url={getTeamBadge(liveMatch.equipoLocal)} name={liveMatch.equipoLocal} size={56} />
                     </div>
-                    <p className="text-white/80 text-xs font-semibold text-center leading-tight mt-1">{displayMatches[0].equipoLocal}</p>
+                    <p className="text-white/80 text-xs font-semibold text-center leading-tight mt-1">{liveMatch.equipoLocal}</p>
                   </div>
 
                   <div className="flex flex-col items-center gap-1">
@@ -237,30 +238,30 @@ export function HomePage() {
                       <span
                         style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '52px', color: '#FFF', lineHeight: 1, letterSpacing: '-0.03em' }}
                       >
-                        {displayMatches[0].homeScore ?? '–'}
+                        {liveMatch.homeScore ?? '–'}
                       </span>
                       <span className="text-white/20 text-2xl font-light">:</span>
                       <span
                         style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '52px', color: '#FFF', lineHeight: 1, letterSpacing: '-0.03em' }}
                       >
-                        {displayMatches[0].awayScore ?? '–'}
+                        {liveMatch.awayScore ?? '–'}
                       </span>
                     </div>
                     <span className="text-[9px] font-bold uppercase tracking-widest text-white/40">
-                      {displayMatches[0].status}
+                      {liveMatch.status}
                     </span>
                   </div>
 
                   <div className="flex flex-col items-center gap-2 flex-1">
                     <div className="w-14 aspect-[3/2] overflow-hidden shadow-sm bg-slate-950">
-                      <TeamBadge url={getTeamBadge(displayMatches[0].equipoVisitante)} name={displayMatches[0].equipoVisitante} size={56} />
+                      <TeamBadge url={getTeamBadge(liveMatch.equipoVisitante)} name={liveMatch.equipoVisitante} size={56} />
                     </div>
-                    <p className="text-white/80 text-xs font-semibold text-center leading-tight mt-1">{displayMatches[0].equipoVisitante}</p>
+                    <p className="text-white/80 text-xs font-semibold text-center leading-tight mt-1">{liveMatch.equipoVisitante}</p>
                   </div>
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
-                  <p className="text-white/30 text-[10px]">{displayMatches[0].stadium || 'Sede por definir'}</p>
+                  <p className="text-white/30 text-[10px]">{liveMatch.stadium || 'Sede por definir'}</p>
                   <Link to="/partidos" className="text-[9px] font-bold uppercase tracking-widest hover:opacity-80 transition-opacity" style={{ color: RED }}>
                     Ver detalle →
                   </Link>

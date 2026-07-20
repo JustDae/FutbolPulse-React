@@ -32,7 +32,7 @@ export function AppShell() {
 
   useEffect(() => {
     matchRepository.getMatches()
-      .then(m => setMatches(m.slice(0, 8)))
+      .then(m => setMatches(m.filter(match => match.status === 'En curso').slice(0, 8)))
       .catch(() => {})
   }, [])
 
