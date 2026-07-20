@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CalendarDays, Shield, Trophy, Users, Settings } from 'lucide-react';
+import { CalendarDays, Shield, Trophy, Users } from 'lucide-react';
 import type { AdminStats } from '@/domain/entities/admin-stats.entity';
 import { dashboardUseCase } from '@/infrastructure/factories/dashboard.factory';
 import { Card } from '@/presentation/components/ui/card';
@@ -108,21 +108,7 @@ export const AdminDashboardPage = () => {
           <p className="text-slate-500 dark:text-white/50 text-xs mt-1 font-medium pl-5">Resumen operativo general de la plataforma deportiva.</p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-4 py-2 rounded-xl">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
-            <span className="text-[10px] font-extrabold uppercase tracking-wider">Sistema Operativo</span>
-          </div>
-          <button 
-            className="flex items-center gap-2 bg-[#E31C3D] hover:bg-[#c61834] text-white rounded-xl px-5 py-2.5 text-xs font-bold uppercase tracking-widest transition-all shadow-lg shadow-[#E31C3D]/20 active:scale-95 cursor-pointer"
-          >
-            <Settings className="h-4 w-4" />
-            <span>Ajustes</span>
-          </button>
-        </div>
+
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
