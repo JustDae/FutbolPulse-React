@@ -164,14 +164,24 @@ export function CoachShell() {
             >
               <Menu className="h-5 w-5" />
             </button>
-            <div className="hidden md:flex items-center gap-2">
-              <div className="w-1 h-5" style={{ background: RED }} />
-              <span
-                className="uppercase font-bold text-white/50 text-[10px] tracking-[0.15em]"
-                style={{ fontFamily: "'Inter', sans-serif" }}
-              >
-                {navItems.find(i => i.href === pathname || (i.href !== '/coach' && pathname.startsWith(i.href)))?.label ?? 'Panel de Control'}
-              </span>
+            <div className="hidden md:flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-5" style={{ background: RED }} />
+                <span
+                  className="uppercase font-bold text-white/50 text-[10px] tracking-[0.15em]"
+                  style={{ fontFamily: "'Inter', sans-serif" }}
+                >
+                  {navItems.find(i => i.href === pathname || (i.href !== '/coach' && pathname.startsWith(i.href)))?.label ?? 'Panel de Control'}
+                </span>
+              </div>
+              {(user?.is_staff || user?.tipo_usuario === 'Admin') && (
+                <Link
+                  to="/admin"
+                  className="text-xs font-extrabold text-white bg-[#E31C3D] hover:bg-[#c61834] px-4 py-1.5 rounded-full shadow-lg shadow-[#E31C3D]/25 transition-all cursor-pointer uppercase tracking-wider"
+                >
+                  Panel Administrador
+                </Link>
+              )}
             </div>
           </div>
 

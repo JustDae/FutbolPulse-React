@@ -100,204 +100,203 @@ export const AdminPlayersPage = () => {
   const inactiveCount = displayedPlayers.filter(p => !p.isActive).length;
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="space-y-6 p-6 max-w-7xl mx-auto">
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-foreground tracking-tight">
+    <div className="space-y-6 animate-fade-in text-slate-900 dark:text-white">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#1C2B45] pb-6">
+        <div>
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-7 bg-[#E31C3D] rounded-full" />
+            <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
               Plantilla de Jugadores
             </h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Gestión de la plantilla del equipo
-            </p>
           </div>
-          <Button
-            variant="action"
-            onClick={handleOpenCreate}
-            className="px-5 py-2.5 text-sm font-medium"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Nuevo Jugador
-          </Button>
+          <p className="text-slate-500 dark:text-white/50 text-xs mt-1 font-medium pl-5">Gestión de la plantilla federada y fichas de atletas.</p>
         </div>
+        <button
+          onClick={handleOpenCreate}
+          className="flex items-center gap-2 rounded-xl bg-[#E31C3D] hover:bg-[#c61834] px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-all shadow-lg shadow-[#E31C3D]/20 active:scale-95 self-start md:self-auto cursor-pointer"
+        >
+          <Plus className="h-4 w-4" /> Nuevo Jugador
+        </button>
+      </div>
 
-        <div className="grid grid-cols-4 gap-4">
-          <div className="bg-card border border-border rounded-md px-4 py-3">
-            <div className="text-2xl font-semibold text-foreground">{displayedPlayers.length}</div>
-            <div className="text-xs text-muted-foreground uppercase tracking-wide">Total</div>
-          </div>
-          <div className="bg-card border border-border rounded-md px-4 py-3">
-            <div className="text-2xl font-semibold text-emerald-600">{activeCount}</div>
-            <div className="text-xs text-muted-foreground uppercase tracking-wide">Activos</div>
-          </div>
-          <div className="bg-card border border-border rounded-md px-4 py-3">
-            <div className="text-2xl font-semibold text-muted-foreground">{inactiveCount}</div>
-            <div className="text-xs text-muted-foreground uppercase tracking-wide">Inactivos</div>
-          </div>
-          <div className="bg-card border border-border rounded-md px-4 py-3">
-            <div className="text-2xl font-semibold text-foreground">{coachTeams.length}</div>
-            <div className="text-xs text-muted-foreground uppercase tracking-wide">Equipos</div>
-          </div>
+      {/* Metric Stat Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] rounded-2xl p-4 shadow-md">
+          <div className="text-3xl font-black text-slate-900 dark:text-white" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{displayedPlayers.length}</div>
+          <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-white/40 mt-1">Total Registrados</div>
         </div>
+        <div className="bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] rounded-2xl p-4 shadow-md">
+          <div className="text-3xl font-black text-emerald-500 dark:text-emerald-400" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{activeCount}</div>
+          <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-white/40 mt-1">Activos</div>
+        </div>
+        <div className="bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] rounded-2xl p-4 shadow-md">
+          <div className="text-3xl font-black text-slate-400 dark:text-white/50" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{inactiveCount}</div>
+          <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-white/40 mt-1">Inactivos</div>
+        </div>
+        <div className="bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] rounded-2xl p-4 shadow-md">
+          <div className="text-3xl font-black text-[#E31C3D]" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{coachTeams.length}</div>
+          <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-white/40 mt-1">Equipos</div>
+        </div>
+      </div>
 
-        <div className="bg-card border border-border rounded-md overflow-hidden">
-          <div className="p-4 border-b border-border">
-            <div className="flex items-center gap-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="Buscar jugador..."
-                  className="w-full pl-9 pr-4 py-2 text-sm bg-background border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-              <select
-                value={selectedTeamFilter}
-                onChange={(e) => setSelectedTeamFilter(e.target.value)}
-                className="px-3 py-2 text-sm bg-background border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
-              >
-                <option value="">Todos los equipos</option>
-                {coachTeams.map((t) => (
-                  <option key={t.id} value={t.id}>{t.name}</option>
-                ))}
-              </select>
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as any)}
-                className="px-3 py-2 text-sm bg-background border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
-              >
-                <option value="all">Todos</option>
-                <option value="active">Activos</option>
-                <option value="inactive">Inactivos</option>
-              </select>
+      {/* Main Table Card */}
+      <div className="bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] rounded-2xl overflow-hidden shadow-xl">
+        <div className="p-4 border-b border-slate-200 dark:border-[#1C2B45] bg-slate-50/50 dark:bg-[#1C2B45]/30">
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <div className="relative flex-1 w-full">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-white/40" />
+              <input
+                type="text"
+                placeholder="Buscar jugador por nombre o dorsal..."
+                className="w-full pl-10 pr-4 py-2.5 text-xs bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-white/40 focus:outline-none focus:border-[#E31C3D] transition-all"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
+            <select
+              value={selectedTeamFilter}
+              onChange={(e) => setSelectedTeamFilter(e.target.value)}
+              className="w-full md:w-auto px-4 py-2.5 text-xs bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] rounded-xl text-slate-800 dark:text-white/80 focus:outline-none focus:border-[#E31C3D] transition-all"
+            >
+              <option value="">Todos los equipos</option>
+              {coachTeams.map((t) => (
+                <option key={t.id} value={t.id}>{t.name}</option>
+              ))}
+            </select>
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value as any)}
+              className="w-full md:w-auto px-4 py-2.5 text-xs bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] rounded-xl text-slate-800 dark:text-white/80 focus:outline-none focus:border-[#E31C3D] transition-all"
+            >
+              <option value="all">Todos los estados</option>
+              <option value="active">Activos</option>
+              <option value="inactive">Inactivos</option>
+            </select>
           </div>
+        </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border bg-muted/30">
-                  <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Jugador</th>
-                  <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Dorsal</th>
-                  <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider hidden md:table-cell">Fecha Nac.</th>
-                  <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Equipo</th>
-                  <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Estado</th>
-                  <th className="text-right py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Acciones</th>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-slate-200 dark:border-[#1C2B45] bg-slate-50 dark:bg-[#1C2B45]/40 text-[10px] font-extrabold uppercase tracking-widest text-slate-500 dark:text-white/60">
+              <tr>
+                <th className="py-4 px-6">Jugador</th>
+                <th className="py-4 px-6">Dorsal</th>
+                <th className="py-4 px-6 hidden md:table-cell">Fecha Nac.</th>
+                <th className="py-4 px-6">Equipo</th>
+                <th className="py-4 px-6">Estado</th>
+                <th className="py-4 px-6 text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-[#1C2B45]/50 text-xs">
+              {isLoading ? (
+                <tr>
+                  <td colSpan={6} className="py-16 text-center">
+                    <Loader2 className="animate-spin h-8 w-8 text-[#E31C3D] mx-auto mb-3" />
+                    <p className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-white/50">Cargando plantilla...</p>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {isLoading ? (
-                  <tr>
-                    <td colSpan={6} className="py-12 text-center">
-                      <Loader2 className="animate-spin h-8 w-8 text-muted-foreground mx-auto mb-3" />
-                      <p className="text-sm text-muted-foreground">Cargando jugadores...</p>
+              ) : paginatedPlayers.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-16 text-center">
+                    <Users className="h-12 w-12 text-slate-300 dark:text-white/20 mx-auto mb-3" />
+                    <p className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-white/40">No se encontraron jugadores</p>
+                  </td>
+                </tr>
+              ) : (
+                paginatedPlayers.map((player) => (
+                  <tr key={player.id} className="hover:bg-slate-50 dark:hover:bg-[#1C2B45]/30 transition-colors">
+                    <td className="py-4 px-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] flex items-center justify-center text-xs font-bold text-[#E31C3D] overflow-hidden shrink-0 shadow-inner">
+                          {player.photoUrl ? (
+                            <img src={player.photoUrl} alt={player.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <User className="h-4 w-4 text-[#E31C3D]" />
+                          )}
+                        </div>
+                        <span className="font-bold text-slate-900 dark:text-white text-sm">{player.name}</span>
+                      </div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <span className="text-xs font-mono font-bold text-[#E31C3D] bg-[#E31C3D]/10 px-2.5 py-1 rounded-lg border border-[#E31C3D]/20">
+                        #{player.jerseyNumber}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 hidden md:table-cell text-slate-600 dark:text-white/70">
+                      {player.birthDate ? new Date(player.birthDate).toLocaleDateString('es-ES', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                      }) : '-'}
+                    </td>
+                    <td className="py-4 px-6 text-slate-900 dark:text-white font-medium">
+                      {getTeamName(player.teamId)}
+                    </td>
+                    <td className="py-4 px-6">
+                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider rounded-lg ${player.isActive
+                        ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
+                        : 'bg-slate-100 text-slate-500 border border-slate-200 dark:bg-white/5 dark:text-white/40 dark:border-white/10'
+                        }`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${player.isActive ? 'bg-emerald-400' : 'bg-slate-400 dark:bg-white/40'}`} />
+                        {player.isActive ? 'Activo' : 'Inactivo'}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => handleOpenEdit(player)}
+                          className="rounded-lg p-2 text-slate-400 hover:text-slate-900 dark:text-white/60 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                          title="Editar jugador"
+                        >
+                          <Edit2 className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(player.id, player.name)}
+                          className="rounded-lg p-2 text-slate-400 hover:text-[#E31C3D] hover:bg-red-50 dark:text-white/60 dark:hover:text-[#E31C3D] dark:hover:bg-[#E31C3D]/10 transition-colors cursor-pointer"
+                          title="Eliminar jugador"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
-                ) : paginatedPlayers.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="py-12 text-center">
-                      <Users className="h-12 w-12 text-muted-foreground/30 mx-auto mb-3" />
-                      <p className="text-sm text-muted-foreground">No se encontraron jugadores</p>
-                    </td>
-                  </tr>
-                ) : (
-                  paginatedPlayers.map((player) => (
-                    <tr key={player.id} className="hover:bg-muted/20 transition-colors">
-                      <td className="py-3 px-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-md bg-muted/50 border border-border flex items-center justify-center text-xs font-medium text-muted-foreground">
-                            {player.photoUrl ? (
-                              <img src={player.photoUrl} alt={player.name} className="w-full h-full object-cover rounded-md" />
-                            ) : (
-                              <User className="h-4 w-4" />
-                            )}
-                          </div>
-                          <span className="font-medium text-sm text-foreground">{player.name}</span>
-                        </div>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className="text-sm font-mono text-muted-foreground">#{player.jerseyNumber}</span>
-                      </td>
-                      <td className="py-3 px-4 hidden md:table-cell">
-                        <div className="text-sm text-foreground">
-                          {player.birthDate ? new Date(player.birthDate).toLocaleDateString('es-ES', {
-                            day: '2-digit',
-                            month: 'short',
-                            year: 'numeric'
-                          }) : '-'}
-                        </div>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className="text-sm text-foreground">{getTeamName(player.teamId)}</span>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md ${player.isActive
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                          : 'bg-muted/50 text-muted-foreground border border-border'
-                          }`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${player.isActive ? 'bg-emerald-500' : 'bg-muted-foreground'}`} />
-                          {player.isActive ? 'Activo' : 'Inactivo'}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1">
-                          <button
-                            onClick={() => handleOpenEdit(player)}
-                            className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted/30 rounded-md transition-colors"
-                          >
-                            <Edit2 className="h-4 w-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(player.id, player.name)}
-                            className="p-1.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-
-          {totalPages > 1 && (
-            <div className="px-4 py-3 border-t border-border flex items-center justify-between">
-              <div className="text-sm text-muted-foreground">
-                Mostrando {startIndex + 1} - {Math.min(startIndex + itemsPerPage, filteredPlayers.length)} de {filteredPlayers.length}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                  disabled={currentPage === 1}
-                  className="p-2 rounded-md border border-border hover:bg-muted/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </button>
-                <span className="text-sm font-medium text-foreground px-3 py-1">
-                  {currentPage} / {totalPages}
-                </span>
-                <button
-                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                  disabled={currentPage === totalPages}
-                  className="p-2 rounded-md border border-border hover:bg-muted/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          )}
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="p-4 border-t border-slate-200 dark:border-[#1C2B45] flex items-center justify-between bg-slate-50/50 dark:bg-[#1C2B45]/20">
+            <span className="text-xs font-semibold text-slate-500 dark:text-white/50 uppercase tracking-wider">
+              Página {currentPage} de {totalPages}
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="p-2 rounded-xl bg-slate-100 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="p-2 rounded-xl bg-slate-100 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <PlayerDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         playerToEdit={selectedPlayer}
-        defaultTeamId={selectedTeamFilter}
       />
     </div>
   );

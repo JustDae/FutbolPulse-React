@@ -215,14 +215,22 @@ export function PlayerShell() {
             </span>
           </div>
 
-          {/* Left/Center: Clickable Badge */}
-          <div className="hidden md:flex flex-1">
+          {/* Left/Center: Clickable Badges */}
+          <div className="hidden md:flex flex-1 items-center gap-3">
             <Link
               to="/jugador"
-              className="text-sm font-bold text-muted-foreground bg-white/5 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/10 shadow-inner hover:text-foreground hover:bg-white/10 transition-all cursor-pointer"
+              className="text-xs font-bold text-muted-foreground bg-white/5 backdrop-blur-md px-4 py-2.5 rounded-full border border-white/10 shadow-inner hover:text-foreground hover:bg-white/10 transition-all cursor-pointer"
             >
-              Dashboard General
+              Dashboard Jugador
             </Link>
+            {(user?.is_staff || user?.tipo_usuario === 'Admin') && (
+              <Link
+                to="/admin"
+                className="text-xs font-extrabold text-white bg-[#E31C3D] hover:bg-[#c61834] px-4 py-2.5 rounded-full shadow-lg shadow-[#E31C3D]/25 transition-all cursor-pointer uppercase tracking-wider flex items-center gap-1.5"
+              >
+                <span>Panel Administrador</span>
+              </Link>
+            )}
           </div>
 
           {/* Right: online + theme + profile */}

@@ -49,35 +49,34 @@ export function ProfilePage() {
   const profilePhoto   = editForm.foto_perfil || currentPlayer?.photoUrl || user?.foto_perfil;
 
   return (
-    <div className="flex-1 space-y-8 pb-10">
+    <div className="flex-1 space-y-8 pb-10 text-slate-900 dark:text-white animate-fade-in">
 
       {/* Hero Banner */}
       <div
-        className="relative overflow-hidden p-8 md:p-10 border border-border"
-        style={{ background: 'linear-gradient(105deg, rgba(227,28,61,0.1) 0%, var(--card) 60%)' }}
+        className="relative overflow-hidden p-8 md:p-10 border border-slate-200 dark:border-[#1C2B45] rounded-2xl bg-white dark:bg-[#10182B] shadow-lg"
       >
-        <div className="absolute top-0 left-0 w-1 h-full bg-primary" />
+        <div className="absolute top-0 left-0 w-1.5 h-full bg-[#E31C3D]" />
         <div className="relative z-10 pl-4 flex items-center justify-between gap-4 flex-wrap">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-6 h-[2px] bg-primary" />
-              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                Cuenta
+              <div className="w-6 h-[2px] bg-[#E31C3D]" />
+              <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#E31C3D]">
+                Mi Cuenta
               </span>
             </div>
             <h1
-              className="uppercase text-foreground mb-2"
-              style={{ fontFamily: FONT_DISPLAY, fontWeight: 800, fontSize: 'clamp(34px,5vw,56px)', lineHeight: 0.9, letterSpacing: '-0.02em' }}
+              className="uppercase text-slate-900 dark:text-white mb-2"
+              style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 'clamp(34px,5vw,56px)', lineHeight: 0.9, letterSpacing: '-0.02em' }}
             >
               Mi Perfil
             </h1>
-            <p className="text-sm text-muted-foreground">
-              Administra tu información y preferencias.
+            <p className="text-xs text-slate-500 dark:text-white/50 font-medium">
+              Administra tu información personal, credenciales y preferencias.
             </p>
           </div>
           <button
             onClick={() => logout()}
-            className="flex items-center gap-2 px-5 py-3 text-[10px] font-bold uppercase tracking-widest border border-border text-muted-foreground hover:border-foreground hover:text-foreground transition-colors bg-card"
+            className="flex items-center gap-2 px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest border border-slate-200 dark:border-[#1C2B45] text-slate-700 dark:text-white/70 hover:border-[#E31C3D] hover:text-[#E31C3D] dark:hover:border-[#E31C3D] dark:hover:text-[#E31C3D] transition-all rounded-xl bg-slate-50 dark:bg-[#0B1220]"
           >
             <LogOut className="w-3.5 h-3.5" /> Cerrar Sesión
           </button>
@@ -87,18 +86,18 @@ export function ProfilePage() {
       <div className="grid gap-6 md:grid-cols-2">
 
         {/* Personal Info Card */}
-        <div className="bg-card border border-border">
-          <div className="px-6 py-5 border-b border-border flex items-center justify-between">
+        <div className="bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] rounded-2xl shadow-lg overflow-hidden">
+          <div className="px-6 py-5 border-b border-slate-200 dark:border-[#1C2B45] flex items-center justify-between bg-slate-50/50 dark:bg-[#1C2B45]/30">
             <div>
               <h2
-                className="uppercase text-foreground"
-                style={{ fontFamily: FONT_DISPLAY, fontWeight: 800, fontSize: '20px', letterSpacing: '-0.01em' }}
+                className="uppercase text-slate-900 dark:text-white font-extrabold"
+                style={{ fontFamily: FONT_DISPLAY, fontSize: '22px', letterSpacing: '-0.01em' }}
               >
                 Información Personal
               </h2>
-              <p className="text-[10px] mt-0.5 text-muted-foreground">Tus datos principales de usuario.</p>
+              <p className="text-[10px] mt-0.5 text-slate-500 dark:text-white/40 uppercase tracking-wider">Tus datos principales de usuario.</p>
             </div>
-            <Settings className="w-4 h-4 text-muted-foreground/30" />
+            <Settings className="w-4 h-4 text-[#E31C3D]" />
           </div>
 
           <div className="p-6">
@@ -107,36 +106,36 @@ export function ProfilePage() {
                 {/* Avatar + info */}
                 <div className="flex items-center gap-5">
                   {profilePhoto ? (
-                    <img src={profilePhoto} alt="Perfil" className="w-16 h-16 object-cover rounded-full border-2 border-primary" />
+                    <img src={profilePhoto} alt="Perfil" className="w-16 h-16 object-cover rounded-2xl border-2 border-[#E31C3D] shadow-md" />
                   ) : (
                     <div
-                      className="w-16 h-16 flex items-center justify-center font-bold text-white text-xl shrink-0 bg-primary rounded-full"
+                      className="w-16 h-16 flex items-center justify-center font-black text-white text-xl shrink-0 bg-[#E31C3D] rounded-2xl shadow-md"
                       style={{ fontFamily: FONT_DISPLAY }}
                     >
                       {initials}
                     </div>
                   )}
                   <div>
-                    <p className="font-bold text-foreground text-lg" style={{ fontFamily: FONT_DISPLAY }}>
+                    <p className="font-bold text-slate-900 dark:text-white text-xl" style={{ fontFamily: FONT_DISPLAY }}>
                       {displayName}
                     </p>
-                    <p className="text-sm mt-0.5 text-muted-foreground">{user.email}</p>
+                    <p className="text-xs mt-0.5 text-slate-500 dark:text-white/50">{user.email}</p>
                     <div className="flex items-center gap-2 mt-2 flex-wrap">
                       <span
-                        className="px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-primary/10 border border-primary/20 text-primary"
+                        className="px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider bg-[#E31C3D]/10 border border-[#E31C3D]/30 text-[#E31C3D] rounded-lg"
                       >
                         {roleLabel}
                       </span>
                       {user.tipo_usuario === 'Player' && (
                         <span
-                          className="px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-muted border border-border text-muted-foreground"
+                          className="px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white/60 rounded-lg"
                         >
                           {playerBadge}
                         </span>
                       )}
                       {user.is_staff && (
                         <span
-                          className="px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 bg-yellow-500/10 border border-yellow-500/20 text-yellow-500"
+                          className="px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider flex items-center gap-1 bg-amber-500/15 border border-amber-500/30 text-amber-500 rounded-lg"
                         >
                           <Shield className="w-3 h-3" /> Staff
                         </span>
@@ -146,7 +145,7 @@ export function ProfilePage() {
                 </div>
 
                 <button
-                  className="w-full flex items-center justify-center gap-2 py-3 text-[10px] font-bold uppercase tracking-widest transition-colors border bg-muted/20 border-border text-muted-foreground hover:border-primary hover:text-primary"
+                  className="w-full flex items-center justify-center gap-2 py-3 text-[10px] font-extrabold uppercase tracking-widest transition-all border bg-slate-50 hover:bg-slate-100 text-slate-700 dark:bg-[#0B1220] dark:hover:bg-[#1C2B45] border-slate-200 dark:border-[#1C2B45] dark:text-white rounded-xl"
                   onClick={() => setIsEditing(true)}
                 >
                   <Settings className="w-3.5 h-3.5" /> Editar Perfil
@@ -158,13 +157,13 @@ export function ProfilePage() {
                 <div className="flex justify-center mb-2">
                   <div className="relative group cursor-pointer">
                     {profilePhoto ? (
-                      <img src={profilePhoto} alt="Perfil" className="w-16 h-16 object-cover rounded-full border-2 border-primary" />
+                      <img src={profilePhoto} alt="Perfil" className="w-16 h-16 object-cover rounded-2xl border-2 border-[#E31C3D]" />
                     ) : (
-                      <div className="w-16 h-16 flex items-center justify-center font-bold text-white text-xl bg-primary rounded-full" style={{ fontFamily: FONT_DISPLAY }}>
+                      <div className="w-16 h-16 flex items-center justify-center font-black text-white text-xl bg-[#E31C3D] rounded-2xl" style={{ fontFamily: FONT_DISPLAY }}>
                         {initials}
                       </div>
                     )}
-                    <label className="absolute inset-0 flex items-center justify-center bg-black/60 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                    <label className="absolute inset-0 flex items-center justify-center bg-black/60 text-white rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                       <Camera className="h-5 w-5" />
                       <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
                     </label>
@@ -172,20 +171,20 @@ export function ProfilePage() {
                 </div>
 
                 <div>
-                  <label className="block text-[9px] font-bold uppercase tracking-[0.15em] mb-2 text-muted-foreground">Nombre Completo</label>
+                  <label className="block text-[9px] font-extrabold uppercase tracking-[0.15em] mb-2 text-slate-500 dark:text-white/50">Nombre Completo</label>
                   <input
                     type="text"
-                    className="w-full h-10 px-3 text-sm text-foreground bg-muted/30 border border-border focus:border-primary outline-none transition-all"
+                    className="w-full h-10 px-3 text-xs font-semibold text-slate-900 dark:text-white bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] focus:border-[#E31C3D] outline-none transition-all rounded-xl"
                     value={editForm.nombre_completo}
                     onChange={e => setEditForm(prev => ({ ...prev, nombre_completo: e.target.value }))}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[9px] font-bold uppercase tracking-[0.15em] mb-2 text-muted-foreground">Correo Electrónico</label>
+                  <label className="block text-[9px] font-extrabold uppercase tracking-[0.15em] mb-2 text-slate-500 dark:text-white/50">Correo Electrónico</label>
                   <input
                     type="email"
-                    className="w-full h-10 px-3 text-sm text-foreground bg-muted/30 border border-border focus:border-primary outline-none transition-all"
+                    className="w-full h-10 px-3 text-xs font-semibold text-slate-900 dark:text-white bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] focus:border-[#E31C3D] outline-none transition-all rounded-xl"
                     value={editForm.email}
                     onChange={e => setEditForm(prev => ({ ...prev, email: e.target.value }))}
                   />
@@ -193,13 +192,13 @@ export function ProfilePage() {
 
                 <div className="flex gap-3 pt-2">
                   <button
-                    className="flex-1 flex items-center justify-center gap-2 py-3 text-[10px] font-bold uppercase tracking-widest text-white transition-opacity hover:opacity-90 bg-primary"
+                    className="flex-1 flex items-center justify-center gap-2 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white transition-opacity hover:opacity-90 bg-[#E31C3D] rounded-xl shadow-md"
                     onClick={handleSave}
                   >
                     <Save className="w-3.5 h-3.5" /> Guardar
                   </button>
                   <button
-                    className="flex-1 flex items-center justify-center gap-2 py-3 text-[10px] font-bold uppercase tracking-widest border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors bg-card"
+                    className="flex-1 flex items-center justify-center gap-2 py-3 text-[10px] font-extrabold uppercase tracking-widest border border-slate-200 dark:border-[#1C2B45] text-slate-600 dark:text-white/60 hover:text-slate-900 dark:hover:text-white bg-slate-50 dark:bg-[#0B1220] transition-colors rounded-xl"
                     onClick={() => setIsEditing(false)}
                   >
                     <X className="w-3.5 h-3.5" /> Cancelar
@@ -211,15 +210,15 @@ export function ProfilePage() {
         </div>
 
         {/* Role Info Card */}
-        <div className="bg-card border border-border">
-          <div className="px-6 py-5 border-b border-border">
+        <div className="bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] rounded-2xl shadow-lg overflow-hidden">
+          <div className="px-6 py-5 border-b border-slate-200 dark:border-[#1C2B45] bg-slate-50/50 dark:bg-[#1C2B45]/30">
             <h2
-              className="uppercase text-foreground"
-              style={{ fontFamily: FONT_DISPLAY, fontWeight: 800, fontSize: '20px', letterSpacing: '-0.01em' }}
+              className="uppercase text-slate-900 dark:text-white font-extrabold"
+              style={{ fontFamily: FONT_DISPLAY, fontSize: '22px', letterSpacing: '-0.01em' }}
             >
               {isCoach ? 'Privilegios de Coach' : 'Estadísticas del Jugador'}
             </h2>
-            <p className="text-[10px] mt-0.5 text-muted-foreground">
+            <p className="text-[10px] mt-0.5 text-slate-500 dark:text-white/40 uppercase tracking-wider">
               {isCoach ? 'Resumen de tus herramientas.' : 'Tu rendimiento y salud deportiva.'}
             </p>
           </div>
@@ -227,7 +226,7 @@ export function ProfilePage() {
           <div className="p-6">
             {isCoach ? (
               <div className="space-y-3">
-                <p className="text-sm text-muted-foreground mb-3">
+                <p className="text-xs text-slate-500 dark:text-white/50 mb-3 leading-relaxed">
                   Como Coach, tienes permisos para gestionar entidades, equipos, crear partidos y administrar a tus jugadores.
                 </p>
                 {[
@@ -236,15 +235,15 @@ export function ProfilePage() {
                 ].map(({ icon: Icon, label }) => (
                   <button
                     key={label}
-                    className="w-full flex items-center gap-3 px-4 py-3 text-[10px] font-bold uppercase tracking-widest border transition-colors bg-muted/10 border-border text-muted-foreground hover:border-primary hover:text-primary"
+                    className="w-full flex items-center gap-3 px-4 py-3 text-[10px] font-extrabold uppercase tracking-widest border transition-colors bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200 dark:bg-[#0B1220] dark:border-[#1C2B45] dark:text-white/70 dark:hover:border-[#E31C3D] dark:hover:text-[#E31C3D] rounded-xl"
                   >
-                    <Icon className="w-4 h-4" /> {label}
+                    <Icon className="w-4 h-4 text-[#E31C3D]" /> {label}
                   </button>
                 ))}
               </div>
             ) : (
               <div className="space-y-4">
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-xs text-slate-500 dark:text-white/50 mb-4 leading-relaxed">
                   Actualmente solo tienes permisos de lectura sobre el calendario de partidos y torneos. Tus estadísticas serán actualizadas por el equipo técnico.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
@@ -252,9 +251,9 @@ export function ProfilePage() {
                     { value: '0', label: 'Partidos Jugados' },
                     { value: '0', label: 'Goles' },
                   ].map(({ value, label }) => (
-                    <div key={label} className="flex flex-col items-center justify-center py-6 bg-muted/20 border border-border">
-                      <span className="font-bold text-3xl text-foreground" style={{ fontFamily: FONT_DISPLAY }}>{value}</span>
-                      <span className="text-[9px] font-bold uppercase tracking-[0.15em] mt-1 text-muted-foreground">{label}</span>
+                    <div key={label} className="flex flex-col items-center justify-center py-6 bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] rounded-2xl shadow-inner">
+                      <span className="font-black text-3xl text-slate-900 dark:text-white" style={{ fontFamily: FONT_DISPLAY }}>{value}</span>
+                      <span className="text-[9px] font-extrabold uppercase tracking-[0.15em] mt-1 text-slate-400 dark:text-white/40">{label}</span>
                     </div>
                   ))}
                 </div>
