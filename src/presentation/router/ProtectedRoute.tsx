@@ -32,7 +32,7 @@ export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
     if (!isAllowed) {
       return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-[#0B1220] text-white px-4 text-center">
-          <div className="bg-[#10182B] border border-[#1C2B45] p-8 rounded-2xl max-w-md w-full shadow-2xl">
+          <div className="max-w-md w-full">
             <div className="w-16 h-16 bg-[#E31C3D]/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <span className="text-[#E31C3D] text-3xl font-black">!</span>
             </div>
