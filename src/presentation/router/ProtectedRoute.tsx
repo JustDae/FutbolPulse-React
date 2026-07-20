@@ -1,7 +1,11 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/auth.store';
 
-export const ProtectedRoute = () => {
+interface ProtectedRouteProps {
+  allowedRoles?: string[];
+}
+
+export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
   const user = useAuthStore((state) => state.user);
   const isLoading = useAuthStore((state) => state.isLoading);
   const hasHydrated = useAuthStore((state) => state.hasHydrated);
@@ -19,6 +23,15 @@ export const ProtectedRoute = () => {
 
   if (!user) {
     return <Navigate to="/login" replace state={{ from: location }} />;
+  }
+
+  if (allowedRoles && allowedRoles.length > 0) {
+    const isAdmin = user.is_staff || user.tipo_usuario === 'Admin';
+    const isAllowed = allowedRoles.includes(user.tipo_usuario) || (allowedRoles.includes('Admin') && isAdmin);
+    
+    if (!isAllowed) {
+      return <Navigate to="/" replace />;
+    }
   }
 
   return <Outlet />;

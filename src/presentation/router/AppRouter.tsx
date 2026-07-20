@@ -59,7 +59,7 @@ export const AppRouter = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
           <Route path="/admin" element={<AdminShell />}>
             <Route index element={<AdminDashboardPage />} />
             <Route path="dashboard" element={<AdminDashboardPage />} />
@@ -74,7 +74,7 @@ export const AppRouter = () => {
           </Route>
         </Route>
 
-        <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute allowedRoles={['Jugador']} />}>
           <Route path="/jugador" element={<PlayerShell />}>
             <Route index element={<PlayerDashboardPage />} />
             <Route path="partidos" element={<PlayerMatchHistoryPage />} />
@@ -84,7 +84,7 @@ export const AppRouter = () => {
           </Route>
         </Route>
 
-        <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute allowedRoles={['Coach']} />}>
           <Route path="/coach" element={<CoachShell />}>
             <Route index element={<MatchManagementPage />} />
             <Route path="equipos" element={<AdminTeamsPage />} />
@@ -98,7 +98,7 @@ export const AppRouter = () => {
           </Route>
         </Route>
 
-        <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute allowedRoles={['Scout']} />}>
           <Route path="/scout" element={<ScoutShell />}>
             <Route index element={<ScoutDashboardPage />} />
             <Route path="jugadores" element={<ScoutPlayersPage />} />
