@@ -74,7 +74,7 @@ export const AppRouter = () => {
           </Route>
         </Route>
 
-        <Route element={<ProtectedRoute allowedRoles={['Jugador']} />}>
+        <Route element={<ProtectedRoute allowedRoles={['Player']} />}>
           <Route path="/jugador" element={<PlayerShell />}>
             <Route index element={<PlayerDashboardPage />} />
             <Route path="partidos" element={<PlayerMatchHistoryPage />} />
