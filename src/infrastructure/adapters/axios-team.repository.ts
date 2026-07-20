@@ -84,26 +84,30 @@ export class AxiosTeamRepository implements TeamRepository {
   }
 
   async uploadBadge(id: string, file: File): Promise<{ badgeUrl: string }> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64 = reader.result as string;
+    const formData = new FormData();
+    formData.append('escudo', file);
 
-        // Always save locally as fast cache
-        try { localStorage.setItem(`mock_team_badge_${id}`, base64); } catch { /* quota exceeded — skip */ }
+    try {
+      const { data } = await axiosClient.patch(`${this.baseUrl}${id}/escudo/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      
+      // Keep local cache for immediate display if desired
+      try {
+        const reader = new FileReader();
+        reader.onloadend = () => localStorage.setItem(`mock_team_badge_${id}`, reader.result as string);
+        reader.readAsDataURL(file);
+      } catch { /* ignore quota errors */ }
 
-        // Persist to backend so all browsers can see the badge
-        try {
-          await axiosClient.patch(`${this.baseUrl}${id}/`, { logo_url: base64 });
-        } catch (err) {
-          console.warn('[uploadBadge] Could not persist badge to backend, stored locally only:', err);
-        }
-
-        resolve({ badgeUrl: base64 });
-      };
-      reader.onerror = () => reject(new Error('Error leyendo el archivo'));
-      reader.readAsDataURL(file);
-    });
+      return { badgeUrl: data.badgeUrl };
+    } catch (error: any) {
+      if (error.response?.data?.error) {
+        throw new Error(error.response.data.error);
+      }
+      throw new Error('Error al subir el escudo');
+    }
   }
 
 }

@@ -29,7 +29,7 @@ export class AxiosPlayerRepository implements PlayerRepository {
     return list.map(raw => {
       const player = PlayerMapper.fromJsonToDomain(raw);
       const mockPhoto = localStorage.getItem(`mock_player_photo_${player.id}`);
-      if (mockPhoto) player.photoUrl = mockPhoto;
+      if (!player.photoUrl && mockPhoto) player.photoUrl = mockPhoto;
       return player;
     });
   }
@@ -39,7 +39,7 @@ export class AxiosPlayerRepository implements PlayerRepository {
     return list.map((raw: any) => {
       const player = PlayerMapper.fromJsonToDomain(raw);
       const mockPhoto = localStorage.getItem(`mock_player_photo_${player.id}`);
-      if (mockPhoto) player.photoUrl = mockPhoto;
+      if (!player.photoUrl && mockPhoto) player.photoUrl = mockPhoto;
       return player;
     });
   }
@@ -47,7 +47,7 @@ export class AxiosPlayerRepository implements PlayerRepository {
     const { data } = await axiosClient.get(`${this.baseUrl}${id}/`);
     const player = PlayerMapper.fromJsonToDomain(data);
     const mockPhoto = localStorage.getItem(`mock_player_photo_${player.id}`);
-    if (mockPhoto) player.photoUrl = mockPhoto;
+    if (!player.photoUrl && mockPhoto) player.photoUrl = mockPhoto;
     return player;
   }
   async createPlayer(dto: CreatePlayerDto): Promise<Player> {
@@ -64,14 +64,29 @@ export class AxiosPlayerRepository implements PlayerRepository {
     await axiosClient.delete(`${this.baseUrl}${id}/`);
   }
   async uploadPhoto(id: string, file: File): Promise<{ photoUrl: string }> {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        localStorage.setItem(`mock_player_photo_${id}`, base64);
-        resolve({ photoUrl: base64 });
-      };
-      reader.readAsDataURL(file);
-    });
+    const formData = new FormData();
+    formData.append('foto', file);
+
+    try {
+      const { data } = await axiosClient.patch(`${this.baseUrl}${id}/foto/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      // Local cache for immediate display if desired
+      try {
+        const reader = new FileReader();
+        reader.onloadend = () => localStorage.setItem(`mock_player_photo_${id}`, reader.result as string);
+        reader.readAsDataURL(file);
+      } catch { /* ignore quota errors */ }
+
+      return { photoUrl: data.photoUrl };
+    } catch (error: any) {
+      if (error.response?.data?.error) {
+        throw new Error(error.response.data.error);
+      }
+      throw new Error('Error al subir la foto');
+    }
   }
 }
