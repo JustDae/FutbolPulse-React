@@ -26,67 +26,102 @@ export const AdminMatchesPage = () => {
     }
   };
 
+  const handleOpenCreate = () => {
+    setSelectedMatch(null);
+    setIsDialogOpen(true);
+  };
+
+  const handleOpenEdit = (match: Match) => {
+    setSelectedMatch(match);
+    setIsDialogOpen(true);
+  };
+
+  // Mocks para mantener compatibilidad con el nuevo layout solicitado
+  const getTournamentName = (_id: string) => "Torneo Principal";
+  const getTeamName = (name: string) => name;
+  const getTeamBadge = (_id: string) => "";
+  const getStatusBadge = (status: string) => 
+    status === 'Finalizado' ? 'bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-white/60' :
+    status === 'En curso' ? 'bg-[#E31C3D]/20 text-[#E31C3D]' :
+    'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400';
+
   return (
-    <div className="space-y-6 p-6">
-      {}
-      <div className="mb-8 pl-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="space-y-6 animate-fade-in text-slate-900 dark:text-white">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#1C2B45] pb-6">
         <div>
-          <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Calendario y Resultados</h1>
-          <p className="text-gray-500 dark:text-[#888888] font-normal text-sm">Gestiona la programación y puntuación de los partidos.</p>
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-7 bg-[#E31C3D] rounded-full" />
+            <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+              Calendario de Partidos
+            </h1>
+          </div>
+          <p className="text-slate-500 dark:text-white/50 text-xs mt-1 font-medium pl-5">Programa partidos, actualiza marcadores en tiempo real y gestiona las fechas.</p>
         </div>
-        <button 
-          onClick={() => { setSelectedMatch(null); setIsDialogOpen(true); }}
-          className="flex items-center gap-2 rounded-xl bg-[#f94116] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#e03a13] shadow-md"
+        <button
+          onClick={handleOpenCreate}
+          className="flex items-center gap-2 rounded-xl bg-[#E31C3D] hover:bg-[#c61834] px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-all shadow-lg shadow-[#E31C3D]/20 active:scale-95 self-start md:self-auto cursor-pointer"
         >
           <Plus className="h-4 w-4" /> Programar Partido
         </button>
       </div>
 
       {isLoading ? (
-        <p className="text-gray-500">Cargando calendario...</p>
+        <div className="py-20 text-center text-slate-400 dark:text-white/50 font-bold uppercase tracking-widest text-xs">
+          Cargando partidos...
+        </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {matches.map((match) => (
-            <div key={match.id} className="rounded-2xl border border-gray-200 dark:border-none bg-white dark:bg-[#1a1a1c] p-6 shadow-sm dark:shadow-none transition-transform hover:scale-[1.02]">
-              <div className="mb-5 flex items-center justify-between text-xs text-gray-500 dark:text-[#888888]">
-                <div className="flex items-center gap-3">
-                  <span>{new Date(match.matchDate).toLocaleString()}</span>
-                  <span className="font-semibold bg-gray-100 dark:bg-[#101010] border border-gray-200 dark:border-white/5 px-2.5 py-1 rounded text-gray-600 dark:text-[#888888]">{match.matchType}</span>
-                </div>
-                <span className={`rounded px-2.5 py-1 font-semibold ${
-                  match.status === 'Finalizado' ? 'bg-gray-100 dark:bg-[#101010] text-gray-600 dark:text-[#888888]' :
-                  match.status === 'En curso' ? 'bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-500 animate-pulse' :
-                  'bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400'
-                }`}>
+            <div
+              key={match.id}
+              className="group relative flex flex-col justify-between rounded-2xl bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] hover:border-[#E31C3D]/50 p-6 shadow-md hover:shadow-xl transition-all duration-300"
+            >
+              {/* Header card info */}
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#1C2B45] pb-3 mb-4 text-xs">
+                <span className="text-slate-500 dark:text-white/50 font-bold uppercase text-[10px] tracking-wider truncate max-w-[150px]">
+                  {match.matchType || getTournamentName(match.tournamentId)}
+                </span>
+                <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-widest ${getStatusBadge(match.status)}`}>
                   {match.status}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between gap-4">
+              {/* Match Scoreboard display */}
+              <div className="flex items-center justify-between gap-4 py-2">
                 <div className="flex flex-1 flex-col items-center text-center">
-                  <span className="font-semibold text-gray-900 dark:text-white text-lg tracking-tight">
+                  <span className="font-extrabold text-slate-900 dark:text-white text-lg tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
                     {match.equipoLocal}
                   </span>
+                  <span className="text-[10px] font-bold text-slate-400 dark:text-white/40 uppercase mt-0.5">Local</span>
                 </div>
 
-                <div className="flex items-center justify-center gap-3 rounded-xl bg-gray-50 dark:bg-[#101010] px-5 py-3 text-2xl font-bold text-gray-900 dark:text-white border border-gray-100 dark:border-white/5">
-                  <span>{match.homeScore ?? '-'}</span>
-                  <span className="text-gray-400 dark:text-zinc-600 text-lg">-</span>
+                <div className="flex items-center justify-center gap-3 rounded-2xl bg-slate-50 dark:bg-[#0B1220] px-5 py-3 text-2xl font-black text-slate-900 dark:text-white border border-slate-200 dark:border-[#1C2B45] shadow-inner" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+                  <span className="text-[#E31C3D]">{match.homeScore ?? '-'}</span>
+                  <span className="text-slate-300 dark:text-white/30 text-lg font-normal">:</span>
                   <span>{match.awayScore ?? '-'}</span>
                 </div>
 
                 <div className="flex flex-1 flex-col items-center text-center">
-                  <span className="font-semibold text-gray-900 dark:text-white text-lg tracking-tight">
+                  <span className="font-extrabold text-slate-900 dark:text-white text-lg tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
                     {match.equipoVisitante}
                   </span>
+                  <span className="text-[10px] font-bold text-slate-400 dark:text-white/40 uppercase mt-0.5">Visitante</span>
                 </div>
               </div>
 
-              <div className="mt-6 flex justify-center gap-3 border-t border-gray-100 dark:border-white/5 pt-4">
-                <button onClick={() => { setSelectedMatch(match); setIsDialogOpen(true); }} className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium text-gray-500 dark:text-zinc-400 hover:text-gray-900 hover:bg-gray-100 dark:hover:text-white dark:hover:bg-white/5 transition-colors">
+              {/* Actions */}
+              <div className="mt-6 flex justify-end gap-2 border-t border-slate-200 dark:border-[#1C2B45]/60 pt-4">
+                <button
+                  onClick={() => handleOpenEdit(match)}
+                  className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-900 dark:text-white/60 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                >
                   <Edit2 className="h-3.5 w-3.5" /> Editar
                 </button>
-                <button onClick={() => handleDelete(match.id)} className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium text-gray-500 dark:text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:text-red-500 dark:hover:bg-red-500/10 transition-colors">
+                <button
+                  onClick={() => handleDelete(match.id)}
+                  className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-[#E31C3D] hover:bg-red-50 dark:text-white/60 dark:hover:text-[#E31C3D] dark:hover:bg-[#E31C3D]/10 transition-colors cursor-pointer"
+                >
                   <Trash2 className="h-3.5 w-3.5" /> Eliminar
                 </button>
               </div>

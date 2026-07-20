@@ -107,7 +107,7 @@ export function AppShell() {
                     <UserAvatar user={user} size="sm" />
                     <div className="hidden sm:block text-left">
                       <p className="text-white text-xs font-semibold leading-none">{user.nombre_completo || user.username || 'Usuario'}</p>
-                      <p className="text-white/40 text-[9px] uppercase tracking-widest mt-0.5">{user.is_staff ? 'Admin' : 'Miembro'}</p>
+                      <p className="text-white/40 text-[9px] uppercase tracking-widest mt-0.5">{(user.is_staff || user.tipo_usuario === 'Admin') ? 'Admin' : 'Miembro'}</p>
                     </div>
                   </button>
                 </DropdownMenuTrigger>
@@ -119,7 +119,7 @@ export function AppShell() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-white/10" />
-                  {user.is_staff && (
+                  {(user.is_staff || user.tipo_usuario === 'Admin') && (
                     <>
                       <DropdownMenuItem asChild>
                         <Link to="/admin" className="flex items-center gap-2 cursor-pointer text-white/80 hover:text-white focus:text-white focus:bg-white/10">

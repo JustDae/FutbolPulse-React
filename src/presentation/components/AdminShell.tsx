@@ -47,13 +47,13 @@ function SideNavLink({ item, currentPath, onClick }: SideNavLinkProps) {
       to={item.href}
       onClick={onClick}
       className={cn(
-        'group relative flex items-center gap-3 px-4 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200 rounded-lg',
+        'group relative flex items-center gap-3 px-4 py-3 text-xs font-bold uppercase tracking-wider transition-all duration-200 rounded-xl',
         isActive
-          ? 'bg-red-50 text-[#E31C3D]'
-          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50/80',
+          ? 'bg-[#E31C3D] text-white shadow-lg shadow-[#E31C3D]/25'
+          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-white/60 dark:hover:text-white dark:hover:bg-[#1C2B45]/50',
       )}
     >
-      <Icon className={cn("h-4.5 w-4.5 transition-colors", isActive ? "text-[#E31C3D]" : "text-slate-400 group-hover:text-slate-950")} />
+      <Icon className={cn("h-4.5 w-4.5 transition-colors", isActive ? "text-white" : "text-slate-400 group-hover:text-slate-800 dark:text-white/40 dark:group-hover:text-white")} />
       <span style={{ fontFamily: "'Inter', sans-serif" }}>{item.label}</span>
     </Link>
   );
@@ -66,28 +66,31 @@ interface SidebarContentProps {
 
 function SidebarContent({ currentPath, onLinkClick }: SidebarContentProps) {
   return (
-    <div className="flex h-full flex-col relative overflow-hidden border-r border-slate-200 bg-white">
-      <div className="px-6 py-8 relative z-10 flex items-center justify-center border-b border-slate-200 mb-6">
-        <Link to="/" className="flex items-center gap-0">
-          <span style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '24px', color: RED, letterSpacing: '-0.01em' }}>FÚTBOL</span>
-          <span className="text-slate-900 ml-1" style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '24px', letterSpacing: '-0.01em' }}>PULSE</span>
-          <span className="ml-1.5 w-1.5 h-1.5 rounded-full" style={{ background: RED }} />
+    <div className="flex h-full flex-col relative overflow-hidden border-r border-slate-200 bg-white dark:border-[#1C2B45] dark:bg-[#0B1220] text-slate-800 dark:text-white">
+      <div className="px-6 py-6 relative z-10 flex flex-col items-start border-b border-slate-200 dark:border-[#1C2B45] mb-6">
+        <Link to="/" className="flex items-center gap-1">
+          <span style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '26px', color: RED, letterSpacing: '-0.01em' }}>FÚTBOL</span>
+          <span className="text-slate-900 dark:text-white ml-1" style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '26px', letterSpacing: '-0.01em' }}>PULSE</span>
+          <span className="ml-1.5 w-2 h-2 rounded-full" style={{ background: RED }} />
         </Link>
+        <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-widest bg-[#E31C3D]/10 text-[#E31C3D] border border-[#E31C3D]/25">
+          <span>PANEL ADMINISTRADOR</span>
+        </div>
       </div>
 
-      <nav className="flex-1 space-y-1 px-4 relative z-10 overflow-y-auto custom-scrollbar">
+      <nav className="flex-1 space-y-1.5 px-4 relative z-10 overflow-y-auto custom-scrollbar">
         {navItems.map((item) => (
           <SideNavLink key={item.href} item={item} currentPath={currentPath} onClick={onLinkClick} />
         ))}
       </nav>
 
-      <div className="p-4 mt-auto relative z-10 border-t border-slate-200">
+      <div className="p-4 mt-auto relative z-10 border-t border-slate-200 dark:border-[#1C2B45]">
         <Link
           to="/"
           onClick={onLinkClick}
-          className="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-slate-550 hover:text-slate-900 hover:bg-slate-50 transition-all rounded-lg w-full"
+          className="flex items-center gap-3 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-white/50 dark:hover:text-white dark:hover:bg-[#1C2B45]/50 transition-all rounded-xl w-full"
         >
-          <LogOut className="h-4.5 w-4.5 text-slate-450 group-hover:text-slate-900 transition-colors" />
+          <LogOut className="h-4.5 w-4.5 text-slate-400 group-hover:text-slate-800 dark:text-white/40 dark:group-hover:text-white transition-colors" />
           <span style={{ fontFamily: "'Inter', sans-serif" }}>Portal Público</span>
         </Link>
       </div>
@@ -101,41 +104,41 @@ export function AdminShell() {
   const { user } = useAuthStore();
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden text-slate-800 transition-colors bg-slate-50">
-      <aside className="hidden w-[260px] shrink-0 md:flex flex-col z-20 transition-colors bg-white h-full">
+    <div className="flex h-screen w-screen overflow-hidden text-slate-800 dark:text-white transition-colors bg-[#F8FAFC] dark:bg-[#0B1220]">
+      <aside className="hidden w-[260px] shrink-0 md:flex flex-col z-20 transition-colors bg-white dark:bg-[#0B1220] h-full">
         <SidebarContent currentPath={pathname} />
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col h-full overflow-hidden">
-        <header className="flex h-20 items-center justify-between gap-4 border-b border-slate-200 px-8 transition-colors bg-white shrink-0">
+        <header className="flex h-20 items-center justify-between gap-4 border-b border-slate-200 bg-white dark:border-[#1C2B45] dark:bg-[#10182B] px-8 transition-colors shrink-0">
           <div className="flex items-center md:hidden">
             <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Abrir menú" className="hover:bg-slate-50 text-slate-700 rounded-lg">
+                <Button variant="ghost" size="icon" aria-label="Abrir menú" className="hover:bg-slate-100 text-slate-700 dark:hover:bg-[#1C2B45] dark:text-white rounded-lg">
                   <LayoutDashboard className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-[280px] border-r border-slate-200 bg-white p-0 text-slate-900">
+              <SheetContent side="left" className="w-[280px] border-r border-slate-200 dark:border-[#1C2B45] bg-white dark:bg-[#0B1220] p-0 text-slate-900 dark:text-white">
                 <SheetHeader className="sr-only">
                   <SheetTitle>Menú Administrativo</SheetTitle>
                 </SheetHeader>
                 <SidebarContent currentPath={pathname} onLinkClick={() => setSheetOpen(false)} />
               </SheetContent>
             </Sheet>
-            <span className="ml-3 text-sm font-black text-slate-900 tracking-wider uppercase" style={{ fontFamily: FONT_DISPLAY }}>Fútbol Pulse</span>
+            <span className="ml-3 text-sm font-black text-slate-900 dark:text-white tracking-wider uppercase" style={{ fontFamily: FONT_DISPLAY }}>Fútbol Pulse</span>
           </div>
 
           <div className="hidden md:flex flex-1">
-            <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-600 bg-slate-100 px-3 py-1.5 border border-slate-200/60 rounded-md" style={{ fontFamily: "'Inter', sans-serif" }}>
+            <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#E31C3D] bg-[#E31C3D]/10 px-3.5 py-1.5 border border-[#E31C3D]/25 rounded-lg" style={{ fontFamily: "'Inter', sans-serif" }}>
               Panel de Administración
             </div>
           </div>
 
           <div className="ml-auto flex items-center gap-6">
-            <div className="hidden sm:flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider px-3 py-1.5 bg-emerald-50/80 text-emerald-700 border border-emerald-200 rounded-md">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            <div className="hidden sm:flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-wider px-3.5 py-1.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded-lg">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
               </span>
               Temporada Activa
             </div>
@@ -143,21 +146,25 @@ export function AdminShell() {
             <ThemeToggle />
 
             {user && (
-              <Link to="perfil" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <Link to="perfil" className="flex items-center gap-3 hover:opacity-85 transition-opacity">
                 {user.foto_perfil ? (
-                  <img src={user.foto_perfil} alt="Perfil" className="h-9 w-9 rounded-full object-cover border border-slate-200" />
+                  <img src={user.foto_perfil} alt="Perfil" className="h-10 w-10 rounded-full object-cover border-2 border-[#E31C3D]" />
                 ) : (
-                  <div className="h-9 w-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 font-semibold text-sm">
+                  <div className="h-10 w-10 rounded-full bg-[#E31C3D]/10 border-2 border-[#E31C3D] flex items-center justify-center text-[#E31C3D] font-extrabold text-sm shadow-md">
                     {(user.nombre_completo || user.username || 'A').charAt(0).toUpperCase()}
                   </div>
                 )}
-                <ChevronRight className="h-4 w-4 text-slate-400 rotate-90" />
+                <div className="hidden lg:block text-left">
+                  <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">{user.nombre_completo || user.username}</p>
+                  <p className="text-[10px] font-semibold text-slate-500 dark:text-white/50 uppercase">Administrador</p>
+                </div>
+                <ChevronRight className="h-4 w-4 text-slate-400 dark:text-white/40 rotate-90" />
               </Link>
             )}
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-6 md:p-10 transition-colors bg-slate-50">
+        <main className="flex-1 overflow-y-auto p-6 md:p-10 transition-colors bg-[#F8FAFC] dark:bg-[#0B1220]">
           <Outlet />
         </main>
       </div>

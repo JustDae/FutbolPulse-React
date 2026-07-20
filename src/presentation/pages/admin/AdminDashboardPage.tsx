@@ -77,7 +77,7 @@ export const AdminDashboardPage = () => {
 
   if (isLoading) {
     return (
-      <div className="py-20 text-center text-slate-400 font-semibold uppercase tracking-wider text-xs">
+      <div className="py-20 text-center text-white/50 font-bold uppercase tracking-widest text-xs">
         Cargando estadísticas del dashboard...
       </div>
     );
@@ -85,7 +85,7 @@ export const AdminDashboardPage = () => {
 
   if (error) {
     return (
-      <div className="p-4 border-l-4 border-[#E31C3D] bg-red-50 text-[#E31C3D] text-xs font-semibold uppercase tracking-wider rounded-r-lg">
+      <div className="p-4 border-l-4 border-[#E31C3D] bg-[#E31C3D]/10 text-[#E31C3D] text-xs font-bold uppercase tracking-wider rounded-r-xl">
         {error}
       </div>
     );
@@ -96,23 +96,28 @@ export const AdminDashboardPage = () => {
   }
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-slate-200/80 pb-6">
+    <div className="space-y-8 animate-fade-in text-slate-900 dark:text-white">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-slate-200 dark:border-[#1C2B45] pb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Panel de Control</h1>
-          <p className="text-slate-500 text-sm mt-1">Resumen general y acceso rápido a las funciones principales.</p>
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-7 bg-[#E31C3D] rounded-full" />
+            <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+              Panel de Control
+            </h1>
+          </div>
+          <p className="text-slate-500 dark:text-white/50 text-xs mt-1 font-medium pl-5">Resumen operativo general de la plataforma deportiva.</p>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-emerald-50/80 text-emerald-700 border border-emerald-100 px-4 py-2 rounded-lg">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          <div className="flex items-center gap-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-4 py-2 rounded-xl">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
             </span>
-            <span className="text-[10px] font-bold uppercase tracking-wider">Sistema Activo</span>
+            <span className="text-[10px] font-extrabold uppercase tracking-wider">Sistema Operativo</span>
           </div>
           <button 
-            className="flex items-center gap-2 bg-[#E31C3D] hover:bg-[#c61834] text-white rounded-lg px-4 py-2.5 text-xs font-bold uppercase tracking-widest transition-colors shadow-sm"
+            className="flex items-center gap-2 bg-[#E31C3D] hover:bg-[#c61834] text-white rounded-xl px-5 py-2.5 text-xs font-bold uppercase tracking-widest transition-all shadow-lg shadow-[#E31C3D]/20 active:scale-95 cursor-pointer"
           >
             <Settings className="h-4 w-4" />
             <span>Ajustes</span>
@@ -124,21 +129,23 @@ export const AdminDashboardPage = () => {
         {statConfig.map(({ key, label, description, icon: Icon }) => (
           <Card 
             key={key} 
-            className="bg-white border border-slate-200/85 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between"
-            style={{ minHeight: '150px' }}
+            className="group relative overflow-hidden bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] hover:border-[#E31C3D]/50 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+            style={{ minHeight: '160px' }}
           >
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E31C3D] to-transparent opacity-40 group-hover:opacity-100 transition-opacity" />
+
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500 tracking-normal">{label}</span>
-              <div className="p-2 bg-slate-50 text-slate-400 rounded-lg border border-slate-100">
-                <Icon className="h-4 w-4" />
+              <span className="text-xs font-bold text-slate-500 dark:text-white/60 uppercase tracking-wider">{label}</span>
+              <div className="p-2.5 bg-slate-100 dark:bg-[#1C2B45]/50 text-[#E31C3D] rounded-xl border border-slate-200 dark:border-[#1C2B45] group-hover:bg-[#E31C3D] group-hover:text-white transition-colors">
+                <Icon className="h-4.5 w-4.5" />
               </div>
             </div>
 
-            <div className="mt-4 flex items-baseline justify-between gap-4">
-              <span className="text-3xl font-bold text-slate-900 tracking-tight">
+            <div className="mt-6 flex items-baseline justify-between gap-4">
+              <span className="text-4xl font-black text-slate-900 dark:text-white tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
                 {stats[key]}
               </span>
-              <span className="text-[11px] font-medium text-slate-400 text-right max-w-[160px]">
+              <span className="text-[11px] font-medium text-slate-500 dark:text-white/40 text-right max-w-[160px]">
                 {description}
               </span>
             </div>

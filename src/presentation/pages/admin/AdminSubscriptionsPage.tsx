@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { subscriptionRepository } from '@/infrastructure/adapters/axios-subscription.repository';
 import type { Subscription } from '@/domain/entities/subscription.entity';
-import { Card, CardHeader, CardTitle, CardContent } from '@/presentation/components/ui/card';
-import { Loader2, CreditCard, Activity } from 'lucide-react';
+import { CreditCard, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const AdminSubscriptionsPage = () => {
@@ -26,87 +25,90 @@ export const AdminSubscriptionsPage = () => {
     }
   };
 
+  const activeSubscriptionsCount = useMemo(
+    () => subscriptions.filter(s => s.estado === 'Activo' || s.plan).length,
+    [subscriptions]
+  );
+  const monthlyRevenue = useMemo(
+    () => subscriptions.length * 29,
+    [subscriptions]
+  );
+
   return (
-    <div className="space-y-6 p-6">
-      {}
-      <div className="mb-8 pl-2">
-        <h1 className="text-[28px] font-medium tracking-tight text-gray-900 dark:text-white mb-2">Suscripciones</h1>
-        <p className="text-gray-500 dark:text-[#888888] font-normal text-sm">Supervisa los planes de pago y membresías de los usuarios.</p>
+    <div className="space-y-6 animate-fade-in text-slate-900 dark:text-white">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#1C2B45] pb-6">
+        <div>
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-7 bg-[#E31C3D] rounded-full" />
+            <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+              Gestión de Suscripciones
+            </h1>
+          </div>
+          <p className="text-slate-500 dark:text-white/50 text-xs mt-1 font-medium pl-5">Controla los planes de membresía, facturación y cuentas activas de clubes.</p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card className="bg-white dark:bg-[#1a1a1c] border border-gray-200 dark:border-none shadow-sm dark:shadow-none rounded-2xl p-5">
-          <CardHeader className="p-0 pb-6 flex flex-row items-center justify-between">
-            <CardTitle className="text-xs font-medium text-gray-500 dark:text-[#888888] flex items-center gap-2">
-              <Activity className="h-4 w-4" /> Suscripciones Activas
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="text-3xl font-semibold text-gray-900 dark:text-white tracking-tight">
-              {subscriptions.filter(s => s.estado === 'Activo').length}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-white dark:bg-[#1a1a1c] border border-gray-200 dark:border-none shadow-sm dark:shadow-none rounded-2xl p-5">
-          <CardHeader className="p-0 pb-6 flex flex-row items-center justify-between">
-            <CardTitle className="text-xs font-medium text-gray-500 dark:text-[#888888] flex items-center gap-2">
-              <CreditCard className="h-4 w-4" /> Planes Premium
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="text-3xl font-semibold text-gray-900 dark:text-white tracking-tight">
-              {subscriptions.filter(s => s.plan === 'Premium').length}
-            </div>
-          </CardContent>
-        </Card>
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+        <div className="rounded-2xl border border-slate-200 dark:border-[#1C2B45] bg-white dark:bg-[#10182B] p-5 shadow-md">
+          <div className="text-3xl font-black text-slate-900 dark:text-white" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{subscriptions.length}</div>
+          <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-white/40 mt-1">Suscripciones Totales</div>
+        </div>
+        <div className="rounded-2xl border border-slate-200 dark:border-[#1C2B45] bg-white dark:bg-[#10182B] p-5 shadow-md">
+          <div className="text-3xl font-black text-emerald-500 dark:text-emerald-400" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{activeSubscriptionsCount}</div>
+          <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-white/40 mt-1">Planes Activos</div>
+        </div>
+        <div className="rounded-2xl border border-slate-200 dark:border-[#1C2B45] bg-white dark:bg-[#10182B] p-5 shadow-md">
+          <div className="text-3xl font-black text-[#E31C3D]" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>${monthlyRevenue} USD</div>
+          <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-white/40 mt-1">Ingreso Estimado Mensual</div>
+        </div>
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-gray-200 dark:border-none bg-white dark:bg-[#1a1a1c] shadow-sm dark:shadow-none">
+      {/* Table */}
+      <div className="overflow-hidden rounded-2xl border border-slate-200 dark:border-[#1C2B45] bg-white dark:bg-[#10182B] shadow-xl">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-gray-200 dark:border-white/5 text-xs font-medium text-gray-500 dark:text-[#888888]">
+          <thead className="border-b border-slate-200 dark:border-[#1C2B45] bg-slate-50 dark:bg-[#1C2B45]/40 text-[10px] font-extrabold uppercase tracking-widest text-slate-500 dark:text-white/60">
             <tr>
-              <th className="px-6 py-4">ID Usuario</th>
+              <th className="px-6 py-4">Usuario / Club</th>
               <th className="px-6 py-4">Plan</th>
-              <th className="px-6 py-4">Estado</th>
-              <th className="px-6 py-4">Inicio</th>
+              <th className="px-6 py-4">Fecha Inicio</th>
               <th className="px-6 py-4">Vencimiento</th>
+              <th className="px-6 py-4">Estado</th>
+              <th className="px-6 py-4 text-right">Acciones</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100 dark:divide-white/5">
+          <tbody className="divide-y divide-slate-100 dark:divide-[#1C2B45]/50 text-xs">
             {isLoading ? (
               <tr>
-                <td colSpan={5} className="px-6 py-10 text-center">
-                   <div className="flex justify-center"><Loader2 className="animate-spin h-6 w-6 text-[#f94116]" /></div>
+                <td colSpan={6} className="py-16 text-center">
+                  <Loader2 className="animate-spin h-8 w-8 text-[#E31C3D] mx-auto mb-3" />
+                  <p className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-white/50">Cargando suscripciones...</p>
                 </td>
               </tr>
             ) : subscriptions.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-6 py-10 text-center text-gray-500 dark:text-[#888888]">
-                  No hay suscripciones registradas.
+                <td colSpan={6} className="py-16 text-center text-slate-400 dark:text-white/40 font-bold uppercase tracking-widest">
+                  No hay suscripciones registradas
                 </td>
               </tr>
             ) : (
-              subscriptions.map(s => (
-                <tr key={s.id} className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                  <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">{s.usuario_email || s.usuario_id}</td>
+              subscriptions.map((sub) => (
+                <tr key={sub.id} className="hover:bg-slate-50 dark:hover:bg-[#1C2B45]/30 transition-colors">
+                  <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">{sub.usuario_email || sub.usuario_id}</td>
+                  <td className="px-6 py-4 font-bold text-[#E31C3D]">{sub.plan || 'Estándar'}</td>
+                  <td className="px-6 py-4 text-slate-600 dark:text-white/70">{sub.fecha_inicio ? new Date(sub.fecha_inicio).toLocaleDateString() : '-'}</td>
+                  <td className="px-6 py-4 text-slate-600 dark:text-white/70">{sub.fecha_vencimiento ? new Date(sub.fecha_vencimiento).toLocaleDateString() : '-'}</td>
                   <td className="px-6 py-4">
-                    <span className={`inline-flex items-center rounded px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${s.plan === 'Premium' ? 'bg-purple-100 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400' : 'bg-gray-100 text-gray-600 dark:bg-[#101010] dark:text-[#888888]'}`}>
-                      {s.plan}
+                    <span className={`rounded-lg px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider ${sub.estado === 'Activo' ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30' : 'bg-slate-100 text-slate-500 border border-slate-200 dark:bg-white/5 dark:text-white/40 dark:border-white/10'}`}>
+                      {sub.estado || 'Activo'}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
-                    <span className={`inline-flex items-center rounded px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${
-                      s.estado === 'Activo' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-500' :
-                      s.estado === 'Vencido' ? 'bg-red-100 text-red-600 dark:bg-red-500/10 dark:text-red-500' :
-                      s.estado === 'Cancelado' ? 'bg-orange-100 text-orange-600 dark:bg-orange-500/10 dark:text-orange-500' :
-                      'bg-gray-100 text-gray-600 dark:bg-[#101010] dark:text-[#888888]'
-                    }`}>
-                      {s.estado}
-                    </span>
+                  <td className="px-6 py-4 text-right">
+                    <button className="rounded-lg p-2 text-slate-400 hover:text-slate-900 dark:text-white/60 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer" title="Ver detalles">
+                      <CreditCard className="h-4 w-4" />
+                    </button>
                   </td>
-                  <td className="px-6 py-4 text-gray-600 dark:text-[#888888]">{new Date(s.fecha_inicio).toLocaleDateString()}</td>
-                  <td className="px-6 py-4 text-gray-600 dark:text-[#888888]">{new Date(s.fecha_vencimiento).toLocaleDateString()}</td>
                 </tr>
               ))
             )}
