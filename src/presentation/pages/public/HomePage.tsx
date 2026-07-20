@@ -32,7 +32,7 @@ function TeamBadge({ url, name, size = 56 }: { url?: string; name: string; size?
     return (
       <img src={url} alt={name} width={size} height={Math.round(size * 0.67)}
         className="w-full h-full object-contain" referrerPolicy="no-referrer"
-        crossOrigin="anonymous" onError={() => setFailed(true)} loading="lazy" />
+        onError={() => setFailed(true)} loading="lazy" />
     );
   }
   return (
