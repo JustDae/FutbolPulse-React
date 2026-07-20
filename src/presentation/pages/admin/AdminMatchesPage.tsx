@@ -38,9 +38,7 @@ export const AdminMatchesPage = () => {
 
   // Mocks para mantener compatibilidad con el nuevo layout solicitado
   const getTournamentName = (_id: string) => "Torneo Principal";
-  const getTeamName = (name: string) => name;
-  const getTeamBadge = (_id: string) => "";
-  const getStatusBadge = (status: string) => 
+  const getStatusBadge = (status: string) =>
     status === 'Finalizado' ? 'bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-white/60' :
     status === 'En curso' ? 'bg-[#E31C3D]/20 text-[#E31C3D]' :
     'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400';

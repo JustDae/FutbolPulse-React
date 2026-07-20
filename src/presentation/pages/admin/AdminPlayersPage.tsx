@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Button } from '../../components/ui/button';
 import type { Player } from '../../../domain/entities/player.entity';
 import { usePlayerStore } from '../../store/player.store';
 import { useTeamStore } from '../../store/team.store';
