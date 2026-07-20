@@ -194,8 +194,7 @@ export function HomePage() {
             </h1>
 
             <p className="text-white/50 text-sm leading-relaxed max-w-md mb-10" style={{ fontFamily: "'Inter', sans-serif" }}>
-              FútbolPulse te permite seguir a tus equipos, revisar resultados en tiempo real
-              y gestionar torneos con herramientas de nivel profesional.
+              Resultados en tiempo real y gestión de torneos a nivel profesional.
             </p>
 
             <div className="flex flex-wrap gap-4">
