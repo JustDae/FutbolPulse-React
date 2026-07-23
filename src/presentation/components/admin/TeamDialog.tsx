@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -56,13 +57,23 @@ function TeamDialogInner({ onClose, teamToEdit }: Omit<TeamDialogProps, 'isOpen'
 
 
 
+  const [selectedBadge, setSelectedBadge] = useState<File | null>(null);
+
   const onSubmit = async (data: TeamFormValues) => {
     try {
       if (teamToEdit) {
         await updateTeam(teamToEdit.id, data);
         toast.success('Equipo actualizado correctamente');
       } else {
-        await createTeam(data);
+        const newTeam = await createTeam(data);
+        if (selectedBadge) {
+          try {
+            await uploadTeamBadge(newTeam.id, selectedBadge);
+          } catch (e) {
+            console.error('Error subiendo imagen en creación:', e);
+            toast.error('Equipo creado, pero hubo un error subiendo el escudo');
+          }
+        }
         toast.success('Equipo creado correctamente');
       }
       onClose();
@@ -78,6 +89,8 @@ function TeamDialogInner({ onClose, teamToEdit }: Omit<TeamDialogProps, 'isOpen'
   const handleBadgeUpload = async (file: File) => {
     if (teamToEdit) {
       await uploadTeamBadge(teamToEdit.id, file);
+    } else {
+      setSelectedBadge(file);
     }
   };
 
@@ -88,15 +101,13 @@ function TeamDialogInner({ onClose, teamToEdit }: Omit<TeamDialogProps, 'isOpen'
           {teamToEdit ? 'Editar Equipo' : 'Registrar Nuevo Equipo'}
         </h2>
 
-        {teamToEdit && (
-          <div className="mb-6 flex flex-col items-center">
-            <span className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Escudo del Club</span>
-            <ImageUploader
-              currentImageUrl={teamToEdit.badgeUrl}
-              onImageSelected={handleBadgeUpload}
-            />
-          </div>
-        )}
+        <div className="mb-6 flex flex-col items-center">
+          <span className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Escudo del Club</span>
+          <ImageUploader
+            currentImageUrl={teamToEdit?.badgeUrl}
+            onImageSelected={handleBadgeUpload}
+          />
+        </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
