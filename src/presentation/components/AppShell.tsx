@@ -14,7 +14,6 @@ import { useState, useEffect } from 'react'
 import { matchRepository } from '@/infrastructure/adapters/axios-match.repository'
 import type { Match } from '@/domain/entities/match.entity'
 import { Menu, X } from 'lucide-react'
-import logoImg from '@/assets/logo.png'
 
 const RED = '#E31C3D'
 
@@ -75,7 +74,7 @@ export function AppShell() {
 
           {}
           <Link to="/" className="flex items-center gap-3">
-            <img src={logoImg} alt="FútbolPulse Logo" className="w-10 h-10 object-contain" />
+            <img src="/logo.png" alt="FútbolPulse Logo" className="w-10 h-10 object-contain" />
             <span className="text-white font-bold tracking-tight text-lg">FÚTBOL <span style={{ color: RED }}>PULSE</span></span>
           </Link>
 
