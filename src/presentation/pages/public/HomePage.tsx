@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { ReactLenis } from 'lenis/react';
+import SplitType from 'split-type';
 import { matchRepository } from '@/infrastructure/adapters/axios-match.repository';
 import type { Match } from '@/domain/entities/match.entity';
 import { ArrowRight, Play, Calendar, MapPin } from 'lucide-react';
@@ -132,7 +134,8 @@ export function HomePage() {
       ease: 'sine.inOut'
     });
 
-    const tl = gsap.timeline({
+    // 1. Existing soccer ball timeline
+    const ballTl = gsap.timeline({
       scrollTrigger: {
         trigger: mainRef.current,
         start: 'top top',
@@ -141,8 +144,7 @@ export function HomePage() {
       }
     });
 
-    // We animate top/left of the outer container
-    tl.to('.gsap-soccer-ball', {
+    ballTl.to('.gsap-soccer-ball', {
       top: '35vh',
       left: '75vw',
       scale: 0.7,
@@ -165,6 +167,55 @@ export function HomePage() {
       ease: 'power2.in',
     }, 0.7);
 
+    // 2. SplitType Text Animations
+    const splitTexts = document.querySelectorAll('.split-text-anim');
+    splitTexts.forEach((text) => {
+      const split = new SplitType(text as HTMLElement, { types: 'lines,words,chars' });
+      gsap.from(split.chars, {
+        scrollTrigger: {
+          trigger: text,
+          start: 'top 90%',
+          toggleActions: 'play none none reverse',
+        },
+        y: 100,
+        opacity: 0,
+        stagger: 0.02,
+        duration: 0.8,
+        ease: 'back.out(1.7)'
+      });
+    });
+
+    // 3. Parallax Effects for backgrounds
+    gsap.utils.toArray('.parallax-bg').forEach((bg: any) => {
+      gsap.to(bg, {
+        y: '20%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: bg.parentElement,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        }
+      });
+    });
+
+    // 4. Staggered Card reveals
+    gsap.utils.toArray('.stagger-card-container').forEach((container: any) => {
+      const cards = container.querySelectorAll('.stagger-card');
+      gsap.from(cards, {
+        scrollTrigger: {
+          trigger: container,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+        y: 50,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.6,
+        ease: 'power2.out'
+      });
+    });
+
   }, { scope: mainRef });
 
   useEffect(() => {
@@ -185,9 +236,10 @@ export function HomePage() {
   const liveMatch = matches.find(m => m.status === 'En curso');
 
   return (
-    <div ref={mainRef} className="w-full overflow-x-hidden relative" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <ReactLenis root>
+      <div ref={mainRef} className="w-full overflow-x-hidden relative" style={{ fontFamily: "'Inter', sans-serif" }}>
 
-      {/* Floating 3D GSAP Ball */}
+        {/* Floating 3D GSAP Ball */}
       <div 
         className="gsap-soccer-ball pointer-events-none z-[100]"
         style={{ 
@@ -220,7 +272,7 @@ export function HomePage() {
             loop
             muted
             playsInline
-            className="w-full h-full object-cover"
+            className="w-full h-[120%] object-cover parallax-bg absolute -top-[10%]"
             style={{ objectPosition: 'center 30%' }}
           />
           <div
@@ -255,7 +307,7 @@ export function HomePage() {
             </div>
 
             <h1
-              className="uppercase mb-6"
+              className="uppercase mb-6 split-text-anim"
               style={{
                 fontFamily: FONT_DISPLAY,
                 fontWeight: 900,
@@ -381,8 +433,8 @@ export function HomePage() {
             <div>
               <span className="inline-block text-[9px] font-bold uppercase tracking-[0.2em] text-white/50">Calendario</span>
               <h2
-                className="uppercase text-white mt-1.5"
-                style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 'clamp(26px, 4vw, 48px)', lineHeight: 0.9, letterSpacing: '-0.02em' }}
+                className="uppercase text-white mt-1.5 split-text-anim"
+                style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 'clamp(26px, 4vw, 48px)', lineHeight: 0.9, letterSpacing: '-0.02em', clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)' }}
               >
                 ÚLTIMOS<br />PARTIDOS
               </h2>
@@ -396,18 +448,18 @@ export function HomePage() {
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 stagger-card-container">
               {[0, 1, 2].map(i => (
-                <div key={i} className="h-56 bg-white/[0.04] border border-white/5 animate-pulse" />
+                <div key={i} className="h-56 bg-white/[0.04] border border-white/5 animate-pulse stagger-card" />
               ))}
             </div>
           ) : displayMatches.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 stagger-card-container">
               {displayMatches.map((match) => (
                 <Link
                   key={match.id}
                   to={`/partidos/${match.id}`}
-                  className="group flex flex-col p-6 bg-white/[0.05] border border-white/10 hover:bg-white/[0.09] hover:border-white/20 hover:-translate-y-1 transition-all duration-300 shadow-xl"
+                  className="group flex flex-col p-6 bg-white/[0.05] border border-white/10 hover:bg-white/[0.09] hover:border-white/20 hover:-translate-y-1 transition-all duration-300 shadow-xl stagger-card"
                   style={{ borderRadius: '0px' }}
                 >
                   <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
@@ -489,7 +541,7 @@ export function HomePage() {
                 <RedLabel>Temporada Actual</RedLabel>
               </div>
               <h2
-                className="uppercase"
+                className="uppercase split-text-anim"
                 style={{
                   fontFamily: FONT_DISPLAY,
                   fontWeight: 900,
@@ -497,6 +549,7 @@ export function HomePage() {
                   lineHeight: 0.9,
                   letterSpacing: '-0.02em',
                   color: NAVY,
+                  clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)'
                 }}
               >
                 SEASON<br />STATS
@@ -521,33 +574,33 @@ export function HomePage() {
             </div>
 
             <div>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
-                <MetricBlock value={String(matches.length || '0')} label="Partidos registrados" dark={false} />
-                <MetricBlock
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 stagger-card-container">
+                <div className="stagger-card"><MetricBlock value={String(matches.length || '0')} label="Partidos registrados" dark={false} /></div>
+                <div className="stagger-card"><MetricBlock
                   value={String(matches.filter(m => m.status === 'Finalizado').length || '0')}
                   label="Partidos finalizados"
                   dark={false}
-                />
-                <MetricBlock
+                /></div>
+                <div className="stagger-card"><MetricBlock
                   value={String(matches.filter(m => m.status === 'En curso').length || '0')}
                   label="En vivo ahora"
                   dark={false}
-                />
-                <MetricBlock
+                /></div>
+                <div className="stagger-card"><MetricBlock
                   value={String(matches.reduce((acc, m) => acc + (m.homeScore ?? 0) + (m.awayScore ?? 0), 0) || '0')}
                   label="Goles marcados"
                   dark={false}
-                />
-                <MetricBlock
+                /></div>
+                <div className="stagger-card"><MetricBlock
                   value={String(matches.filter(m => m.status === 'Programado').length || '0')}
                   label="Próximos partidos"
                   dark={false}
-                />
-                <MetricBlock
+                /></div>
+                <div className="stagger-card"><MetricBlock
                   value={String(new Set(matches.flatMap(m => [m.equipoLocal, m.equipoVisitante])).size || '0')}
                   label="Equipos activos"
                   dark={false}
-                />
+                /></div>
               </div>
 
               <div className="flex gap-2 mt-10">
@@ -572,8 +625,8 @@ export function HomePage() {
                 <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/40">Explora</span>
               </div>
               <h2
-                className="uppercase text-white"
-                style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 'clamp(26px, 4vw, 48px)', lineHeight: 0.9, letterSpacing: '-0.02em' }}
+                className="uppercase text-white split-text-anim"
+                style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 'clamp(26px, 4vw, 48px)', lineHeight: 0.9, letterSpacing: '-0.02em', clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)' }}
               >
                 EQUIPOS<br />&amp; TORNEOS
               </h2>
@@ -599,8 +652,8 @@ export function HomePage() {
               <div className="relative z-10 p-8 h-full flex flex-col justify-end">
                 <RedLabel>Torneos Activos</RedLabel>
                 <h3
-                  className="uppercase text-white mt-2 mb-4"
-                  style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 'clamp(22px, 3vw, 38px)', lineHeight: 0.92, letterSpacing: '-0.02em' }}
+                  className="uppercase text-white mt-2 mb-4 split-text-anim"
+                  style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 'clamp(22px, 3vw, 38px)', lineHeight: 0.92, letterSpacing: '-0.02em', clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)' }}
                 >
                   EXPLORA<br />TODOS LOS<br />TORNEOS
                 </h3>
@@ -627,8 +680,8 @@ export function HomePage() {
                 <div className="relative z-10 p-6 h-full flex flex-col justify-end">
                   <RedLabel>Equipos</RedLabel>
                   <h3
-                    className="uppercase text-white mt-1"
-                    style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '28px', lineHeight: 0.92, letterSpacing: '-0.01em' }}
+                    className="uppercase text-white mt-1 split-text-anim"
+                    style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '28px', lineHeight: 0.92, letterSpacing: '-0.01em', clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)' }}
                   >
                     TODOS LOS EQUIPOS
                   </h3>
@@ -651,8 +704,8 @@ export function HomePage() {
                   <RedLabel>Partidos</RedLabel>
                   <div>
                     <h3
-                      className="uppercase text-white mb-3"
-                      style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '28px', lineHeight: 0.92, letterSpacing: '-0.01em' }}
+                      className="uppercase text-white mb-3 split-text-anim"
+                      style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '28px', lineHeight: 0.92, letterSpacing: '-0.01em', clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)' }}
                     >
                       CALENDARIO<br />COMPLETO
                     </h3>
@@ -671,7 +724,7 @@ export function HomePage() {
         <img
           src={ctaBgImg}
           alt="Fútbol en acción"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-[120%] object-cover parallax-bg -top-[10%]"
           style={{ objectPosition: 'center 40%' }}
         />
         <div className="absolute inset-0" style={{ background: 'rgba(11,18,32,0.88)' }} />
@@ -685,8 +738,8 @@ export function HomePage() {
           <div>
             <RedLabel>Acceso al Panel</RedLabel>
             <h2
-              className="uppercase text-white mt-2"
-              style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 'clamp(28px, 4.5vw, 56px)', lineHeight: 0.9, letterSpacing: '-0.02em' }}
+              className="uppercase text-white mt-2 split-text-anim"
+              style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 'clamp(28px, 4.5vw, 56px)', lineHeight: 0.9, letterSpacing: '-0.02em', clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)' }}
             >
               GESTIONA<br />TU CLUB<br /><span style={{ color: RED }}>HOY.</span>
             </h2>
@@ -710,5 +763,6 @@ export function HomePage() {
       </section>
 
     </div>
+    </ReactLenis>
   );
 }
