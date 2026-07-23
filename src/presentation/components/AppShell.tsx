@@ -14,6 +14,9 @@ import { useState, useEffect } from 'react'
 import { matchRepository } from '@/infrastructure/adapters/axios-match.repository'
 import type { Match } from '@/domain/entities/match.entity'
 import { Menu, X } from 'lucide-react'
+import logoImg from '@/assets/logo.png'
+
+const RED = '#E31C3D'
 
 function navLinkClass({ isActive }: { isActive: boolean }) {
   return [
@@ -71,21 +74,9 @@ export function AppShell() {
         <div className="w-full h-full flex items-center px-6 md:px-10 gap-6">
 
           {}
-          <Link to="/" className="flex items-center gap-0 shrink-0 group">
-            <span
-              className="font-display font-black italic text-2xl tracking-tight uppercase"
-              style={{ color: '#E31C3D', fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: '-0.01em' }}
-            >
-              FÚTBOL
-            </span>
-            <span
-              className="font-display font-black italic text-2xl tracking-tight uppercase"
-              style={{ color: '#FFFFFF', fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: '-0.01em' }}
-            >
-              PULSE
-            </span>
-            {}
-            <span className="ml-1.5 w-2 h-2 shrink-0" style={{ background: '#E31C3D' }} />
+          <Link to="/" className="flex items-center gap-3">
+            <img src={logoImg} alt="FútbolPulse Logo" className="w-10 h-10 object-contain" />
+            <span className="text-white font-bold tracking-tight text-lg">FÚTBOL <span style={{ color: RED }}>PULSE</span></span>
           </Link>
 
           {}
