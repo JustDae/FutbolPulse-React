@@ -7,8 +7,8 @@ import { useTeamStore } from '@/presentation/store/team.store';
 import torneosImg from '@/assets/torneos.png';
 import equiposImg from '@/assets/equipos.png';
 import partidosImg from '@/assets/partidos.png';
-import heroBgImg from '@/assets/hero_bg.jpg';
 import ctaBgImg from '@/assets/cta_bg.jpg';
+import heroVideo from '@/assets/hero_video.mp4';
 
 const NAVY = '#0B1220';
 const NAVY_MID = '#10182B';
@@ -140,9 +140,12 @@ export function HomePage() {
         style={{ background: NAVY, minHeight: '92vh' }}
       >
         <div className="absolute inset-0 z-0">
-          <img
-            src={heroBgImg}
-            alt="Estadio de fútbol"
+          <video
+            src={heroVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
             className="w-full h-full object-cover"
             style={{ objectPosition: 'center 30%' }}
           />
