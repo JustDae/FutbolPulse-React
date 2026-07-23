@@ -94,6 +94,7 @@ export function AppShell() {
             <NavLink to="/equipos" className={navLinkClass}>Equipos</NavLink>
             <NavLink to="/partidos" className={navLinkClass}>Partidos</NavLink>
             <NavLink to="/estadisticas" className={navLinkClass}>Estadísticas</NavLink>
+            <NavLink to="/pro" className={navLinkClass} style={{ color: '#E31C3D' }}>PRO</NavLink>
           </nav>
 
           <div className="flex-1" />
@@ -171,6 +172,7 @@ export function AppShell() {
               { to: '/equipos', label: 'Equipos' },
               { to: '/partidos', label: 'Partidos' },
               { to: '/estadisticas', label: 'Estadísticas' },
+              { to: '/pro', label: 'PRO' },
             ].map(({ to, label }) => (
               <NavLink
                 key={to}
@@ -208,7 +210,7 @@ export function AppShell() {
           <div>
             <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest mb-4">Navegación</p>
             <div className="space-y-2">
-              {[['/', 'Inicio'], ['/torneos', 'Torneos'], ['/equipos', 'Equipos'], ['/partidos', 'Partidos'], ['/estadisticas', 'Estadísticas']].map(([to, label]) => (
+              {[['/', 'Inicio'], ['/torneos', 'Torneos'], ['/equipos', 'Equipos'], ['/partidos', 'Partidos'], ['/estadisticas', 'Estadísticas'], ['/pro', 'PRO']].map(([to, label]) => (
                 <Link key={to} to={to} className="block text-white/40 text-xs font-medium hover:text-white transition-colors">{label}</Link>
               ))}
             </div>

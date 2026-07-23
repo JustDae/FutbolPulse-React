@@ -5,9 +5,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import SplitType from 'split-type';
 import { matchRepository } from '@/infrastructure/adapters/axios-match.repository';
-import { subscriptionRepository } from '@/infrastructure/adapters/axios-subscription.repository';
 import type { Match } from '@/domain/entities/match.entity';
-import { ArrowRight, Play, Calendar, MapPin, Zap } from 'lucide-react';
+import { ArrowRight, Play, Calendar, MapPin } from 'lucide-react';
 import { useTeamStore } from '@/presentation/store/team.store';
 import { Magnetic } from '@/presentation/components/Magnetic';
 import torneosImg from '@/assets/torneos.png';
@@ -121,7 +120,6 @@ function MetricBlock({
 export function HomePage() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
-  const [premiumCount, setPremiumCount] = useState<number>(0);
   const { teams, fetchTeams } = useTeamStore();
   const mainRef = useRef<HTMLDivElement>(null);
 
@@ -181,14 +179,11 @@ export function HomePage() {
 
   useEffect(() => {
     fetchTeams();
-    Promise.all([
-      matchRepository.getMatches().catch(() => []),
-      subscriptionRepository.getSubscriptions().catch(() => [])
-    ]).then(([m, subs]) => {
-      setMatches(m as Match[]);
-      const proSubs = (subs as any[]).filter(s => s.plan === 'Premium' && s.estado === 'Activo');
-      setPremiumCount(proSubs.length);
-    }).finally(() => setLoading(false));
+    matchRepository
+      .getMatches()
+      .then((m) => setMatches(m))
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, [fetchTeams]);
 
   const getTeamBadge = (teamName: string) => {
@@ -643,66 +638,6 @@ export function HomePage() {
                 </div>
               </Link>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PRO SUBSCRIPTION SECTION */}
-      <section className="relative w-full overflow-hidden border-y border-white/5" style={{ background: '#070C16', padding: '100px 0' }}>
-        <div className="absolute inset-0 opacity-10" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(227, 28, 61, 0.4) 0%, transparent 70%)' }} />
-        
-        <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <Zap className="w-4 h-4" style={{ color: RED }} />
-              <RedLabel>Desbloquea Todo el Potencial</RedLabel>
-            </div>
-            <h2
-              className="uppercase text-white mb-6 split-text-anim"
-              style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 'clamp(32px, 5vw, 64px)', lineHeight: 0.9, letterSpacing: '-0.02em', clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)' }}
-            >
-              NIVEL <span style={{ color: RED }}>PRO</span>
-            </h2>
-            <p className="text-white/50 text-sm leading-relaxed max-w-md mb-8">
-              Herramientas avanzadas para entrenadores, scouts y administradores. Gestiona plantillas, analiza métricas y toma el control total de tu equipo.
-            </p>
-            
-            <div className="flex items-center gap-4 mb-10">
-              <div className="flex -space-x-3">
-                {[0, 1, 2, 3].map((i) => (
-                  <div key={i} className="w-10 h-10 rounded-full border-2 border-[#070C16] bg-white/10 flex items-center justify-center text-[10px] font-bold text-white/40">
-                    CLUB
-                  </div>
-                ))}
-              </div>
-              <div className="flex flex-col">
-                <span className="text-white font-bold text-sm">+{premiumCount} Clubes Activos</span>
-                <span className="text-[9px] uppercase tracking-widest text-white/40">Ya son Nivel PRO</span>
-              </div>
-            </div>
-
-            <Magnetic>
-              <Link
-                to="/register"
-                className="inline-flex items-center gap-3 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.15em] transition-opacity hover:opacity-90"
-                style={{ background: RED, color: '#FFF' }}
-              >
-                Obtener PRO Ahora <ArrowRight className="w-4 h-4" />
-              </Link>
-            </Magnetic>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 stagger-card-container">
-            {[
-              { title: 'Gestión de Plantillas', desc: 'Controla jugadores, lesiones y contratos.' },
-              { title: 'Estadísticas Avanzadas', desc: 'Métricas detalladas de rendimiento por partido.' },
-              { title: 'Live Match Tracker', desc: 'Panel en vivo para actualizar eventos en tiempo real.' },
-            ].map((feature, idx) => (
-              <div key={idx} className="p-6 bg-white/[0.03] border border-white/5 hover:bg-white/[0.05] transition-colors stagger-card">
-                <h3 className="text-white font-bold mb-2 uppercase tracking-wide text-sm">{feature.title}</h3>
-                <p className="text-white/40 text-xs">{feature.desc}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>

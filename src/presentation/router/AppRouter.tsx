@@ -36,6 +36,7 @@ import { MatchesPage } from '../pages/matches/MatchesPage';
 import { MatchDetailPage } from '../pages/matches/MatchDetailPage';
 import { ProfilePage } from '../pages/profile/ProfilePage';
 import { StatisticsPage } from '../pages/statistics/StatisticsPage';
+import { ProPage } from '../pages/public/ProPage';
 
 export const AppRouter = () => {
   return (
@@ -50,6 +51,7 @@ export const AppRouter = () => {
           <Route path="/partidos" element={<MatchesPage />} />
           <Route path="/partidos/:id" element={<MatchDetailPage />} />
           <Route path="/estadisticas" element={<StatisticsPage />} />
+          <Route path="/pro" element={<ProPage />} />
 
           <Route element={<ProtectedRoute />}>
             <Route path="/profile" element={<ProfilePage />} />
