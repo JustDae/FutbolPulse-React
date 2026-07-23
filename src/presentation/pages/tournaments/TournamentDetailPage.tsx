@@ -17,7 +17,8 @@ export function TournamentDetailPage() {
   };
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <div className="py-12 px-6 md:px-12">
+      <div className="space-y-6 max-w-5xl mx-auto">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" asChild>
           <Link to="/torneos">
@@ -86,6 +87,7 @@ export function TournamentDetailPage() {
             </CardContent>
           </Card>
         </div>
+      </div>
       </div>
     </div>
   );
