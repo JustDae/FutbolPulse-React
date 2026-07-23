@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_CONFIG } from '@/infrastructure/config/api.config';
 
 const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 
@@ -25,21 +26,30 @@ interface TeamBadgeProps {
   size?: number;
 }
 
+function getFullImageUrl(url?: string): string | undefined {
+  if (!url) return undefined;
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('blob:') || url.startsWith('data:')) {
+    return url;
+  }
+  const domain = API_CONFIG.BASE_URL.replace(/\/api\/?$/, '');
+  return `${domain}${url.startsWith('/') ? '' : '/'}${url}`;
+}
+
 export function TeamBadge({ url, name, size = 96 }: TeamBadgeProps) {
   const [failed, setFailed] = useState(false);
+  const fullUrl = getFullImageUrl(url);
   const [bg, fg] = badgePalette(name || 'Unknown');
   const initials = (name || '???').substring(0, 3).toUpperCase();
 
-  if (url && !failed) {
+  if (fullUrl && !failed) {
     return (
       <img
-        src={url}
+        src={fullUrl}
         alt={name}
         width={size}
         height={Math.round(size * 0.67)}
         className="w-full h-full object-contain"
         referrerPolicy="no-referrer"
-        crossOrigin="anonymous"
         onError={() => setFailed(true)}
         loading="lazy"
       />
