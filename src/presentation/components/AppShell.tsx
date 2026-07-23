@@ -15,8 +15,6 @@ import { matchRepository } from '@/infrastructure/adapters/axios-match.repositor
 import type { Match } from '@/domain/entities/match.entity'
 import { Menu, X } from 'lucide-react'
 
-const RED = '#E31C3D'
-
 function navLinkClass({ isActive }: { isActive: boolean }) {
   return [
     'flex items-center h-full px-5 text-[11px] font-bold uppercase tracking-[0.15em] transition-colors relative',
