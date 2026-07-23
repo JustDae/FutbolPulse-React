@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useAuthStore } from '@/presentation/store/auth.store';
 import { useMatchStore } from '@/presentation/store/match.store';
 import { useTeamStore } from '@/presentation/store/team.store';
+import { TeamBadge } from '@/presentation/components/TeamBadge';
 import { ArrowLeft, Clock, Edit2, Shield, Activity, Users } from 'lucide-react';
 
 const RED = '#E31C3D';
@@ -112,13 +113,9 @@ export function MatchDetailPage() {
               <h2 className="uppercase font-black text-slate-900 tracking-tight leading-none truncate" style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(28px, 4vw, 48px)' }}>
                 {match.equipoLocal}
               </h2>
-              {localTeam?.badgeUrl ? (
-                <img src={localTeam.badgeUrl} alt={match.equipoLocal} className="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-md" />
-              ) : (
-                <div className="w-20 h-20 md:w-24 md:h-24 bg-slate-100 rounded-full flex items-center justify-center border-2 border-dashed border-slate-300">
-                  <Shield className="w-8 h-8 text-slate-300" />
-                </div>
-              )}
+              <div className="w-20 h-20 md:w-24 md:h-24 overflow-hidden drop-shadow-md bg-slate-100 flex-shrink-0">
+                <TeamBadge url={localTeam?.badgeUrl} name={match.equipoLocal} size={96} />
+              </div>
             </div>
 
             <div className="shrink-0 bg-slate-950 px-8 py-4 flex items-center justify-center min-w-[160px] shadow-inner">
@@ -128,13 +125,9 @@ export function MatchDetailPage() {
             </div>
 
             <div className="flex-1 text-center md:text-left w-full flex flex-col-reverse md:flex-row items-center justify-start gap-6">
-              {awayTeam?.badgeUrl ? (
-                <img src={awayTeam.badgeUrl} alt={match.equipoVisitante} className="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-md" />
-              ) : (
-                <div className="w-20 h-20 md:w-24 md:h-24 bg-slate-100 rounded-full flex items-center justify-center border-2 border-dashed border-slate-300">
-                  <Shield className="w-8 h-8 text-slate-300" />
-                </div>
-              )}
+              <div className="w-20 h-20 md:w-24 md:h-24 overflow-hidden drop-shadow-md bg-slate-100 flex-shrink-0">
+                <TeamBadge url={awayTeam?.badgeUrl} name={match.equipoVisitante} size={96} />
+              </div>
               <h2 className="uppercase font-black text-slate-900 tracking-tight leading-none truncate" style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(28px, 4vw, 48px)' }}>
                 {match.equipoVisitante}
               </h2>
