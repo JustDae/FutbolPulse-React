@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { ReactLenis } from 'lenis/react';
 import SplitType from 'split-type';
 import { matchRepository } from '@/infrastructure/adapters/axios-match.repository';
 import type { Match } from '@/domain/entities/match.entity';
 import { ArrowRight, Play, Calendar, MapPin } from 'lucide-react';
 import { useTeamStore } from '@/presentation/store/team.store';
+import { Magnetic } from '@/presentation/components/Magnetic';
 import torneosImg from '@/assets/torneos.png';
 import equiposImg from '@/assets/equipos.png';
 import partidosImg from '@/assets/partidos.png';
@@ -195,7 +195,6 @@ export function HomePage() {
   const liveMatch = matches.find(m => m.status === 'En curso');
 
   return (
-    <ReactLenis root>
       <div ref={mainRef} className="w-full overflow-x-hidden relative" style={{ fontFamily: "'Inter', sans-serif" }}>
 
       <section
@@ -682,13 +681,15 @@ export function HomePage() {
             </h2>
           </div>
           <div className="flex flex-col gap-4 items-start md:items-end">
-            <Link
-              to="/login"
-              className="inline-flex items-center gap-3 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.15em] transition-opacity hover:opacity-90"
-              style={{ background: RED, color: '#FFF' }}
-            >
-              Iniciar sesión <ArrowRight className="w-4 h-4" />
-            </Link>
+            <Magnetic>
+              <Link
+                to="/login"
+                className="inline-flex items-center gap-3 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.15em] transition-opacity hover:opacity-90"
+                style={{ background: RED, color: '#FFF' }}
+              >
+                Iniciar sesión <ArrowRight className="w-4 h-4" />
+              </Link>
+            </Magnetic>
             <Link
               to="/register"
               className="text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors"
@@ -700,6 +701,5 @@ export function HomePage() {
       </section>
 
     </div>
-    </ReactLenis>
   );
 }
