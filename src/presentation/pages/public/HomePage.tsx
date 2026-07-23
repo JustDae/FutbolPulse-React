@@ -219,20 +219,6 @@ export function HomePage() {
 
         <SectionNumber n="01" dark />
 
-        <div
-          className="absolute hidden md:block"
-          style={{
-            top: 0,
-            right: '37%',
-            width: '3px',
-            height: '100%',
-            background: RED,
-            transform: 'skewX(-6deg)',
-            opacity: 0.7,
-            zIndex: 1,
-          }}
-        />
-
         <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-0" style={{ minHeight: '92vh' }}>
 
           <div className="flex flex-col justify-center py-20 md:py-0 pr-0 md:pr-16">
@@ -279,7 +265,7 @@ export function HomePage() {
             </div>
           </div>
 
-          <div className="hidden md:flex flex-col justify-center gap-6 pl-12 border-l border-white/10">
+          <div className="hidden md:flex flex-col justify-center gap-6 pl-12">
 
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 blink-live" style={{ background: RED }} />
