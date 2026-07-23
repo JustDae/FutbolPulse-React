@@ -14,7 +14,6 @@ import equiposImg from '@/assets/equipos.png';
 import partidosImg from '@/assets/partidos.png';
 import ctaBgImg from '@/assets/cta_bg.jpg';
 import heroVideo from '@/assets/hero_video.mp4';
-import soccerBall from '@/assets/3d_soccer_ball.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -125,47 +124,7 @@ export function HomePage() {
   const mainRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    // A continuous gentle float for the ball when stationary
-    gsap.to('.gsap-ball-inner', {
-      y: -15,
-      duration: 2,
-      yoyo: true,
-      repeat: -1,
-      ease: 'sine.inOut'
-    });
-
-    // 1. Existing soccer ball timeline
-    const ballTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: mainRef.current,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 1, // smooth scrubbing
-      }
-    });
-
-    ballTl.to('.gsap-soccer-ball', {
-      top: '35vh',
-      left: '75vw',
-      scale: 0.7,
-      rotation: 180,
-      ease: 'power1.inOut',
-    }, 0)
-    .to('.gsap-soccer-ball', {
-      top: '65vh',
-      left: '10vw',
-      scale: 0.9,
-      rotation: 360,
-      ease: 'power1.inOut',
-    }, 0.3)
-    .to('.gsap-soccer-ball', {
-      top: '80vh',
-      left: '50vw',
-      scale: 2.5,
-      rotation: 720,
-      opacity: 0,
-      ease: 'power2.in',
-    }, 0.7);
+    // 1. (Removed ball timeline)
 
     // 2. SplitType Text Animations
     const splitTexts = document.querySelectorAll('.split-text-anim');
@@ -238,28 +197,6 @@ export function HomePage() {
   return (
     <ReactLenis root>
       <div ref={mainRef} className="w-full overflow-x-hidden relative" style={{ fontFamily: "'Inter', sans-serif" }}>
-
-        {/* Floating 3D GSAP Ball */}
-      <div 
-        className="gsap-soccer-ball pointer-events-none z-[100]"
-        style={{ 
-          position: 'fixed', 
-          top: '15vh', 
-          left: '8vw', 
-          width: 'clamp(150px, 15vw, 300px)', 
-          aspectRatio: '1/1',
-          willChange: 'transform, top, left'
-        }}
-      >
-        <div className="gsap-ball-inner w-full h-full">
-          <img 
-            src={soccerBall} 
-            alt="3D Soccer Ball" 
-            className="w-full h-full object-cover" 
-            style={{ clipPath: 'circle(48.5% at 50% 50%)', filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.5))' }}
-          />
-        </div>
-      </div>
 
       <section
         className="relative w-full overflow-hidden"
