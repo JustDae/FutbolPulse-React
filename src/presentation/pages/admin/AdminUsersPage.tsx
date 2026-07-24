@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { userRepository } from '@/infrastructure/adapters/axios-user.repository';
+import { subscriptionRepository } from '@/infrastructure/adapters/axios-subscription.repository';
 import type { LoggedUser } from '@/domain/entities/logged-user.entity';
-import { Loader2, Users, ShieldAlert, ShieldCheck, Mail, UserCog, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Loader2, Users, ShieldAlert, ShieldCheck, Mail, UserCog, Search, ChevronLeft, ChevronRight, Crown } from 'lucide-react';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/presentation/components/ui/card';
 
@@ -46,6 +47,22 @@ export const AdminUsersPage = () => {
       }
     } catch (error) {
       toast.error('Error al actualizar el rol');
+      console.error(error);
+    }
+  };
+
+  const handleMakePremium = async (userId: string) => {
+    try {
+      const nextYear = new Date();
+      nextYear.setFullYear(nextYear.getFullYear() + 1);
+      await subscriptionRepository.createSubscription({
+        usuario_id: userId,
+        plan: 'Premium',
+        fecha_vencimiento: nextYear.toISOString().split('T')[0]
+      });
+      toast.success('¡Suscripción Premium asignada con éxito!');
+    } catch (error) {
+      toast.error('Error al asignar Premium (quizá ya tenga una suscripción activa)');
       console.error(error);
     }
   };
@@ -147,19 +164,28 @@ export const AdminUsersPage = () => {
                           </div>
                         </td>
                         <td className="py-4 px-6">
-                          <div className="relative inline-flex items-center">
-                            <UserCog className="absolute left-3.5 h-3.5 w-3.5 text-[#E63946] pointer-events-none" />
-                            <select
-                              className="appearance-none pl-10 pr-9 py-2 bg-slate-50 dark:bg-[#0B1220] text-slate-800 dark:text-white border border-slate-200 dark:border-[#1C2B45] hover:border-[#E63946] rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer outline-none transition-all"
-                              value={activeDropdownValue}
-                              onChange={(e) => handleChangeRole((u.id || u.user_id)!, e.target.value)}
+                          <div className="flex items-center gap-3">
+                            <div className="relative inline-flex items-center">
+                              <UserCog className="absolute left-3.5 h-3.5 w-3.5 text-[#E63946] pointer-events-none" />
+                              <select
+                                className="appearance-none pl-10 pr-9 py-2 bg-slate-50 dark:bg-[#0B1220] text-slate-800 dark:text-white border border-slate-200 dark:border-[#1C2B45] hover:border-[#E63946] rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer outline-none transition-all"
+                                value={activeDropdownValue}
+                                onChange={(e) => handleChangeRole((u.id || u.user_id)!, e.target.value)}
+                              >
+                                <option value="Player">Jugador</option>
+                                <option value="Coach">Entrenador</option>
+                                <option value="Scout">Scout</option>
+                                <option value="Admin">Admin</option>
+                              </select>
+                              <div className="absolute right-3.5 pointer-events-none text-slate-400 dark:text-white/40 text-[10px]">▼</div>
+                            </div>
+                            <button 
+                              onClick={() => handleMakePremium((u.id || u.user_id)!)}
+                              className="p-2 rounded-xl bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-white transition-colors border border-amber-500/20"
+                              title="Asignar Plan Premium"
                             >
-                              <option value="Player">Jugador</option>
-                              <option value="Coach">Entrenador</option>
-                              <option value="Scout">Scout</option>
-                              <option value="Admin">Admin</option>
-                            </select>
-                            <div className="absolute right-3.5 pointer-events-none text-slate-400 dark:text-white/40 text-[10px]">▼</div>
+                              <Crown className="w-4 h-4" />
+                            </button>
                           </div>
                         </td>
                         <td className="py-4 px-6 text-center">
