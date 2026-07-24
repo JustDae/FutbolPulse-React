@@ -6,7 +6,7 @@ import { useTeamStore } from '@/presentation/store/team.store';
 import { TeamBadge } from '@/presentation/components/TeamBadge';
 import { ArrowLeft, Clock, Edit2, Shield, Activity, Users } from 'lucide-react';
 
-const RED = '#E31C3D';
+const RED = '#E63946';
 const OFF_WHITE = '#F4F4F5';
 const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 

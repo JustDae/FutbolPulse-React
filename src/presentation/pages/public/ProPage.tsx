@@ -7,7 +7,7 @@ import { subscriptionRepository } from '@/infrastructure/adapters/axios-subscrip
 import { ArrowRight, Zap } from 'lucide-react';
 import { Magnetic } from '@/presentation/components/Magnetic';
 
-const RED = '#E31C3D';
+const RED = '#E63946';
 const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 
 function RedLabel({ children }: { children: React.ReactNode }) {

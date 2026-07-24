@@ -85,7 +85,7 @@ export const AdminDashboardPage = () => {
 
   if (error) {
     return (
-      <div className="p-4 border-l-4 border-[#E31C3D] bg-[#E31C3D]/10 text-[#E31C3D] text-xs font-bold uppercase tracking-wider rounded-r-xl">
+      <div className="p-4 border-l-4 border-[#E63946] bg-[#E63946]/10 text-[#E63946] text-xs font-bold uppercase tracking-wider rounded-r-xl">
         {error}
       </div>
     );
@@ -100,7 +100,7 @@ export const AdminDashboardPage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-slate-200 dark:border-[#1C2B45] pb-6">
         <div>
           <div className="flex items-center gap-3">
-            <div className="w-2 h-7 bg-[#E31C3D] rounded-full" />
+            <div className="w-2 h-7 bg-[#E63946] rounded-full" />
             <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
               Panel de Control
             </h1>
@@ -115,14 +115,14 @@ export const AdminDashboardPage = () => {
         {statConfig.map(({ key, label, description, icon: Icon }) => (
           <Card 
             key={key} 
-            className="group relative overflow-hidden bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] hover:border-[#E31C3D]/50 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+            className="group relative overflow-hidden bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] hover:border-[#E63946]/50 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
             style={{ minHeight: '160px' }}
           >
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E31C3D] to-transparent opacity-40 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E63946] to-transparent opacity-40 group-hover:opacity-100 transition-opacity" />
 
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500 dark:text-white/60 uppercase tracking-wider">{label}</span>
-              <div className="p-2.5 bg-slate-100 dark:bg-[#1C2B45]/50 text-[#E31C3D] rounded-xl border border-slate-200 dark:border-[#1C2B45] group-hover:bg-[#E31C3D] group-hover:text-white transition-colors">
+              <div className="p-2.5 bg-slate-100 dark:bg-[#1C2B45]/50 text-[#E63946] rounded-xl border border-slate-200 dark:border-[#1C2B45] group-hover:bg-[#E63946] group-hover:text-white transition-colors">
                 <Icon className="h-4.5 w-4.5" />
               </div>
             </div>

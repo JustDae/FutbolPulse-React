@@ -55,7 +55,7 @@ export const AdminTeamsPage = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#1C2B45] pb-6">
         <div>
           <div className="flex items-center gap-3">
-            <div className="w-2 h-7 bg-[#E31C3D] rounded-full" />
+            <div className="w-2 h-7 bg-[#E63946] rounded-full" />
             <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
               Equipos Registrados
             </h1>
@@ -64,7 +64,7 @@ export const AdminTeamsPage = () => {
         </div>
         <button
           onClick={handleOpenCreate}
-          className="flex items-center gap-2 rounded-xl bg-[#E31C3D] hover:bg-[#c61834] px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-all shadow-lg shadow-[#E31C3D]/20 active:scale-95 self-start md:self-auto cursor-pointer"
+          className="flex items-center gap-2 rounded-xl bg-[#E63946] hover:bg-[#c61834] px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-all shadow-lg shadow-[#E63946]/20 active:scale-95 self-start md:self-auto cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           Añadir Equipo
@@ -72,7 +72,7 @@ export const AdminTeamsPage = () => {
       </div>
 
       {error && (
-        <div className="rounded-xl border-l-4 border-[#E31C3D] bg-red-50 dark:bg-[#E31C3D]/10 p-4 text-xs text-[#E31C3D] font-bold">
+        <div className="rounded-xl border-l-4 border-[#E63946] bg-red-50 dark:bg-[#E63946]/10 p-4 text-xs text-[#E63946] font-bold">
           Error: {error}
         </div>
       )}
@@ -86,7 +86,7 @@ export const AdminTeamsPage = () => {
           {displayedTeams.map((team) => (
             <div
               key={team.id}
-              className="group relative flex flex-col justify-between rounded-2xl bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] hover:border-[#E31C3D]/50 p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
+              className="group relative flex flex-col justify-between rounded-2xl bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] hover:border-[#E63946]/50 p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
             >
               <div className="absolute right-4 top-4">
                 <DropdownMenu>
@@ -105,7 +105,7 @@ export const AdminTeamsPage = () => {
                     </DropdownMenuItem>
                     <DropdownMenuItem 
                       onClick={() => handleDelete(team.id, team.name)}
-                      className="cursor-pointer gap-2 text-[#E31C3D] focus:bg-red-50 dark:focus:bg-[#E31C3D]/15 focus:text-[#E31C3D]"
+                      className="cursor-pointer gap-2 text-[#E63946] focus:bg-red-50 dark:focus:bg-[#E63946]/15 focus:text-[#E63946]"
                     >
                       <Trash2 className="h-4 w-4" />
                       <span>Eliminar</span>
@@ -115,11 +115,11 @@ export const AdminTeamsPage = () => {
               </div>
 
               <div className="flex flex-col items-center text-center mt-2">
-                <div className="mb-4 h-20 w-20 overflow-hidden rounded-2xl bg-slate-50 dark:bg-[#0B1220] p-2 border border-slate-200 dark:border-[#1C2B45] shrink-0 shadow-inner group-hover:border-[#E31C3D]/40 transition-colors">
+                <div className="mb-4 h-20 w-20 overflow-hidden rounded-2xl bg-slate-50 dark:bg-[#0B1220] p-2 border border-slate-200 dark:border-[#1C2B45] shrink-0 shadow-inner group-hover:border-[#E63946]/40 transition-colors">
                   {team.badgeUrl ? (
                     <img src={team.badgeUrl} alt={team.name} className="h-full w-full object-contain" />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center text-xl font-black text-[#E31C3D]" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
+                    <div className="flex h-full w-full items-center justify-center text-xl font-black text-[#E63946]" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
                       {team.name.substring(0, 2).toUpperCase()}
                     </div>
                   )}
@@ -143,7 +143,7 @@ export const AdminTeamsPage = () => {
                   </div>
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-slate-400 dark:text-white/40 font-semibold uppercase text-[10px] tracking-wider">Fundado</span>
-                    <span className="font-bold text-[#E31C3D]">
+                    <span className="font-bold text-[#E63946]">
                       {team.foundedYear > 0 ? team.foundedYear : '-'}
                     </span>
                   </div>
@@ -155,12 +155,12 @@ export const AdminTeamsPage = () => {
           {/* Tarjeta fantasma para añadir equipo */}
           <div 
             onClick={handleOpenCreate}
-            className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 dark:border-[#1C2B45] bg-white dark:bg-[#10182B]/40 p-6 transition-all hover:bg-slate-50 dark:hover:bg-[#10182B] cursor-pointer hover:border-[#E31C3D] group min-h-[280px]"
+            className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 dark:border-[#1C2B45] bg-white dark:bg-[#10182B]/40 p-6 transition-all hover:bg-slate-50 dark:hover:bg-[#10182B] cursor-pointer hover:border-[#E63946] group min-h-[280px]"
           >
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 dark:bg-[#1C2B45]/50 group-hover:bg-[#E31C3D] transition-colors mb-3 shadow-md">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 dark:bg-[#1C2B45]/50 group-hover:bg-[#E63946] transition-colors mb-3 shadow-md">
               <Plus className="h-6 w-6 text-slate-400 dark:text-white/50 group-hover:text-white transition-colors" />
             </div>
-            <p className="font-bold text-xs uppercase tracking-wider text-slate-500 dark:text-white/60 group-hover:text-[#E31C3D] transition-colors">
+            <p className="font-bold text-xs uppercase tracking-wider text-slate-500 dark:text-white/60 group-hover:text-[#E63946] transition-colors">
               Añadir nuevo equipo
             </p>
           </div>

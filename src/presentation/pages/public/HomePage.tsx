@@ -19,7 +19,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const NAVY = '#0B1220';
 const NAVY_MID = '#10182B';
-const RED = '#E31C3D';
+const RED = '#E63946';
 const OFF_WHITE = '#F4F4F5';
 const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 

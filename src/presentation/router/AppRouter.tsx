@@ -38,6 +38,13 @@ import { ProfilePage } from '../pages/profile/ProfilePage';
 import { StatisticsPage } from '../pages/statistics/StatisticsPage';
 import { ProPage } from '../pages/public/ProPage';
 
+import { UnifiedDashboardShell } from '../components/UnifiedDashboardShell';
+import { UnifiedDashboardPage } from '../pages/dashboard/UnifiedDashboardPage';
+import { UnifiedPlantillaPage } from '../pages/dashboard/UnifiedPlantillaPage';
+import { UnifiedCompeticionPage } from '../pages/dashboard/UnifiedCompeticionPage';
+import { UnifiedScoutingPage } from '../pages/dashboard/UnifiedScoutingPage';
+import { UnifiedSaludPage } from '../pages/dashboard/UnifiedSaludPage';
+
 export const AppRouter = () => {
   return (
     <BrowserRouter>
@@ -60,6 +67,19 @@ export const AppRouter = () => {
 
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+
+        {/* Unified Dashboard (Premium Module) */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<UnifiedDashboardShell />}>
+            <Route index element={<UnifiedDashboardPage />} />
+            <Route path="plantilla" element={<UnifiedPlantillaPage />} />
+            <Route path="competicion" element={<UnifiedCompeticionPage />} />
+            <Route path="scouting" element={<UnifiedScoutingPage />} />
+            <Route path="salud" element={<UnifiedSaludPage />} />
+            <Route path="perfil" element={<ProfilePage />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Route>
+        </Route>
 
         <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
           <Route path="/admin" element={<AdminShell />}>

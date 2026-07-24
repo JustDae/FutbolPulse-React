@@ -40,7 +40,7 @@ export const AdminSubscriptionsPage = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#1C2B45] pb-6">
         <div>
           <div className="flex items-center gap-3">
-            <div className="w-2 h-7 bg-[#E31C3D] rounded-full" />
+            <div className="w-2 h-7 bg-[#E63946] rounded-full" />
             <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
               Gestión de Suscripciones
             </h1>
@@ -60,7 +60,7 @@ export const AdminSubscriptionsPage = () => {
           <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-white/40 mt-1">Planes Activos</div>
         </div>
         <div className="rounded-2xl border border-slate-200 dark:border-[#1C2B45] bg-white dark:bg-[#10182B] p-5 shadow-md">
-          <div className="text-3xl font-black text-[#E31C3D]" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>${monthlyRevenue} USD</div>
+          <div className="text-3xl font-black text-[#E63946]" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>${monthlyRevenue} USD</div>
           <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-white/40 mt-1">Ingreso Estimado Mensual</div>
         </div>
       </div>
@@ -82,7 +82,7 @@ export const AdminSubscriptionsPage = () => {
             {isLoading ? (
               <tr>
                 <td colSpan={6} className="py-16 text-center">
-                  <Loader2 className="animate-spin h-8 w-8 text-[#E31C3D] mx-auto mb-3" />
+                  <Loader2 className="animate-spin h-8 w-8 text-[#E63946] mx-auto mb-3" />
                   <p className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-white/50">Cargando suscripciones...</p>
                 </td>
               </tr>
@@ -96,7 +96,7 @@ export const AdminSubscriptionsPage = () => {
               subscriptions.map((sub) => (
                 <tr key={sub.id} className="hover:bg-slate-50 dark:hover:bg-[#1C2B45]/30 transition-colors">
                   <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">{sub.usuario_email || sub.usuario_id}</td>
-                  <td className="px-6 py-4 font-bold text-[#E31C3D]">{sub.plan || 'Estándar'}</td>
+                  <td className="px-6 py-4 font-bold text-[#E63946]">{sub.plan || 'Estándar'}</td>
                   <td className="px-6 py-4 text-slate-600 dark:text-white/70">{sub.fecha_inicio ? new Date(sub.fecha_inicio).toLocaleDateString() : '-'}</td>
                   <td className="px-6 py-4 text-slate-600 dark:text-white/70">{sub.fecha_vencimiento ? new Date(sub.fecha_vencimiento).toLocaleDateString() : '-'}</td>
                   <td className="px-6 py-4">

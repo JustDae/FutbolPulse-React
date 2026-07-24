@@ -11,7 +11,7 @@ const teamRepository = new AxiosTeamRepository();
 const playerRepository = new AxiosPlayerRepository();
 
 const NAVY = '#0B1220';
-const RED = '#E31C3D';
+const RED = '#E63946';
 const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 
 export function TeamDetailPage() {

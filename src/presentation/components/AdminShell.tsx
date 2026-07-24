@@ -13,7 +13,7 @@ import {
 import { cn } from '@/presentation/utils/cn';
 import { Trophy, Users, UserSquare2, Shield, CalendarDays, LayoutDashboard, CreditCard, ChevronRight, LogOut } from 'lucide-react';
 
-const RED = '#E31C3D';
+const RED = '#E63946';
 const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 
 interface NavItem {
@@ -49,7 +49,7 @@ function SideNavLink({ item, currentPath, onClick }: SideNavLinkProps) {
       className={cn(
         'group relative flex items-center gap-3 px-4 py-3 text-xs font-bold uppercase tracking-wider transition-all duration-200 rounded-xl',
         isActive
-          ? 'bg-[#E31C3D] text-white shadow-lg shadow-[#E31C3D]/25'
+          ? 'bg-[#E63946] text-white shadow-lg shadow-[#E63946]/25'
           : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-white/60 dark:hover:text-white dark:hover:bg-[#1C2B45]/50',
       )}
     >
@@ -73,7 +73,7 @@ function SidebarContent({ currentPath, onLinkClick }: SidebarContentProps) {
           <span className="text-slate-900 dark:text-white ml-1" style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: '26px', letterSpacing: '-0.01em' }}>PULSE</span>
           <span className="ml-1.5 w-2 h-2 rounded-full" style={{ background: RED }} />
         </Link>
-        <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-widest bg-[#E31C3D]/10 text-[#E31C3D] border border-[#E31C3D]/25">
+        <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-widest bg-[#E63946]/10 text-[#E63946] border border-[#E63946]/25">
           <span>PANEL ADMINISTRADOR</span>
         </div>
       </div>
@@ -129,7 +129,7 @@ export function AdminShell() {
           </div>
 
           <div className="hidden md:flex flex-1">
-            <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#E31C3D] bg-[#E31C3D]/10 px-3.5 py-1.5 border border-[#E31C3D]/25 rounded-lg" style={{ fontFamily: "'Inter', sans-serif" }}>
+            <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#E63946] bg-[#E63946]/10 px-3.5 py-1.5 border border-[#E63946]/25 rounded-lg" style={{ fontFamily: "'Inter', sans-serif" }}>
               Panel de Administración
             </div>
           </div>
@@ -148,9 +148,9 @@ export function AdminShell() {
             {user && (
               <Link to="perfil" className="flex items-center gap-3 hover:opacity-85 transition-opacity">
                 {user.foto_perfil ? (
-                  <img src={user.foto_perfil} alt="Perfil" className="h-10 w-10 rounded-full object-cover border-2 border-[#E31C3D]" />
+                  <img src={user.foto_perfil} alt="Perfil" className="h-10 w-10 rounded-full object-cover border-2 border-[#E63946]" />
                 ) : (
-                  <div className="h-10 w-10 rounded-full bg-[#E31C3D]/10 border-2 border-[#E31C3D] flex items-center justify-center text-[#E31C3D] font-extrabold text-sm shadow-md">
+                  <div className="h-10 w-10 rounded-full bg-[#E63946]/10 border-2 border-[#E63946] flex items-center justify-center text-[#E63946] font-extrabold text-sm shadow-md">
                     {(user.nombre_completo || user.username || 'A').charAt(0).toUpperCase()}
                   </div>
                 )}

@@ -12,6 +12,15 @@ export class AxiosSubscriptionRepository {
     return data;
   }
 
+  async getActiveSubscription(): Promise<Subscription | null> {
+    try {
+      const { data } = await axiosClient.get<Subscription>('/suscripciones/activa/');
+      return data;
+    } catch (error) {
+      return null;
+    }
+  }
+
   async createSubscription(dto: CreateSubscriptionDto): Promise<Subscription> {
     const { data } = await axiosClient.post<Subscription>('/suscripciones/', dto);
     return data;

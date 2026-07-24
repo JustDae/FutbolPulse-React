@@ -7,7 +7,7 @@ import type { Team } from '@/domain/entities/team.entity';
 
 const teamRepository = new AxiosTeamRepository();
 
-const RED = '#E31C3D';
+const RED = '#E63946';
 const OFF_WHITE = '#F4F4F5';
 const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 import { TeamBadge } from '@/presentation/components/TeamBadge';

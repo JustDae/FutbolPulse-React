@@ -14,7 +14,7 @@ export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
   if (isLoading || !hasHydrated) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-[#0B1220] text-white">
-        <div className="text-xs font-bold uppercase tracking-widest text-[#E31C3D] animate-pulse">
+        <div className="text-xs font-bold uppercase tracking-widest text-[#E63946] animate-pulse">
           Cargando sesión...
         </div>
       </div>
@@ -33,8 +33,8 @@ export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
       return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-[#0B1220] text-white px-4 text-center">
           <div className="max-w-md w-full">
-            <div className="w-16 h-16 bg-[#E31C3D]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-[#E31C3D] text-3xl font-black">!</span>
+            <div className="w-16 h-16 bg-[#E63946]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <span className="text-[#E63946] text-3xl font-black">!</span>
             </div>
             <h1 className="text-2xl font-black uppercase tracking-tight mb-2" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
               Usuario no autorizado
@@ -44,7 +44,7 @@ export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
             </p>
             <button
               onClick={() => window.history.back()}
-              className="w-full bg-[#E31C3D] hover:bg-[#c61834] text-white font-bold uppercase tracking-widest text-xs py-3 rounded-xl transition-all"
+              className="w-full bg-[#E63946] hover:bg-[#c61834] text-white font-bold uppercase tracking-widest text-xs py-3 rounded-xl transition-all"
             >
               Volver Atrás
             </button>

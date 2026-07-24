@@ -226,7 +226,7 @@ export function PlayerShell() {
             {(user?.is_staff || user?.tipo_usuario === 'Admin') && (
               <Link
                 to="/admin"
-                className="text-xs font-extrabold text-white bg-[#E31C3D] hover:bg-[#c61834] px-4 py-2.5 rounded-full shadow-lg shadow-[#E31C3D]/25 transition-all cursor-pointer uppercase tracking-wider flex items-center gap-1.5"
+                className="text-xs font-extrabold text-white bg-[#E63946] hover:bg-[#c61834] px-4 py-2.5 rounded-full shadow-lg shadow-[#E63946]/25 transition-all cursor-pointer uppercase tracking-wider flex items-center gap-1.5"
               >
                 <span>Panel Administrador</span>
               </Link>

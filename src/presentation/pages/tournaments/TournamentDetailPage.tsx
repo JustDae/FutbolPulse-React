@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Medal, Trophy } from 'lucide-react';
 import { useTournamentStore } from '../../store/tournament.store';
 
-const RED = '#E31C3D';
+const RED = '#E63946';
 const OFF_WHITE = '#F4F4F5';
 const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 

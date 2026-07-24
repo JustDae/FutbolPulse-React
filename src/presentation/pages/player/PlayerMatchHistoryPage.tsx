@@ -94,7 +94,7 @@ export function TacticalBoard() {
         ctx.arc(x, y, 14, 0, Math.PI * 2);
         ctx.stroke();
 
-        ctx.fillStyle = 'var(--color-primary, #E31C3D)';
+        ctx.fillStyle = 'var(--color-primary, #E63946)';
         ctx.beginPath();
         ctx.arc(x, y, 9, 0, Math.PI * 2);
         ctx.fill();
@@ -240,7 +240,7 @@ export function PlayerMatchHistoryPage() {
           {[
             { label: 'Victorias', value: wins,   color: '#22C55E' },
             { label: 'Empates',   value: draws,   color: '#EAB308' },
-            { label: 'Derrotas',  value: losses,  color: 'var(--color-primary, #E31C3D)' },
+            { label: 'Derrotas',  value: losses,  color: 'var(--color-primary, #E63946)' },
           ].map(({ label, value, color }) => (
             <div key={label} className="flex flex-col items-center justify-center">
               <span className="font-black text-4xl leading-none animate-fade-in" style={{ fontFamily: FONT_DISPLAY, color }}>

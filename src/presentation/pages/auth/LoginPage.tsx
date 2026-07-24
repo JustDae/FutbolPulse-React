@@ -8,7 +8,7 @@ import { ArrowLeft, ArrowRight, Mail, Lock } from 'lucide-react'
 import heroBgImg from '@/assets/hero_bg.jpg'
 
 const NAVY = '#0B1220'
-const RED = '#E31C3D'
+const RED = '#E63946'
 const FONT_DISPLAY = "'Barlow Condensed', sans-serif"
 
 const loginSchema = z.object({

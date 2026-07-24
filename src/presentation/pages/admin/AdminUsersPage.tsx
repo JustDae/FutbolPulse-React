@@ -71,7 +71,7 @@ export const AdminUsersPage = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#1C2B45] pb-6">
         <div>
           <div className="flex items-center gap-3">
-            <div className="w-2 h-7 bg-[#E31C3D] rounded-full" />
+            <div className="w-2 h-7 bg-[#E63946] rounded-full" />
             <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
               Directorio de Usuarios
             </h1>
@@ -82,7 +82,7 @@ export const AdminUsersPage = () => {
         <div className="flex items-center gap-3">
           <div className="bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] px-4 py-2 rounded-xl text-xs font-bold shadow-sm">
             <span className="text-slate-400 dark:text-white/50 uppercase tracking-widest text-[10px] mr-2">Total:</span>
-            <span className="text-[#E31C3D] font-black text-sm" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{users.length}</span>
+            <span className="text-[#E63946] font-black text-sm" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{users.length}</span>
           </div>
           <div className="bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] px-4 py-2 rounded-xl text-xs font-bold shadow-sm">
             <span className="text-slate-400 dark:text-white/50 uppercase tracking-widest text-[10px] mr-2">Staff:</span>
@@ -97,7 +97,7 @@ export const AdminUsersPage = () => {
           <input
             type="text"
             placeholder="Buscar por nombre, usuario o email..."
-            className="w-full pl-10 pr-4 py-2.5 text-xs bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-white/40 focus:outline-none focus:border-[#E31C3D] transition-all"
+            className="w-full pl-10 pr-4 py-2.5 text-xs bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-white/40 focus:outline-none focus:border-[#E63946] transition-all"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -108,7 +108,7 @@ export const AdminUsersPage = () => {
         <CardContent className="p-0">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center p-20">
-              <Loader2 className="animate-spin h-8 w-8 text-[#E31C3D] mb-4" />
+              <Loader2 className="animate-spin h-8 w-8 text-[#E63946] mb-4" />
               <p className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-white/50">Cargando directorio...</p>
             </div>
           ) : (
@@ -131,7 +131,7 @@ export const AdminUsersPage = () => {
                       <tr key={u.id || u.user_id || u.email} className="hover:bg-slate-50 dark:hover:bg-[#1C2B45]/30 transition-colors">
                         <td className="py-4 px-6">
                           <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] flex items-center justify-center text-[#E31C3D] font-extrabold text-xs uppercase shrink-0 shadow-inner">
+                            <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] flex items-center justify-center text-[#E63946] font-extrabold text-xs uppercase shrink-0 shadow-inner">
                               {(u.nombre_completo || u.username || u.email).charAt(0)}
                             </div>
                             <div>
@@ -148,9 +148,9 @@ export const AdminUsersPage = () => {
                         </td>
                         <td className="py-4 px-6">
                           <div className="relative inline-flex items-center">
-                            <UserCog className="absolute left-3.5 h-3.5 w-3.5 text-[#E31C3D] pointer-events-none" />
+                            <UserCog className="absolute left-3.5 h-3.5 w-3.5 text-[#E63946] pointer-events-none" />
                             <select
-                              className="appearance-none pl-10 pr-9 py-2 bg-slate-50 dark:bg-[#0B1220] text-slate-800 dark:text-white border border-slate-200 dark:border-[#1C2B45] hover:border-[#E31C3D] rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer outline-none transition-all"
+                              className="appearance-none pl-10 pr-9 py-2 bg-slate-50 dark:bg-[#0B1220] text-slate-800 dark:text-white border border-slate-200 dark:border-[#1C2B45] hover:border-[#E63946] rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer outline-none transition-all"
                               value={activeDropdownValue}
                               onChange={(e) => handleChangeRole((u.id || u.user_id)!, e.target.value)}
                             >

@@ -23,7 +23,7 @@ const BG_CARD = '#0B0F19';
 const BG_INNER = '#151D30';
 const BORDER = 'rgba(255, 255, 255, 0.08)';
 const ACCENT = '#22C55E';
-const RIVAL = '#E31C3D';
+const RIVAL = '#E63946';
 
 export function LineupBuilderPage() {
   const { user } = useAuthStore();

@@ -55,12 +55,12 @@ export function ProfilePage() {
       <div
         className="relative overflow-hidden p-8 md:p-10 border border-slate-200 dark:border-[#1C2B45] rounded-2xl bg-white dark:bg-[#10182B] shadow-lg"
       >
-        <div className="absolute top-0 left-0 w-1.5 h-full bg-[#E31C3D]" />
+        <div className="absolute top-0 left-0 w-1.5 h-full bg-[#E63946]" />
         <div className="relative z-10 pl-4 flex items-center justify-between gap-4 flex-wrap">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-6 h-[2px] bg-[#E31C3D]" />
-              <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#E31C3D]">
+              <div className="w-6 h-[2px] bg-[#E63946]" />
+              <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#E63946]">
                 Mi Cuenta
               </span>
             </div>
@@ -76,7 +76,7 @@ export function ProfilePage() {
           </div>
           <button
             onClick={() => logout()}
-            className="flex items-center gap-2 px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest border border-slate-200 dark:border-[#1C2B45] text-slate-700 dark:text-white/70 hover:border-[#E31C3D] hover:text-[#E31C3D] dark:hover:border-[#E31C3D] dark:hover:text-[#E31C3D] transition-all rounded-xl bg-slate-50 dark:bg-[#0B1220]"
+            className="flex items-center gap-2 px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest border border-slate-200 dark:border-[#1C2B45] text-slate-700 dark:text-white/70 hover:border-[#E63946] hover:text-[#E63946] dark:hover:border-[#E63946] dark:hover:text-[#E63946] transition-all rounded-xl bg-slate-50 dark:bg-[#0B1220]"
           >
             <LogOut className="w-3.5 h-3.5" /> Cerrar Sesión
           </button>
@@ -97,7 +97,7 @@ export function ProfilePage() {
               </h2>
               <p className="text-[10px] mt-0.5 text-slate-500 dark:text-white/40 uppercase tracking-wider">Tus datos principales de usuario.</p>
             </div>
-            <Settings className="w-4 h-4 text-[#E31C3D]" />
+            <Settings className="w-4 h-4 text-[#E63946]" />
           </div>
 
           <div className="p-6">
@@ -106,10 +106,10 @@ export function ProfilePage() {
                 {/* Avatar + info */}
                 <div className="flex items-center gap-5">
                   {profilePhoto ? (
-                    <img src={profilePhoto} alt="Perfil" className="w-16 h-16 object-cover rounded-2xl border-2 border-[#E31C3D] shadow-md" />
+                    <img src={profilePhoto} alt="Perfil" className="w-16 h-16 object-cover rounded-2xl border-2 border-[#E63946] shadow-md" />
                   ) : (
                     <div
-                      className="w-16 h-16 flex items-center justify-center font-black text-white text-xl shrink-0 bg-[#E31C3D] rounded-2xl shadow-md"
+                      className="w-16 h-16 flex items-center justify-center font-black text-white text-xl shrink-0 bg-[#E63946] rounded-2xl shadow-md"
                       style={{ fontFamily: FONT_DISPLAY }}
                     >
                       {initials}
@@ -122,7 +122,7 @@ export function ProfilePage() {
                     <p className="text-xs mt-0.5 text-slate-500 dark:text-white/50">{user.email}</p>
                     <div className="flex items-center gap-2 mt-2 flex-wrap">
                       <span
-                        className="px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider bg-[#E31C3D]/10 border border-[#E31C3D]/30 text-[#E31C3D] rounded-lg"
+                        className="px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider bg-[#E63946]/10 border border-[#E63946]/30 text-[#E63946] rounded-lg"
                       >
                         {roleLabel}
                       </span>
@@ -157,9 +157,9 @@ export function ProfilePage() {
                 <div className="flex justify-center mb-2">
                   <div className="relative group cursor-pointer">
                     {profilePhoto ? (
-                      <img src={profilePhoto} alt="Perfil" className="w-16 h-16 object-cover rounded-2xl border-2 border-[#E31C3D]" />
+                      <img src={profilePhoto} alt="Perfil" className="w-16 h-16 object-cover rounded-2xl border-2 border-[#E63946]" />
                     ) : (
-                      <div className="w-16 h-16 flex items-center justify-center font-black text-white text-xl bg-[#E31C3D] rounded-2xl" style={{ fontFamily: FONT_DISPLAY }}>
+                      <div className="w-16 h-16 flex items-center justify-center font-black text-white text-xl bg-[#E63946] rounded-2xl" style={{ fontFamily: FONT_DISPLAY }}>
                         {initials}
                       </div>
                     )}
@@ -174,7 +174,7 @@ export function ProfilePage() {
                   <label className="block text-[9px] font-extrabold uppercase tracking-[0.15em] mb-2 text-slate-500 dark:text-white/50">Nombre Completo</label>
                   <input
                     type="text"
-                    className="w-full h-10 px-3 text-xs font-semibold text-slate-900 dark:text-white bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] focus:border-[#E31C3D] outline-none transition-all rounded-xl"
+                    className="w-full h-10 px-3 text-xs font-semibold text-slate-900 dark:text-white bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] focus:border-[#E63946] outline-none transition-all rounded-xl"
                     value={editForm.nombre_completo}
                     onChange={e => setEditForm(prev => ({ ...prev, nombre_completo: e.target.value }))}
                   />
@@ -184,7 +184,7 @@ export function ProfilePage() {
                   <label className="block text-[9px] font-extrabold uppercase tracking-[0.15em] mb-2 text-slate-500 dark:text-white/50">Correo Electrónico</label>
                   <input
                     type="email"
-                    className="w-full h-10 px-3 text-xs font-semibold text-slate-900 dark:text-white bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] focus:border-[#E31C3D] outline-none transition-all rounded-xl"
+                    className="w-full h-10 px-3 text-xs font-semibold text-slate-900 dark:text-white bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] focus:border-[#E63946] outline-none transition-all rounded-xl"
                     value={editForm.email}
                     onChange={e => setEditForm(prev => ({ ...prev, email: e.target.value }))}
                   />
@@ -192,7 +192,7 @@ export function ProfilePage() {
 
                 <div className="flex gap-3 pt-2">
                   <button
-                    className="flex-1 flex items-center justify-center gap-2 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white transition-opacity hover:opacity-90 bg-[#E31C3D] rounded-xl shadow-md"
+                    className="flex-1 flex items-center justify-center gap-2 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white transition-opacity hover:opacity-90 bg-[#E63946] rounded-xl shadow-md"
                     onClick={handleSave}
                   >
                     <Save className="w-3.5 h-3.5" /> Guardar
@@ -235,9 +235,9 @@ export function ProfilePage() {
                 ].map(({ icon: Icon, label }) => (
                   <button
                     key={label}
-                    className="w-full flex items-center gap-3 px-4 py-3 text-[10px] font-extrabold uppercase tracking-widest border transition-colors bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200 dark:bg-[#0B1220] dark:border-[#1C2B45] dark:text-white/70 dark:hover:border-[#E31C3D] dark:hover:text-[#E31C3D] rounded-xl"
+                    className="w-full flex items-center gap-3 px-4 py-3 text-[10px] font-extrabold uppercase tracking-widest border transition-colors bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200 dark:bg-[#0B1220] dark:border-[#1C2B45] dark:text-white/70 dark:hover:border-[#E63946] dark:hover:text-[#E63946] rounded-xl"
                   >
-                    <Icon className="w-4 h-4 text-[#E31C3D]" /> {label}
+                    <Icon className="w-4 h-4 text-[#E63946]" /> {label}
                   </button>
                 ))}
               </div>

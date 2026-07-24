@@ -130,8 +130,8 @@ export function RadarChart({ data }: RadarChartProps) {
       <svg width="300" height="250" className="overflow-visible">
         <defs>
           <radialGradient id="radarFill" cx="50%" cy="50%" r="50%">
-            <stop offset="0%"   stopColor="var(--color-primary, #E31C3D)" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="var(--color-primary, #E31C3D)" stopOpacity="0.08" />
+            <stop offset="0%"   stopColor="var(--color-primary, #E63946)" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="var(--color-primary, #E63946)" stopOpacity="0.08" />
           </radialGradient>
         </defs>
 
@@ -161,7 +161,7 @@ export function RadarChart({ data }: RadarChartProps) {
         <polygon
           points={dataPolygonPoints}
           fill="url(#radarFill)"
-          stroke="var(--color-primary, #E31C3D)"
+          stroke="var(--color-primary, #E63946)"
           strokeWidth="2"
         />
 
@@ -169,7 +169,7 @@ export function RadarChart({ data }: RadarChartProps) {
           <circle
             key={idx}
             cx={pt.x} cy={pt.y} r={4}
-            fill="var(--color-primary, #E31C3D)"
+            fill="var(--color-primary, #E63946)"
             stroke="currentColor"
             className="text-background cursor-pointer"
             strokeWidth="1.5"

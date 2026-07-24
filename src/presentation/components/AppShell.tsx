@@ -19,7 +19,7 @@ function navLinkClass({ isActive }: { isActive: boolean }) {
   return [
     'flex items-center h-full px-5 text-[11px] font-bold uppercase tracking-[0.15em] transition-colors relative',
     isActive
-      ? 'text-white after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-[#E31C3D]'
+      ? 'text-white after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-[#E63946]'
       : 'text-white/60 hover:text-white',
   ].join(' ')
 }
@@ -51,7 +51,7 @@ export function AppShell() {
     <div className="flex min-h-screen flex-col" style={{ background: '#F4F4F5' }}>
 
       {}
-      <div className="w-full overflow-hidden h-8 flex items-center" style={{ background: '#E31C3D' }}>
+      <div className="w-full overflow-hidden h-8 flex items-center" style={{ background: '#E63946' }}>
         <div className="flex items-center h-full px-4 shrink-0 border-r border-white/20" style={{ background: '#0B1220' }}>
           <span className="text-white text-[9px] font-bold tracking-[0.2em] uppercase blink-live">● EN VIVO</span>
         </div>
@@ -74,7 +74,7 @@ export function AppShell() {
           <Link to="/" className="flex items-center gap-0 shrink-0 group">
             <span
               className="font-display font-black italic text-2xl tracking-tight uppercase"
-              style={{ color: '#E31C3D', fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: '-0.01em' }}
+              style={{ color: '#E63946', fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: '-0.01em' }}
             >
               FÚTBOL
             </span>
@@ -84,7 +84,7 @@ export function AppShell() {
             >
               PULSE
             </span>
-            <span className="ml-1.5 w-2 h-2 shrink-0" style={{ background: '#E31C3D' }} />
+            <span className="ml-1.5 w-2 h-2 shrink-0" style={{ background: '#E63946' }} />
           </Link>
 
           {}
@@ -93,7 +93,7 @@ export function AppShell() {
             <NavLink to="/equipos" className={navLinkClass}>Equipos</NavLink>
             <NavLink to="/partidos" className={navLinkClass}>Partidos</NavLink>
             <NavLink to="/estadisticas" className={navLinkClass}>Estadísticas</NavLink>
-            <NavLink to="/pro" className={navLinkClass} style={{ color: '#E31C3D' }}>PRO</NavLink>
+            <NavLink to="/pro" className={navLinkClass} style={{ color: '#E63946' }}>PRO</NavLink>
           </nav>
 
           <div className="flex-1" />
@@ -136,7 +136,7 @@ export function AppShell() {
                   <DropdownMenuSeparator className="bg-white/10" />
                   <DropdownMenuItem
                     onClick={handleLogout}
-                    className="flex items-center gap-2 cursor-pointer text-[#E31C3D] focus:text-[#E31C3D] focus:bg-[#E31C3D]/10"
+                    className="flex items-center gap-2 cursor-pointer text-[#E63946] focus:text-[#E63946] focus:bg-[#E63946]/10"
                   >
                     Cerrar sesión
                   </DropdownMenuItem>
@@ -146,7 +146,7 @@ export function AppShell() {
               <Button
                 asChild
                 className="text-[10px] font-bold uppercase tracking-[0.15em] px-6 h-9 hover:opacity-90 transition-opacity"
-                style={{ background: '#E31C3D', color: '#FFF', borderRadius: 0 }}
+                style={{ background: '#E63946', color: '#FFF', borderRadius: 0 }}
               >
                 <Link to="/login">Iniciar sesión</Link>
               </Button>
@@ -178,7 +178,7 @@ export function AppShell() {
                 to={to}
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
-                  `block px-6 py-4 text-sm font-bold uppercase tracking-widest border-b border-white/5 transition-colors ${isActive ? 'text-[#E31C3D]' : 'text-white/70 hover:text-white'}`
+                  `block px-6 py-4 text-sm font-bold uppercase tracking-widest border-b border-white/5 transition-colors ${isActive ? 'text-[#E63946]' : 'text-white/70 hover:text-white'}`
                 }
               >
                 {label}
@@ -198,9 +198,9 @@ export function AppShell() {
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>
             <div className="flex items-center gap-0 mb-4">
-              <span className="font-display font-black italic text-xl uppercase" style={{ color: '#E31C3D', fontFamily: "'Barlow Condensed', sans-serif" }}>FÚTBOL</span>
+              <span className="font-display font-black italic text-xl uppercase" style={{ color: '#E63946', fontFamily: "'Barlow Condensed', sans-serif" }}>FÚTBOL</span>
               <span className="font-display font-black italic text-xl uppercase" style={{ color: '#FFF', fontFamily: "'Barlow Condensed', sans-serif" }}>PULSE</span>
-              <span className="ml-1 w-2 h-2" style={{ background: '#E31C3D' }} />
+              <span className="ml-1 w-2 h-2" style={{ background: '#E63946' }} />
             </div>
             <p className="text-white/40 text-xs leading-relaxed">
               Plataforma de gestión deportiva profesional. Estadísticas, alineaciones y análisis de rendimiento.
@@ -227,7 +227,7 @@ export function AppShell() {
           <p className="text-white/20 text-[10px] uppercase tracking-widest">
             © {new Date().getFullYear()} FútbolPulse
           </p>
-          <div className="w-16 h-[2px]" style={{ background: '#E31C3D' }} />
+          <div className="w-16 h-[2px]" style={{ background: '#E63946' }} />
         </div>
       </footer>
     </div>

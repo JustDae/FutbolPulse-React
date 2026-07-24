@@ -6,7 +6,7 @@ import { matchRepository } from '@/infrastructure/adapters/axios-match.repositor
 import type { Match } from '@/domain/entities/match.entity';
 import { useTeamStore } from '@/presentation/store/team.store';
 
-const RED = '#E31C3D';
+const RED = '#E63946';
 const OFF_WHITE = '#F4F4F5';
 const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 

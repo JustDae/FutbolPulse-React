@@ -7,7 +7,7 @@ import type { Tournament } from '@/domain/entities/tournament.entity';
 
 const tournamentRepo = new AxiosTournamentRepository();
 
-const RED = '#E31C3D';
+const RED = '#E63946';
 const OFF_WHITE = '#F4F4F5';
 const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 

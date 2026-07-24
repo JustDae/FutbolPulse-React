@@ -7,7 +7,7 @@ import { useAuthStore } from '../store/auth.store';
 const NAVY = '#0B1220';
 const NAVY_MID = '#10182B';
 const NAVY_LIGHT = '#1C2B45';
-const RED = '#E31C3D';
+const RED = '#E63946';
 const FONT_DISPLAY = "'Barlow Condensed', sans-serif";
 
 interface NavItem {
@@ -177,7 +177,7 @@ export function CoachShell() {
               {(user?.is_staff || user?.tipo_usuario === 'Admin') && (
                 <Link
                   to="/admin"
-                  className="text-xs font-extrabold text-white bg-[#E31C3D] hover:bg-[#c61834] px-4 py-1.5 rounded-full shadow-lg shadow-[#E31C3D]/25 transition-all cursor-pointer uppercase tracking-wider"
+                  className="text-xs font-extrabold text-white bg-[#E63946] hover:bg-[#c61834] px-4 py-1.5 rounded-full shadow-lg shadow-[#E63946]/25 transition-all cursor-pointer uppercase tracking-wider"
                 >
                   Panel Administrador
                 </Link>

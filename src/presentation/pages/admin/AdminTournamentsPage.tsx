@@ -42,7 +42,7 @@ export const AdminTournamentsPage = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#1C2B45] pb-6">
         <div>
           <div className="flex items-center gap-3">
-            <div className="w-2 h-7 bg-[#E31C3D] rounded-full" />
+            <div className="w-2 h-7 bg-[#E63946] rounded-full" />
             <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
               Gestión de Torneos
             </h1>
@@ -51,7 +51,7 @@ export const AdminTournamentsPage = () => {
         </div>
         <button
           onClick={handleOpenCreate}
-          className="flex items-center gap-2 rounded-xl bg-[#E31C3D] hover:bg-[#c61834] px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-all shadow-lg shadow-[#E31C3D]/20 active:scale-95 self-start md:self-auto cursor-pointer"
+          className="flex items-center gap-2 rounded-xl bg-[#E63946] hover:bg-[#c61834] px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-all shadow-lg shadow-[#E63946]/20 active:scale-95 self-start md:self-auto cursor-pointer"
         >
           <Plus className="h-4 w-4" /> Nuevo Torneo
         </button>
@@ -99,7 +99,7 @@ export const AdminTournamentsPage = () => {
                       </button>
                       <button 
                         onClick={() => handleDelete(t.id, t.name)} 
-                        className="rounded-lg p-2 text-slate-400 hover:text-[#E31C3D] hover:bg-red-50 dark:text-white/60 dark:hover:text-[#E31C3D] dark:hover:bg-[#E31C3D]/10 transition-colors cursor-pointer"
+                        className="rounded-lg p-2 text-slate-400 hover:text-[#E63946] hover:bg-red-50 dark:text-white/60 dark:hover:text-[#E63946] dark:hover:bg-[#E63946]/10 transition-colors cursor-pointer"
                         title="Eliminar torneo"
                       >
                         <Trash2 className="h-4 w-4" />

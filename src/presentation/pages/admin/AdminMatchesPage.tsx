@@ -40,7 +40,7 @@ export const AdminMatchesPage = () => {
   const getTournamentName = (_id: string) => "Torneo Principal";
   const getStatusBadge = (status: string) =>
     status === 'Finalizado' ? 'bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-white/60' :
-    status === 'En curso' ? 'bg-[#E31C3D]/20 text-[#E31C3D]' :
+    status === 'En curso' ? 'bg-[#E63946]/20 text-[#E63946]' :
     'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400';
 
   return (
@@ -49,7 +49,7 @@ export const AdminMatchesPage = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#1C2B45] pb-6">
         <div>
           <div className="flex items-center gap-3">
-            <div className="w-2 h-7 bg-[#E31C3D] rounded-full" />
+            <div className="w-2 h-7 bg-[#E63946] rounded-full" />
             <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
               Calendario de Partidos
             </h1>
@@ -58,7 +58,7 @@ export const AdminMatchesPage = () => {
         </div>
         <button
           onClick={handleOpenCreate}
-          className="flex items-center gap-2 rounded-xl bg-[#E31C3D] hover:bg-[#c61834] px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-all shadow-lg shadow-[#E31C3D]/20 active:scale-95 self-start md:self-auto cursor-pointer"
+          className="flex items-center gap-2 rounded-xl bg-[#E63946] hover:bg-[#c61834] px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-all shadow-lg shadow-[#E63946]/20 active:scale-95 self-start md:self-auto cursor-pointer"
         >
           <Plus className="h-4 w-4" /> Programar Partido
         </button>
@@ -73,7 +73,7 @@ export const AdminMatchesPage = () => {
           {matches.map((match) => (
             <div
               key={match.id}
-              className="group relative flex flex-col justify-between rounded-2xl bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] hover:border-[#E31C3D]/50 p-6 shadow-md hover:shadow-xl transition-all duration-300"
+              className="group relative flex flex-col justify-between rounded-2xl bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] hover:border-[#E63946]/50 p-6 shadow-md hover:shadow-xl transition-all duration-300"
             >
               {/* Header card info */}
               <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#1C2B45] pb-3 mb-4 text-xs">
@@ -95,7 +95,7 @@ export const AdminMatchesPage = () => {
                 </div>
 
                 <div className="flex items-center justify-center gap-3 rounded-2xl bg-slate-50 dark:bg-[#0B1220] px-5 py-3 text-2xl font-black text-slate-900 dark:text-white border border-slate-200 dark:border-[#1C2B45] shadow-inner" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-                  <span className="text-[#E31C3D]">{match.homeScore ?? '-'}</span>
+                  <span className="text-[#E63946]">{match.homeScore ?? '-'}</span>
                   <span className="text-slate-300 dark:text-white/30 text-lg font-normal">:</span>
                   <span>{match.awayScore ?? '-'}</span>
                 </div>
@@ -118,7 +118,7 @@ export const AdminMatchesPage = () => {
                 </button>
                 <button
                   onClick={() => handleDelete(match.id)}
-                  className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-[#E31C3D] hover:bg-red-50 dark:text-white/60 dark:hover:text-[#E31C3D] dark:hover:bg-[#E31C3D]/10 transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-[#E63946] hover:bg-red-50 dark:text-white/60 dark:hover:text-[#E63946] dark:hover:bg-[#E63946]/10 transition-colors cursor-pointer"
                 >
                   <Trash2 className="h-3.5 w-3.5" /> Eliminar
                 </button>

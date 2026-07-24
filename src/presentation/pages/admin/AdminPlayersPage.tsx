@@ -104,7 +104,7 @@ export const AdminPlayersPage = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#1C2B45] pb-6">
         <div>
           <div className="flex items-center gap-3">
-            <div className="w-2 h-7 bg-[#E31C3D] rounded-full" />
+            <div className="w-2 h-7 bg-[#E63946] rounded-full" />
             <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
               Plantilla de Jugadores
             </h1>
@@ -113,7 +113,7 @@ export const AdminPlayersPage = () => {
         </div>
         <button
           onClick={handleOpenCreate}
-          className="flex items-center gap-2 rounded-xl bg-[#E31C3D] hover:bg-[#c61834] px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-all shadow-lg shadow-[#E31C3D]/20 active:scale-95 self-start md:self-auto cursor-pointer"
+          className="flex items-center gap-2 rounded-xl bg-[#E63946] hover:bg-[#c61834] px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-all shadow-lg shadow-[#E63946]/20 active:scale-95 self-start md:self-auto cursor-pointer"
         >
           <Plus className="h-4 w-4" /> Nuevo Jugador
         </button>
@@ -134,7 +134,7 @@ export const AdminPlayersPage = () => {
           <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-white/40 mt-1">Inactivos</div>
         </div>
         <div className="bg-white dark:bg-[#10182B] border border-slate-200 dark:border-[#1C2B45] rounded-2xl p-4 shadow-md">
-          <div className="text-3xl font-black text-[#E31C3D]" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{coachTeams.length}</div>
+          <div className="text-3xl font-black text-[#E63946]" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>{coachTeams.length}</div>
           <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-white/40 mt-1">Equipos</div>
         </div>
       </div>
@@ -148,7 +148,7 @@ export const AdminPlayersPage = () => {
               <input
                 type="text"
                 placeholder="Buscar jugador por nombre o dorsal..."
-                className="w-full pl-10 pr-4 py-2.5 text-xs bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-white/40 focus:outline-none focus:border-[#E31C3D] transition-all"
+                className="w-full pl-10 pr-4 py-2.5 text-xs bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-white/40 focus:outline-none focus:border-[#E63946] transition-all"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -156,7 +156,7 @@ export const AdminPlayersPage = () => {
             <select
               value={selectedTeamFilter}
               onChange={(e) => setSelectedTeamFilter(e.target.value)}
-              className="w-full md:w-auto px-4 py-2.5 text-xs bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] rounded-xl text-slate-800 dark:text-white/80 focus:outline-none focus:border-[#E31C3D] transition-all"
+              className="w-full md:w-auto px-4 py-2.5 text-xs bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] rounded-xl text-slate-800 dark:text-white/80 focus:outline-none focus:border-[#E63946] transition-all"
             >
               <option value="">Todos los equipos</option>
               {coachTeams.map((t) => (
@@ -166,7 +166,7 @@ export const AdminPlayersPage = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value as any)}
-              className="w-full md:w-auto px-4 py-2.5 text-xs bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] rounded-xl text-slate-800 dark:text-white/80 focus:outline-none focus:border-[#E31C3D] transition-all"
+              className="w-full md:w-auto px-4 py-2.5 text-xs bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] rounded-xl text-slate-800 dark:text-white/80 focus:outline-none focus:border-[#E63946] transition-all"
             >
               <option value="all">Todos los estados</option>
               <option value="active">Activos</option>
@@ -191,7 +191,7 @@ export const AdminPlayersPage = () => {
               {isLoading ? (
                 <tr>
                   <td colSpan={6} className="py-16 text-center">
-                    <Loader2 className="animate-spin h-8 w-8 text-[#E31C3D] mx-auto mb-3" />
+                    <Loader2 className="animate-spin h-8 w-8 text-[#E63946] mx-auto mb-3" />
                     <p className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-white/50">Cargando plantilla...</p>
                   </td>
                 </tr>
@@ -207,18 +207,18 @@ export const AdminPlayersPage = () => {
                   <tr key={player.id} className="hover:bg-slate-50 dark:hover:bg-[#1C2B45]/30 transition-colors">
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] flex items-center justify-center text-xs font-bold text-[#E31C3D] overflow-hidden shrink-0 shadow-inner">
+                        <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-[#0B1220] border border-slate-200 dark:border-[#1C2B45] flex items-center justify-center text-xs font-bold text-[#E63946] overflow-hidden shrink-0 shadow-inner">
                           {player.photoUrl ? (
                             <img src={player.photoUrl} alt={player.name} className="w-full h-full object-cover" />
                           ) : (
-                            <User className="h-4 w-4 text-[#E31C3D]" />
+                            <User className="h-4 w-4 text-[#E63946]" />
                           )}
                         </div>
                         <span className="font-bold text-slate-900 dark:text-white text-sm">{player.name}</span>
                       </div>
                     </td>
                     <td className="py-4 px-6">
-                      <span className="text-xs font-mono font-bold text-[#E31C3D] bg-[#E31C3D]/10 px-2.5 py-1 rounded-lg border border-[#E31C3D]/20">
+                      <span className="text-xs font-mono font-bold text-[#E63946] bg-[#E63946]/10 px-2.5 py-1 rounded-lg border border-[#E63946]/20">
                         #{player.jerseyNumber}
                       </span>
                     </td>
@@ -252,7 +252,7 @@ export const AdminPlayersPage = () => {
                         </button>
                         <button
                           onClick={() => handleDelete(player.id, player.name)}
-                          className="rounded-lg p-2 text-slate-400 hover:text-[#E31C3D] hover:bg-red-50 dark:text-white/60 dark:hover:text-[#E31C3D] dark:hover:bg-[#E31C3D]/10 transition-colors cursor-pointer"
+                          className="rounded-lg p-2 text-slate-400 hover:text-[#E63946] hover:bg-red-50 dark:text-white/60 dark:hover:text-[#E63946] dark:hover:bg-[#E63946]/10 transition-colors cursor-pointer"
                           title="Eliminar jugador"
                         >
                           <Trash2 className="h-4 w-4" />
