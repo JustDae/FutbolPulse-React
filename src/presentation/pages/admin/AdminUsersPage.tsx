@@ -74,14 +74,17 @@ export const AdminUsersPage = () => {
       nextYear.setFullYear(nextYear.getFullYear() + 1);
       await subscriptionRepository.createSubscription({
         usuario_id: userId,
+        usuario: userId,
+        estado: 'Activo',
         plan: 'Premium',
         fecha_vencimiento: nextYear.toISOString().split('T')[0]
-      });
+      } as any);
       setActiveSubs(prev => ({ ...prev, [userId]: true }));
       toast.success('¡Suscripción Premium asignada con éxito!');
     } catch (error: any) {
-      const errMsg = error?.response?.data?.detail || error?.response?.data || error.message;
-      toast.error(`Error: ${JSON.stringify(errMsg)}`);
+      const respData = error?.response?.data;
+      const errMsg = respData ? JSON.stringify(respData) : error.message;
+      toast.error(`Error: ${errMsg}`);
       console.error(error);
     }
   };
