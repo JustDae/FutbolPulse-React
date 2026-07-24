@@ -11,11 +11,28 @@ export const AdminUsersPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeSubs, setActiveSubs] = useState<Record<string, boolean>>({});
   const itemsPerPage = 5;
 
   useEffect(() => {
     fetchUsers();
+    fetchSubscriptions();
   }, []);
+
+  const fetchSubscriptions = async () => {
+    try {
+      const subs = await subscriptionRepository.getSubscriptions();
+      const subsMap: Record<string, boolean> = {};
+      subs.forEach(sub => {
+        if (sub.estado === 'Activo' && sub.plan === 'Premium') {
+          subsMap[sub.usuario_id] = true;
+        }
+      });
+      setActiveSubs(subsMap);
+    } catch (error) {
+      console.error('Error fetching subscriptions for users page:', error);
+    }
+  };
 
   const fetchUsers = async () => {
     setIsLoading(true);
@@ -60,9 +77,11 @@ export const AdminUsersPage = () => {
         plan: 'Premium',
         fecha_vencimiento: nextYear.toISOString().split('T')[0]
       });
+      setActiveSubs(prev => ({ ...prev, [userId]: true }));
       toast.success('¡Suscripción Premium asignada con éxito!');
-    } catch (error) {
-      toast.error('Error al asignar Premium (quizá ya tenga una suscripción activa)');
+    } catch (error: any) {
+      const errMsg = error?.response?.data?.detail || error?.response?.data || error.message;
+      toast.error(`Error: ${JSON.stringify(errMsg)}`);
       console.error(error);
     }
   };
@@ -179,13 +198,20 @@ export const AdminUsersPage = () => {
                               </select>
                               <div className="absolute right-3.5 pointer-events-none text-slate-400 dark:text-white/40 text-[10px]">▼</div>
                             </div>
-                            <button 
-                              onClick={() => handleMakePremium((u.id || u.user_id)!)}
-                              className="p-2 rounded-xl bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-white transition-colors border border-amber-500/20"
-                              title="Asignar Plan Premium"
-                            >
-                              <Crown className="w-4 h-4" />
-                            </button>
+                            
+                            {activeSubs[(u.id || u.user_id)!] ? (
+                              <div className="p-2 rounded-xl bg-amber-500 text-white shadow-sm border border-amber-600 cursor-default" title="Usuario Premium Activo">
+                                <Crown className="w-4 h-4 fill-current" />
+                              </div>
+                            ) : (
+                              <button 
+                                onClick={() => handleMakePremium((u.id || u.user_id)!)}
+                                className="p-2 rounded-xl bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-white transition-colors border border-amber-500/20"
+                                title="Asignar Plan Premium"
+                              >
+                                <Crown className="w-4 h-4" />
+                              </button>
+                            )}
                           </div>
                         </td>
                         <td className="py-4 px-6 text-center">
