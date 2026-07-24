@@ -20,8 +20,10 @@ export const UnifiedDashboardShell = () => {
   const location = useLocation();
 
   useEffect(() => {
-    checkPremiumStatus();
-  }, [checkPremiumStatus, location.pathname]);
+    if (user) {
+      checkPremiumStatus();
+    }
+  }, [checkPremiumStatus, location.pathname, user]);
 
   const handleLogout = async () => {
     await logout();

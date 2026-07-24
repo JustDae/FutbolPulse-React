@@ -166,8 +166,10 @@ export function PlayerShell() {
   const { isPremium, checkPremiumStatus } = useSubscriptionStore();
 
   useEffect(() => {
-    checkPremiumStatus();
-  }, [checkPremiumStatus, pathname]);
+    if (user) {
+      checkPremiumStatus();
+    }
+  }, [checkPremiumStatus, pathname, user]);
 
   useEffect(() => {
     if (user?.nombre_completo) {
