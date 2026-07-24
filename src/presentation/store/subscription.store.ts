@@ -39,12 +39,10 @@ export const useSubscriptionStore = create<SubscriptionStore>((set) => ({
         return;
       }
 
-      // Validations according to "Fútbol Pulse" specs
-      const isUserMatch = subscription.usuario_id === user.id;
       const isPlanPremium = subscription.plan.toLowerCase() === 'premium';
       const isStatusActive = subscription.estado.toLowerCase() === 'activo';
 
-      const isPremium = isUserMatch && isPlanPremium && isStatusActive;
+      const isPremium = isPlanPremium && isStatusActive;
 
       set({
         activeSubscription: subscription,
