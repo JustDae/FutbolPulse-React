@@ -5,6 +5,7 @@ import { cn } from '@/presentation/utils/cn';
 import { useAuthStore } from '../store/auth.store';
 import { usePlayerStore } from '../store/player.store';
 import { useMatchStore } from '../store/match.store';
+import { useSubscriptionStore } from '../store/subscription.store';
 import { ThemeToggle } from '@/presentation/components/ThemeToggle';
 import { Button } from '@/presentation/components/ui/button';
 import {
@@ -162,6 +163,11 @@ export function PlayerShell() {
   const { user } = useAuthStore();
   const { currentPlayer, fetchCurrentPlayerByUserName } = usePlayerStore();
   const { fetchMatches } = useMatchStore();
+  const { isPremium, checkPremiumStatus } = useSubscriptionStore();
+
+  useEffect(() => {
+    checkPremiumStatus();
+  }, [checkPremiumStatus, pathname]);
 
   useEffect(() => {
     if (user?.nombre_completo) {
@@ -221,8 +227,17 @@ export function PlayerShell() {
               to="/jugador"
               className="text-xs font-bold text-muted-foreground bg-white/5 backdrop-blur-md px-4 py-2.5 rounded-full border border-white/10 shadow-inner hover:text-foreground hover:bg-white/10 transition-all cursor-pointer"
             >
-              Dashboard Jugador
+              Dashboard Básico
             </Link>
+            {isPremium && (
+              <Link
+                to="/dashboard"
+                className="text-xs font-extrabold text-black bg-[#D4AF37] hover:bg-[#F3CE56] px-4 py-2.5 rounded-full shadow-lg shadow-[#D4AF37]/25 transition-all cursor-pointer uppercase tracking-wider flex items-center gap-1.5"
+              >
+                <Zap className="w-4 h-4" />
+                <span>Portal Pro</span>
+              </Link>
+            )}
             {(user?.is_staff || user?.tipo_usuario === 'Admin') && (
               <Link
                 to="/admin"

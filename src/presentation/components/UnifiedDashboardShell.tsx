@@ -101,6 +101,14 @@ export const UnifiedDashboardShell = () => {
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
         <header className="h-16 flex items-center px-8 border-b border-[#2D3748] bg-[#121820]/50 backdrop-blur-md">
+          {user?.tipo_usuario === 'Player' && (
+            <NavLink
+              to="/jugador"
+              className="text-xs font-bold text-[#A0AEC0] bg-white/5 px-4 py-2 rounded-full border border-white/10 hover:text-white hover:bg-white/10 transition-all cursor-pointer mr-4"
+            >
+              ← Volver a Dashboard Básico
+            </NavLink>
+          )}
           {/* Dashboard Header Space for Dropdowns (Organization Selector will go here) */}
           <div id="shell-header-actions" className="ml-auto flex items-center gap-4"></div>
         </header>
